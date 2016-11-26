@@ -13,3 +13,17 @@
 @import "blacklight_gallery/slideshow";
 @import "blacklight_gallery/osd_viewer";
 @import 'sufia/sufia';
+
+.form-group {
+  margin-bottom: 0.7em;
+  .form-control, .control-label {
+    max-width:37em;
+    margin-bottom: 0.0em;
+  }
+  .help-block {
+    margin-bottom: 0.0em;
+  }
+  button {
+    padding: 0px;
+  }
+}

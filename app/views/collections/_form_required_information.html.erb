@@ -1,0 +1,28 @@
+<fieldset class="required">
+  <legend>Required Information</legend>
+  <%= f.input :title %>
+
+  <%= f.input :creator, as: :multi_value_select,
+    collection: AuthoritiesService.find_all_agents,
+    include_blank: true,
+    #item_helper: method(:include_current_value),
+    input_html: { class: 'form-control' } %>
+
+  <%= f.input :resource_type, as: :multi_value_select,
+    collection: MetadataService.find_all_resource_types,
+    include_blank: true,
+    input_html: { class: 'form-control' } %>
+
+  <%= f.input :local_attribution, as: :multi_value_select,
+    collection: MetadataService.local_attribution_list,
+    include_blank: true,
+    input_html: { class: 'form-control' } %>
+
+  <%= f.input :language, as: :multi_value_select,
+    collection: MetadataService.find_all_languages,
+    include_blank: true,
+    input_html: { class: 'form-control' } %>
+
+  <%= f.input :exhibit %>
+  <%= f.input :description, as: :multi_value, input_html: { rows: '8', type: 'textarea'} %>
+</fieldset>

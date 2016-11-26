@@ -1,0 +1,20 @@
+<%= @presenter.attribute_to_html(:title) %>
+<%= @presenter.attribute_to_html(:creator) %>
+<%= @presenter.attribute_to_html(:created_date) %>
+<%= @presenter.attribute_to_html(:topic) %>
+<%= @presenter.attribute_to_html(:contributor) %>
+<%= @presenter.attribute_to_html(:publisher) %>
+
+<%= @presenter.attribute_to_html(:description) %>
+<% 
+    (GeneralSchema.display_fields).each do |field|
+      if @presenter.respond_to? field
+   %>
+      <%= @presenter.attribute_to_html(field) %>
+  <%
+      end
+    end
+  %>
+
+<%= @presenter.attribute_to_html(:identifier) %>
+

@@ -45,10 +45,27 @@ group :development do
   gem 'spring'
 end
 
+# Deploy with Capistrano
+gem 'capistrano', '~> 3.5.0'
+gem 'capistrano-rails', '~> 1.1.7'
+gem 'capistrano-rbenv', '~> 2.0.4'
+gem 'capistrano-bundler', '~> 1.1.3'
+
+gem 'newrelic_rpm', '3.16.0.318'
 
 gem 'sufia', '7.2.0'
 gem 'flipflop', github: 'jcoyne/flipflop', branch: 'hydra'
+
+gem 'active-fedora', '11.0.0.rc7'
+
 group :development, :test do
+  gem 'capybara', '~> 2.6.0'
+  gem 'factory_girl_rails', '~> 4.4'
+  gem 'rspec-activemodel-mocks', '~> 1.0'
+  gem 'rspec-mocks', '3.5.0'
+  gem 'simplecov', '~> 0.11.2'
+  gem 'rails_autolink', '~> 1.1.6'
+  gem 'unicorn', '~> 5.1.0'
   gem 'solr_wrapper', '>= 0.3'
 end
 
