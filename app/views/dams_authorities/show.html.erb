@@ -1,0 +1,37 @@
+<% provide :page_title, 'Authorities' %>
+<% provide :page_header do %>
+  <h2 class="lower"><%= @obj.label.first %></h2>(<%= @obj.class.name %>)
+<% end %>
+
+  <%= link_to "Edit", "#{records_path}/#{@obj.id}/edit", class: 'btn btn-default btn-edit' %>&nbsp;
+  <%= link_to "New #{@obj.class.name}", "#{records_path}/new?utf8=%E2%9C%93&type=#{@obj.class.name}&commit=Next", class: 'btn btn-default btn-new' %>
+  <style>
+    .label {color: #333; font-weight: normal; font-size: 14px;}
+    th {width: 200px;}
+    td {width: 600px;}
+  </style>
+  <div id="content">
+    <table class="table table-striped authority attributes">
+      <caption class="table-heading"><h2>Attributes</h2></caption>
+      <thead>
+        <tr><th>Attribute Name</th><th>Values</th></tr>
+      </thead>
+      <tbody>
+        <%= render_attribute :label, @obj.label %>
+        <%= render_attribute :alternate_label, @obj.alternate_label %>
+        <%= render_attribute :public_uri, @obj.public_uri %>
+        <% if @obj.respond_to? :close_match %>
+          <%= render_authority_attribute :close_match, @obj.close_match %>
+        <% end %>
+        <% if @obj.respond_to? :related_match %>
+          <%= render_authority_attribute :related_match, @obj.related_match %>
+        <% end %>
+        <% if @obj.respond_to? :note %>
+          <%= render_attribute :note, @obj.note %>
+        <% end %>
+        <% if @obj.respond_to? :point %>
+          <%= render_attribute :point, @obj.point %>
+        <% end %>
+      </tbody>
+    </table>
+  </content>

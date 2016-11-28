@@ -76,4 +76,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # url base for local authorities
+  config.authority_path = 'http://localhost:3000/dams_authorities'
 end

@@ -1,0 +1,6 @@
+<% if Authority.is_authority?(@record) %>
+  <%= render partial: 'records/record_form' %>
+<% else %>
+  <h2>Please choose an Authority type: </h2>
+  <%= link_to "Select Type", "#{records_path}/new", class: 'btn btn-default' %>
+<% end %>

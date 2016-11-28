@@ -8,6 +8,11 @@ class Ability
 
   # Define any customized permissions here.
   def custom_permissions
+    if registered_user?
+      can [:read, :create, :edit, :update, :destroy], Authority
+    else
+      can [:read], Authority
+    end
     # Limits deleting objects to a the admin user
     #
     # if current_user.admin?
