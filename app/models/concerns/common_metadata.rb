@@ -11,8 +11,8 @@ module CommonMetadata
     )
 
     # xsd:URI with CVs
-    property :resource_type, predicate: ::RDF::Vocab::DC.type, class_name: ResourceType
-    property :language, predicate: ::RDF::Vocab::DC.language, class_name: Language
+    property :resource_type, predicate: ::RDF::Vocab::DC.type
+    property :language, predicate: ::RDF::Vocab::DC.language
 
     # creator: edm:Agent
     property :creator, predicate: ::RDF::Vocab::DC.creator, class_name: Agent
