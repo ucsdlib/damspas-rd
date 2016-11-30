@@ -15,6 +15,13 @@
       </ul>
     </li>
 
+    <li class="dropdown">
+        <%= link_to sufia.dashboard_works_path, role: 'button', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } do %>
+          <span class="fa fa-cube"></span> Browse By <span class="caret"></span>
+        <% end %>
+      <%= render 'shared/add_browsing' %>
+    </li>
+
     <% if can_ever_create_works? %>
       <li class="dropdown">
         <%= link_to sufia.dashboard_works_path, role: 'button', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } do %>
@@ -65,5 +72,7 @@
       <%= render 'shared/add_authorities' %>
       </li>
     <% end %>
+
+    
   </ul>
 <% end %>
