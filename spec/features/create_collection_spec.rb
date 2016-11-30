@@ -7,13 +7,14 @@ feature 'Create a Collection' do
 
     before do
       sign_in user
-      @res_type = ResourceType.create(label: ["Resource Type"], public_uri: ["http://id.loc.gov/vocabulary/resourceTypes/resourcetype"])
-      @language = Language.create(label: ["Language"], public_uri: ["http://id.loc.gov/vocabulary/iso639-2/language"])
-    end
-
-    after do
-      @res_type.delete
-      @language.delete
+      language_uri = 'http://id.loc.gov/vocabulary/iso639-2/any'
+      if Qa::Authorities::Local.subauthority_for('languages').find(language_uri).nil?
+        lang = Qa::LocalAuthority.find_or_create_by(name: 'languages')
+        Qa::LocalAuthorityEntry.create(
+          local_authority: lang,
+          label: 'Language',
+          uri: language_uri)
+      end
     end
 
     scenario 'in is allowed to create collections' do
@@ -71,10 +72,10 @@ feature 'Create a Collection' do
       click_link('Additional fields')
 
       fill_in 'collection_title', with: 'Test Collection - Resource Type'
-      select 'Resource Type', from: "collection_resource_type"
+      select 'Data', from: "collection_resource_type"
       click_button("Create Collection")
       expect(page).to have_selector 'h1', text: 'Test Collection - Resource Type'
-      expect(page).to have_selector 'a', text: 'Resource Type'
+      expect(page).to have_selector 'a', text: 'Data'
     end
   end
 end

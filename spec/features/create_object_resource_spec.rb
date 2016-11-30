@@ -9,13 +9,14 @@ feature 'Create a ObjectResource' do
 
     before do
       sign_in user
-      @res_type = ResourceType.create(label: ["Resource Type"], public_uri: ["http://id.loc.gov/vocabulary/resourceTypes/resourcetype"])
-      @language = Language.create(label: ["Language"], public_uri: ["http://id.loc.gov/vocabulary/iso639-2/language"])
-    end
-
-    after do
-      @res_type.delete
-      @language.delete
+      language_uri = 'http://id.loc.gov/vocabulary/iso639-2/any'
+      if Qa::Authorities::Local.subauthority_for('languages').find(language_uri).nil?
+        lang = Qa::LocalAuthority.find_or_create_by(name: 'languages')
+        Qa::LocalAuthorityEntry.create(
+          local_authority: lang,
+          label: 'Language',
+          uri: language_uri)
+      end
     end
 
     scenario do
@@ -64,10 +65,10 @@ feature 'Create a ObjectResource' do
     scenario 'should create object with resource type label from type url' do
       visit new_curation_concerns_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource - Resource Type'
-      select 'Resource Type', from: "object_resource_resource_type"
+      select 'Data', from: "object_resource_resource_type"
       click_button 'Save'
       expect(page).to have_selector 'h1', text: 'Test ObjectResource - Resource Type'
-      expect(page).to have_selector 'li.resource_type', text: 'Resource Type'
+      expect(page).to have_selector 'li.resource_type', text: 'Data'
     end
   end
 end
