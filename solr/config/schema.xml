@@ -125,6 +125,10 @@
     <fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="([^A-Za-z0-9])" replacement="" replace="all"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="(\d+)" replacement="000$1" replace="all"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="0*([0-9]{6,})" replacement="$1" replace="all"/>
         <filter class="solr.ICUFoldingFilterFactory"/>
         <filter class="solr.TrimFilterFactory" />
       </analyzer>
@@ -216,7 +220,7 @@
     
     <!-- string (_s...) -->
     <dynamicField name="*_si" type="string" stored="false" indexed="true" multiValued="false"/>
-    <dynamicField name="*_sim" type="string" stored="false" indexed="true" multiValued="true"/>
+    <dynamicField name="*_sim" type="alphaSort" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_ss" type="string" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_ssm" type="string" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_ssi" type="string" stored="true" indexed="true" multiValued="false"/>
