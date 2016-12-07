@@ -55,6 +55,7 @@ gem 'newrelic_rpm', '3.16.0.318'
 
 gem 'sufia', '7.2.0'
 gem 'flipflop', github: 'jcoyne/flipflop', branch: 'hydra'
+gem 'hydra-role-management'
 
 gem 'active-fedora', '11.0.0.rc7'
 

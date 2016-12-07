@@ -3,7 +3,7 @@ include Warden::Test::Helpers
 
 feature 'Create a Place' do
   context 'a logged in user' do
-    let(:user) { create(:user) }
+    let(:user) { create(:admin) }
 
     before do
       sign_in user

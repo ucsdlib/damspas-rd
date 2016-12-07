@@ -60,6 +60,11 @@ rails s
 ```
 Go to http://localhost:3000/ and register to start
 
+### Adding an admin role to the last user
+```bash
+rake add_admin_role
+```
+
 ### Import Local Authority records for control values
 ```bash
 bin/import-authorities

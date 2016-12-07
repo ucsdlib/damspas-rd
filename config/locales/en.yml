@@ -21,3 +21,7 @@
 
 en:
   hello: "Hello world"
+  curation_concerns:
+    institution_name:  &INSTITUTION_NAME "UCSD"
+    institution:
+      name: "Campus"

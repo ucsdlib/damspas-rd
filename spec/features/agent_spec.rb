@@ -3,7 +3,7 @@ include Warden::Test::Helpers
 
 feature 'Create an Agent' do
   context 'a logged in user' do
-    let(:user) { create(:user) }
+    let(:user) { create(:admin) }
 
     before do
       sign_in user
@@ -42,7 +42,7 @@ feature 'Create an Agent' do
       fill_in 'agent_label', with: 'Test Edit Agent'
       click_button 'Save'
       expect(page).to have_content 'Test Edit Agent'
-      click_link 'Edit'
+      find('.btn-edit').click
       fill_in 'agent_label', with: 'Test Edit Agent Updated'
       click_button 'Save'
       expect(page).to have_content 'Test Edit Agent Updated'
