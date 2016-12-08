@@ -1,0 +1,13 @@
+<% if dom_class(member) == 'object_resource' %>
+  <% member.member_presenters.each do |file| 
+       case file
+	   when CurationConcerns::FileSetPresenter  
+  %>
+         <%= render_thumbnail_tag file %><br/>
+  <%   else %>
+     <%= render 'component_thumbnail', member: file %>
+  <%   end %>         
+  <% end %>
+<% else %>
+  <%= render_thumbnail_tag member %><br/> 
+<% end %>

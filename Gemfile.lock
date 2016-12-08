@@ -643,6 +643,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise
   devise-guests (~> 0.5)
+  factory_girl (~> 4.0)
   factory_girl_rails (~> 4.4)
   fcrepo_wrapper
   flipflop!
