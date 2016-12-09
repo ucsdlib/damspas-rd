@@ -63,6 +63,6 @@ class GeneralSchema < ActiveTriples::Schema
 
   # Fields to auto display. Ignore those for custom display logic and those admin data like (workflow note), title, description, :created_date, :date_created (default), etc.
   def self.display_fields
-    ObjectResource.properties.values.map(&:term) - [:title, :topic, :creator, :contributor, :publisher, :created_date, :brief_description, :description, :identifier, :date_modified, :date_uploaded, :date_created, :depositor, :keyword, :head, :tail]
+    ObjectResource.properties.values.map(&:term) - [:title, :topic, :creator, :contributor, :publisher, :created_date, :brief_description, :description, :identifier, :rights, :date_modified, :date_uploaded, :date_created, :depositor, :keyword, :head, :tail]
   end
 end

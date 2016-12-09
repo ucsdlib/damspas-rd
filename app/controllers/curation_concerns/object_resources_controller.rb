@@ -29,5 +29,9 @@ module CurationConcerns
 
       @form = form_class.new(curation_concern, current_ability)
     end
+
+    def search_builder_class
+      ::WorkSearchBuilder
+    end
   end
 end
