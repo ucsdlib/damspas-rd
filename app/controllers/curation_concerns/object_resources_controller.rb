@@ -7,6 +7,7 @@ module CurationConcerns
     # Adds Sufia behaviors to the controller.
     include Sufia::WorksControllerBehavior
     include LocalAuthorityHashConverter
+    include MembersHelper
 
     self.curation_concern_type = ObjectResource
 
