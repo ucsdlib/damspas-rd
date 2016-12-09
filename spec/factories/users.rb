@@ -3,23 +3,24 @@ FactoryGirl.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password 'password'
 
-    factory :user_with_mail do
-      after(:create) do |user|
-        # Create examples of single file successes and failures
-        (1..10).each do |number|
-          file = MockFile.new(number.to_s, "Single File #{number}")
-          User.batch_user.send_message(user, 'File 1 could not be updated. You do not have sufficient privileges to edit it.', file.to_s, false)
-          User.batch_user.send_message(user, 'File 1 has been saved', file.to_s, false)
-        end
+    factory :admin do
+      roles { [Role.where(name: 'admin').first_or_create] }
+    end
 
-        # Create examples of mulitple file successes and failures
-        files = []
-        (1..50).each do |number|
-          files << MockFile.new(number.to_s, "File #{number}")
-        end
-        User.batch_user.send_message(user, 'These files could not be updated. You do not have sufficient privileges to edit them.', 'Batch upload permission denied', false)
-        User.batch_user.send_message(user, 'These files have been saved', 'Batch upload complete', false)
-      end
+    factory :editor do
+      roles { [Role.where(name: 'editor').first_or_create] }
+    end
+
+    factory :curator do
+      roles { [Role.where(name: 'curator').first_or_create] }
+    end
+
+    factory :campus do
+      roles { [Role.where(name: Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED.to_s).first_or_create] }
+    end
+
+    factory :anonymous do
+      roles { [] }
     end
   end
 

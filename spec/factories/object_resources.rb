@@ -1,12 +1,13 @@
 FactoryGirl.define do
 
   factory :object_resource, aliases: [:obj], class: ObjectResource do
+    title ["Test title"]
+    rights_statement ["http://creativecommons.org/licenses/by/3.0/us/"]
+    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+
     transient do
       user { FactoryGirl.create(:user) }
     end
-
-    title ['Test title']
-    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     
     after(:build) do |obj, evaluator|
       obj.apply_depositor_metadata(evaluator.user.user_key)
@@ -39,6 +40,24 @@ FactoryGirl.define do
 
     factory :object_resource_with_files do
       before(:create) { |obj, evaluator| 2.times {obj.ordered_members << FactoryGirl.create(:file_set, user: evaluator.user) } }
-    end                
+    end
+
+    # https://github.com/projecthydra/hydra-head/blob/master/hydra-access-controls/app/models/concerns/hydra/access_controls/access_right.rb
+    factory :campus_only_object_resource do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    end
+
+    factory :private_object_resource do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    end
+
+    factory :object_resource_with_file do
+      after(:create) do |object_resource, evaluator|
+        file = FactoryGirl.create(:file_set, user: evaluator.user)
+        object_resource.ordered_members << file
+        object_resource.save
+        file.update_index
+      end
+    end
   end
 end

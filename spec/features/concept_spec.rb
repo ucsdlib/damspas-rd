@@ -3,7 +3,7 @@ include Warden::Test::Helpers
 
 feature 'Create a Concept' do
   context 'a logged in user' do
-    let(:user) { create(:user) }
+    let(:user) { create(:admin) }
 
     before do
       sign_in user
@@ -42,7 +42,7 @@ feature 'Create a Concept' do
       fill_in 'concept_label', with: 'Test Edit Concept'
       click_button 'Save'
       expect(page).to have_content 'Test Edit Concept'
-      click_link 'Edit'
+      find('.btn-edit').click
       fill_in 'concept_label', with: 'Test Edit Concept Updated'
       click_button 'Save'
       expect(page).to have_content 'Test Edit Concept Updated'
