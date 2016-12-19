@@ -46,6 +46,12 @@ Rails.application.configure do
   # dams user roles
   config.dams_user_roles = ['anonymous', 'campus', 'curator', 'editor', 'admin']
 
+  # enable Wowza service
+  config.wowza_enabled = false
+
+  # Wowza server url base
+  config.wowza_baseurl = 'lib-streaming.ucsd.edu:1935/dams4-test/_definst_/'
+
   # url base for local authorities
   config.authority_path = 'http://localhost:3000/dams_authorities'
 end
