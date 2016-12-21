@@ -40,6 +40,14 @@ module AuthoritiesService
       end
       cols 
     end
+
+    # find or create authority records
+    def find_or_create (model, label)
+      mod = Object.const_get(model)
+      records = ActiveFedora::Base.where("has_model_ssim:#{model}").select { |rec| rec[:label].first == label }
+      records = [mod.create({label: [label]})] if records.first.nil?
+      ActiveFedora::Base.id_to_uri(records.first.id)
+    end
   end
 
 end

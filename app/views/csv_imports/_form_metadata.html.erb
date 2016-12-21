@@ -1,0 +1,25 @@
+<div class="base-terms">
+    <div id="collection-widget">
+        <%= f.input :collection_ids, as: :select,
+              collection: available_collections(nil),
+              input_html: { class: 'form-control', multiple: true } %>
+    </div>
+
+    <% license_service = CurationConcerns::LicenseService.new %>
+    <%= f.input :rights, as: :select,
+        collection: license_service.select_active_options,
+        include_blank: true,
+        item_helper: license_service.method(:include_current_value),
+        input_html: { class: 'form-control' } %>
+
+    <div class="with-headroom" style="padding-bottom:25px;">
+        <label>CSV Metadata Source</label><br />
+        <div class="btn btn-success fileinput-button">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span>CSV file...</span>
+            <input id="csv_source" type="file" name="csv_source">
+        </div>
+    </div>
+
+</div>
+
