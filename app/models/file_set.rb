@@ -2,5 +2,43 @@
 class FileSet < ActiveFedora::Base
   include ::CurationConcerns::FileSetBehavior
   include Sufia::FileSetBehavior
+  include ::ExtendedContainedFiles
   include ::CommonMetadata
+
+  Hydra::Derivatives.output_file_service = PersistBinaryStoreOutputFileService
+
+  def self.indexer
+    ::FileSetIndexer
+  end
+
+  # This completely overrides the version in Hydra::Works so that we
+  # read and write to a local file. It's important that characterization runs
+  # before derivatives so that we have a credible mime_type field to work with.
+  def create_derivatives(filename)
+    case mime_type
+    when *self.class.pdf_mime_types
+      Hydra::Derivatives::PdfDerivatives.create(filename,
+                                                 outputs: [{ object: self, label: :thumbnail, format: 'jpg', size: '150x150', url: uri, container: "files" },
+                                                           { object: self, label: :intermediate_file, format: 'jpg', size: '450x450', url: uri, container: "files" }])
+      Hydra::Derivatives::FullTextExtract.create(filename, outputs: [{ url: uri, container: "extracted_text" }])
+    when *self.class.office_document_mime_types
+      Hydra::Derivatives::DocumentDerivatives.create(filename,
+                                                 outputs: [{ object: self, label: :thumbnail, format: 'jpg', size: '150x150>', url: uri, container: "files" },
+                                                           { object: self, label: :intermediate_file, format: 'jpg', size: '450x450', url: uri, container: "files" }])
+      Hydra::Derivatives::FullTextExtract.create(filename, outputs: [{ url: uri, container: "extracted_text" }])
+    when *self.class.audio_mime_types
+      Hydra::Derivatives::AudioDerivatives.create(filename,
+                                                  outputs: [{ object: self, label: :service_file, format: 'mp3', url: uri, container: "files" }])
+    when *self.class.video_mime_types
+      Hydra::Derivatives::VideoDerivatives.create(filename,
+                                                  outputs: [{ object: self, label: :thumbnail, format: 'jpg', size: '150x150>', url: uri, container: "files" },
+                                                            { object: self, label: :intermediate_file, format: 'jpg', url: uri, container: "files" },
+                                                            { object: self, label: :service_file, format: 'mp4', url: uri, container: "files" }])
+    when *self.class.image_mime_types
+      Hydra::Derivatives::ImageDerivatives.create(filename,
+                                                  outputs: [{ object: self, label: :thumbnail, format: 'jpg', size: '150x150>', url: uri, container: "files" },
+                                                            { object: self, label: :intermediate_file, format: 'jpg', size: '450x450', url: uri, container: "files" },
+                                                            { object: self, label: :service_file, format: 'jpg', size: '768x768', url: uri, container: "files" }])
+    end
+  end
 end

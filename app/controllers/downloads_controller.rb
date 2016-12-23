@@ -1,5 +1,5 @@
 class DownloadsController < ApplicationController
-  include CurationConcerns::DownloadBehavior
+  include DownloadBehavior
 
   def authorize_download!
     authorize! :read, FileSet.find(params[asset_param_key])
