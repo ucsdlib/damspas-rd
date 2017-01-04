@@ -36,10 +36,9 @@ class CsvImportJob < ActiveJob::Base
       end
 
       model = model_to_create(attributes) #::ObjectResource #
-      count = 0
       parser = CSVParser.new(csv_source)
       parser.each do |attrs|
-        splict_attributes (attrs)
+        split_attributes (attrs)
 
         # topic field
         auth_arr = authority_hash attrs, :Topic, 'Concept'
@@ -59,19 +58,9 @@ class CsvImportJob < ActiveJob::Base
 
         matched_files = []
         remote_files = []
-        if attrs.include?(:file_1) 
-          file_name = attrs[:file_1].first
-          matched_files << uploaded_files_map[attrs[:file_1].first] if uploaded_files_map.key?(file_name)
-          remote_files << remote_files_map[attrs[:file_1].first] if remote_files_map.key?(file_name)
-          attrs.delete(:file_1)
-        end
 
-        if attrs.include?(:file_2)
-          file_name = attrs[:file_2].first
-          matched_files << uploaded_files_map[attrs[:file_2].first] if uploaded_files_map.key?(file_name)
-          remote_files << remote_files_map[attrs[:file_2].first] if remote_files_map.key?(file_name)
-          attrs.delete(:file_2)
-        end
+        map_files attrs, :file_1, uploaded_files_map, remote_files_map, matched_files, remote_files if attrs.include?(:file_1)
+        map_files attrs, :file_2, uploaded_files_map, remote_files_map, matched_files, remote_files if attrs.include?(:file_2)
 
         attributes = attributes.merge(attrs)
         attributes[:uploaded_files] = matched_files
@@ -81,7 +70,6 @@ class CsvImportJob < ActiveJob::Base
                                                       parent: log)
         IngestWorkJob.perform_later(user, model.to_s, attributes, child_log)
 
-        count += 1
       end
     end
 
@@ -93,20 +81,22 @@ class CsvImportJob < ActiveJob::Base
     end
 
     def authority_hash (attrs, key, model)
-      authority_arr = []
-      if(attrs.key?(key))
-        attrs.delete(key).each do |label|
-          authority_arr << AuthoritiesService.find_or_create(model, label)
-        end
-      end
-      authority_arr
+      return attrs.delete(key).map { |label| AuthoritiesService.find_or_create(model, label) } if attrs.key?(key)
+      []
     end
 
-    def splict_attributes (attrs)
+    def split_attributes (attrs)
       attrs.each do |key, val|
         arr = []
         val.first.to_s.split('|').map {|v| arr << v.strip}
         val.clear.push *arr
       end
+    end
+
+    def map_files (attrs, file_header, uploaded_files_map, remote_files_map, matched_files, remote_files)
+      file_name = attrs[file_header].first
+      matched_files << uploaded_files_map[file_name] if uploaded_files_map.key?(file_name)
+      remote_files << remote_files_map[file_name] if remote_files_map.key?(file_name)
+      attrs.delete(file_header)
     end
 end
