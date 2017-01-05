@@ -23,6 +23,7 @@ Please visit [Curation Concerns](https://github.com/projecthydra/curation_concer
 2. Open Project: ```cd horton```
 3. Install gems: ```bundle install```
 4. Update DB: ```bundle exec rake db:migrate```
+5. Edit config/browse_everything_providers.yml file_system home for server side files ingest.
 
 ### Running Tests
 ```bash

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount BrowseEverything::Engine => '/browse'
   Hydra::BatchEdit.add_routes(self)
   mount Qa::Engine => '/authorities'
 
@@ -33,6 +34,8 @@ Rails.application.routes.draw do
       delete 'clear'
     end
   end
+
+  resources :csv_imports, only: [:new, :create], controller: 'csv_imports'
 
   get 'dams_authorities/:authority/:id', to: 'dams_authorities#show', as: 'authority', :constraints => { authority: /(agent|concept|place)/ }
   resources :records
