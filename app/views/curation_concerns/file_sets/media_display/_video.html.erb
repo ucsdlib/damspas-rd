@@ -3,7 +3,7 @@
   solr_document = file_set.solr_document if (file_set.respond_to? :solr_document)
 
   parent_id = parent.id if defined?(parent) && !parent.nil?
-  fedora_file = solr_document['digest_ssim'].first.split(':')[-1] if !solr_document['digest_ssim'].nil?
+  fedora_file = solr_document['service_file_digest_ssim'].first.split(':')[-1] if !solr_document['service_file_digest_ssim'].nil?
 
   file_ext = 'mp4'
   file_ext = solr_document['label_tesim'].first.split('.')[-1] if solr_document['label_tesim'].first
@@ -34,8 +34,7 @@
   <% end %>
 <% else %>
   <video controls="controls" class="video-js vjs-default-skin" data-setup="{}" preload="auto">
-    <source src="<%= main_app.download_path(file_set, file: 'webm') %>" type="video/webm" />
-    <source src="<%= main_app.download_path(file_set, file: 'mp4') %>" type="video/mp4" />
+    <source src="<%= main_app.download_path(file_set, file: 'service_file') %>" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 <% end %>
