@@ -15,7 +15,16 @@
 /log/*
 !/log/.keep
 /tmp
+spec/examples.txt
 
 .project
 .DS_Store
 dump.rdb
+
+# Ansible artifacts
+playbooks/hosts
+playbooks/roles
+playbooks/*.retry
+playbooks/*.log
+playbooks/.vaultpassword
+playbooks/.vagrant
