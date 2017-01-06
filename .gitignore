@@ -19,3 +19,13 @@
 .project
 .DS_Store
 dump.rdb
+
+# Ansible artifacts
+playbooks/.ssh-config
+playbooks/.vagrant
+playbooks/.vaultpassword
+playbooks/*.log
+playbooks/*.retry
+playbooks/ansible.cfg
+playbooks/hosts
+playbooks/roles

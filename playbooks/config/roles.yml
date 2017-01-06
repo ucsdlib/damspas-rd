@@ -1,0 +1,10 @@
+---
+
+- ucsdlib.fedora-commons
+- ucsdlib.ffmpeg
+- ucsdlib.fits
+- ucsdlib.imagemagick-jpeg2000
+- ucsdlib.libreoffice
+- ucsdlib.postgresql
+- ucsdlib.redis
+- ucsdlib.solr
