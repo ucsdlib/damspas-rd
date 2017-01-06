@@ -3,7 +3,7 @@
   solr_document = file_set.solr_document if (file_set.respond_to? :solr_document)
 
   parent_id = parent.id if defined?(parent) && !parent.nil?
-  fedora_file = solr_document['digest_ssim'].first.split(':')[-1] if !solr_document['digest_ssim'].nil?
+  fedora_file = solr_document['service_file_digest_ssim'].first.split(':')[-1] if !solr_document['service_file_digest_ssim'].nil?
 
   file_ext = 'mp3'
   file_ext = solr_document['label_tesim'].first.split('.')[-1] if solr_document['label_tesim'].first
@@ -32,8 +32,7 @@ puts "#{parent_id} #{file_set.id} #{fedora_file} #{file_ext} 127.0.0.1: #{wowzaU
   <% end %>
 <% else %>
   <audio controls="controls" class="audiojs" preload="auto">
-    <source src="<%= main_app.download_path(file_set, file: 'ogg') %>" type="audio/ogg" />
-    <source src="<%= main_app.download_path(file_set, file: 'mp3') %>" type="audio/mpeg" />
+    <source src="<%= main_app.download_path(file_set, file: 'service_file') %>" type="audio/mpeg" />
     Your browser does not support the audio tag.
   </audio>
 <% end %>
