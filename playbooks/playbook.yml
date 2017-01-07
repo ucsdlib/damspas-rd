@@ -1,0 +1,28 @@
+---
+
+- hosts: horton
+  become: true
+
+  vars:
+    - do_update: false
+
+  roles:
+    - ucsdlib.fedora-commons
+    # TODO: write start script for Fedora Commons
+    - { role: 'ucsdlib.ffmpeg', ffmpeg_version: 'release' }
+    - ucsdlib.fits
+    - ucsdlib.imagemagick-jpeg2000
+    # TODO: Determine if RHEL 7 ImageMagick is sufficient
+    - ucsdlib.libreoffice
+    - ucsdlib.postgresql
+    - ucsdlib.redis
+    - ucsdlib.solr
+
+  pre_tasks:
+    - name: Update Packages
+      package:
+        name: '*'
+        state: latest
+      when: do_update
+
+# TODO: setup postgresql databases and users
