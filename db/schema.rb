@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -21,10 +20,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.binary   "title"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["document_id"], name: "index_bookmarks_on_document_id"
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
-
-  add_index "bookmarks", ["document_id"], name: "index_bookmarks_on_document_id"
-  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
 
   create_table "checksum_audit_logs", force: :cascade do |t|
     t.string   "file_set_id"
@@ -35,9 +33,8 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string   "actual_result"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id"
   end
-
-  add_index "checksum_audit_logs", ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id"
 
   create_table "content_blocks", force: :cascade do |t|
     t.string   "name"
@@ -62,37 +59,33 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.integer  "children_count", default: 0, null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.index ["lft"], name: "index_curation_concerns_operations_on_lft"
+    t.index ["parent_id"], name: "index_curation_concerns_operations_on_parent_id"
+    t.index ["rgt"], name: "index_curation_concerns_operations_on_rgt"
+    t.index ["user_id"], name: "index_curation_concerns_operations_on_user_id"
   end
-
-  add_index "curation_concerns_operations", ["lft"], name: "index_curation_concerns_operations_on_lft"
-  add_index "curation_concerns_operations", ["parent_id"], name: "index_curation_concerns_operations_on_parent_id"
-  add_index "curation_concerns_operations", ["rgt"], name: "index_curation_concerns_operations_on_rgt"
-  add_index "curation_concerns_operations", ["user_id"], name: "index_curation_concerns_operations_on_user_id"
 
   create_table "domain_terms", force: :cascade do |t|
     t.string "model"
     t.string "term"
+    t.index ["model", "term"], name: "terms_by_model_and_term"
   end
-
-  add_index "domain_terms", ["model", "term"], name: "terms_by_model_and_term"
 
   create_table "domain_terms_local_authorities", id: false, force: :cascade do |t|
     t.integer "domain_term_id"
     t.integer "local_authority_id"
+    t.index ["domain_term_id", "local_authority_id"], name: "dtla_by_ids2"
+    t.index ["local_authority_id", "domain_term_id"], name: "dtla_by_ids1"
   end
-
-  add_index "domain_terms_local_authorities", ["domain_term_id", "local_authority_id"], name: "dtla_by_ids2"
-  add_index "domain_terms_local_authorities", ["local_authority_id", "domain_term_id"], name: "dtla_by_ids1"
 
   create_table "featured_works", force: :cascade do |t|
     t.integer  "order",      default: 5
     t.string   "work_id"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["order"], name: "index_featured_works_on_order"
+    t.index ["work_id"], name: "index_featured_works_on_work_id"
   end
-
-  add_index "featured_works", ["order"], name: "index_featured_works_on_order"
-  add_index "featured_works", ["work_id"], name: "index_featured_works_on_work_id"
 
   create_table "file_download_stats", force: :cascade do |t|
     t.datetime "date"
@@ -101,10 +94,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
+    t.index ["file_id"], name: "index_file_download_stats_on_file_id"
+    t.index ["user_id"], name: "index_file_download_stats_on_user_id"
   end
-
-  add_index "file_download_stats", ["file_id"], name: "index_file_download_stats_on_file_id"
-  add_index "file_download_stats", ["user_id"], name: "index_file_download_stats_on_user_id"
 
   create_table "file_view_stats", force: :cascade do |t|
     t.datetime "date"
@@ -113,10 +105,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
+    t.index ["file_id"], name: "index_file_view_stats_on_file_id"
+    t.index ["user_id"], name: "index_file_view_stats_on_user_id"
   end
-
-  add_index "file_view_stats", ["file_id"], name: "index_file_view_stats_on_file_id"
-  add_index "file_view_stats", ["user_id"], name: "index_file_view_stats_on_user_id"
 
   create_table "local_authorities", force: :cascade do |t|
     t.string "name"
@@ -126,19 +117,17 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.integer "local_authority_id"
     t.string  "label"
     t.string  "uri"
+    t.index ["local_authority_id", "label"], name: "entries_by_term_and_label"
+    t.index ["local_authority_id", "uri"], name: "entries_by_term_and_uri"
   end
-
-  add_index "local_authority_entries", ["local_authority_id", "label"], name: "entries_by_term_and_label"
-  add_index "local_authority_entries", ["local_authority_id", "uri"], name: "entries_by_term_and_uri"
 
   create_table "mailboxer_conversation_opt_outs", force: :cascade do |t|
-    t.integer "unsubscriber_id"
     t.string  "unsubscriber_type"
+    t.integer "unsubscriber_id"
     t.integer "conversation_id"
+    t.index ["conversation_id"], name: "index_mailboxer_conversation_opt_outs_on_conversation_id"
+    t.index ["unsubscriber_id", "unsubscriber_type"], name: "index_mailboxer_conversation_opt_outs_on_unsubscriber_id_type"
   end
-
-  add_index "mailboxer_conversation_opt_outs", ["conversation_id"], name: "index_mailboxer_conversation_opt_outs_on_conversation_id"
-  add_index "mailboxer_conversation_opt_outs", ["unsubscriber_id", "unsubscriber_type"], name: "index_mailboxer_conversation_opt_outs_on_unsubscriber_id_type"
 
   create_table "mailboxer_conversations", force: :cascade do |t|
     t.string   "subject",    default: ""
@@ -150,28 +139,27 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string   "type"
     t.text     "body"
     t.string   "subject",              default: ""
-    t.integer  "sender_id"
     t.string   "sender_type"
+    t.integer  "sender_id"
     t.integer  "conversation_id"
     t.boolean  "draft",                default: false
     t.string   "notification_code"
-    t.integer  "notified_object_id"
     t.string   "notified_object_type"
+    t.integer  "notified_object_id"
     t.string   "attachment"
     t.datetime "updated_at",                           null: false
     t.datetime "created_at",                           null: false
     t.boolean  "global",               default: false
     t.datetime "expires"
+    t.index ["conversation_id"], name: "index_mailboxer_notifications_on_conversation_id"
+    t.index ["notified_object_id", "notified_object_type"], name: "index_mailboxer_notifications_on_notified_object_id_and_type"
+    t.index ["sender_id", "sender_type"], name: "index_mailboxer_notifications_on_sender_id_and_sender_type"
+    t.index ["type"], name: "index_mailboxer_notifications_on_type"
   end
 
-  add_index "mailboxer_notifications", ["conversation_id"], name: "index_mailboxer_notifications_on_conversation_id"
-  add_index "mailboxer_notifications", ["notified_object_id", "notified_object_type"], name: "index_mailboxer_notifications_on_notified_object_id_and_type"
-  add_index "mailboxer_notifications", ["sender_id", "sender_type"], name: "index_mailboxer_notifications_on_sender_id_and_sender_type"
-  add_index "mailboxer_notifications", ["type"], name: "index_mailboxer_notifications_on_type"
-
   create_table "mailboxer_receipts", force: :cascade do |t|
-    t.integer  "receiver_id"
     t.string   "receiver_type"
+    t.integer  "receiver_id"
     t.integer  "notification_id",                            null: false
     t.boolean  "is_read",                    default: false
     t.boolean  "trashed",                    default: false
@@ -182,10 +170,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.boolean  "is_delivered",               default: false
     t.string   "delivery_method"
     t.string   "message_id"
+    t.index ["notification_id"], name: "index_mailboxer_receipts_on_notification_id"
+    t.index ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type"
   end
-
-  add_index "mailboxer_receipts", ["notification_id"], name: "index_mailboxer_receipts_on_notification_id"
-  add_index "mailboxer_receipts", ["receiver_id", "receiver_type"], name: "index_mailboxer_receipts_on_receiver_id_and_receiver_type"
 
   create_table "proxy_deposit_requests", force: :cascade do |t|
     t.string   "work_id",                               null: false
@@ -197,28 +184,25 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.text     "receiver_comment"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.index ["receiving_user_id"], name: "index_proxy_deposit_requests_on_receiving_user_id"
+    t.index ["sending_user_id"], name: "index_proxy_deposit_requests_on_sending_user_id"
   end
-
-  add_index "proxy_deposit_requests", ["receiving_user_id"], name: "index_proxy_deposit_requests_on_receiving_user_id"
-  add_index "proxy_deposit_requests", ["sending_user_id"], name: "index_proxy_deposit_requests_on_sending_user_id"
 
   create_table "proxy_deposit_rights", force: :cascade do |t|
     t.integer  "grantor_id"
     t.integer  "grantee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["grantee_id"], name: "index_proxy_deposit_rights_on_grantee_id"
+    t.index ["grantor_id"], name: "index_proxy_deposit_rights_on_grantor_id"
   end
-
-  add_index "proxy_deposit_rights", ["grantee_id"], name: "index_proxy_deposit_rights_on_grantee_id"
-  add_index "proxy_deposit_rights", ["grantor_id"], name: "index_proxy_deposit_rights_on_grantor_id"
 
   create_table "qa_local_authorities", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_qa_local_authorities_on_name", unique: true
   end
-
-  add_index "qa_local_authorities", ["name"], name: "index_qa_local_authorities_on_name", unique: true
 
   create_table "qa_local_authority_entries", force: :cascade do |t|
     t.integer  "local_authority_id"
@@ -226,10 +210,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string   "uri"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.index ["local_authority_id"], name: "index_qa_local_authority_entries_on_local_authority_id"
+    t.index ["uri"], name: "index_qa_local_authority_entries_on_uri", unique: true
   end
-
-  add_index "qa_local_authority_entries", ["local_authority_id"], name: "index_qa_local_authority_entries_on_local_authority_id"
-  add_index "qa_local_authority_entries", ["uri"], name: "index_qa_local_authority_entries_on_uri", unique: true
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
@@ -238,10 +221,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
   create_table "roles_users", id: false, force: :cascade do |t|
     t.integer "role_id"
     t.integer "user_id"
+    t.index ["role_id", "user_id"], name: "index_roles_users_on_role_id_and_user_id"
+    t.index ["user_id", "role_id"], name: "index_roles_users_on_user_id_and_role_id"
   end
-
-  add_index "roles_users", ["role_id", "user_id"], name: "index_roles_users_on_role_id_and_user_id"
-  add_index "roles_users", ["user_id", "role_id"], name: "index_roles_users_on_user_id_and_role_id"
 
   create_table "searches", force: :cascade do |t|
     t.binary   "query_params"
@@ -249,9 +231,8 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string   "user_type"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["user_id"], name: "index_searches_on_user_id"
   end
-
-  add_index "searches", ["user_id"], name: "index_searches_on_user_id"
 
   create_table "single_use_links", force: :cascade do |t|
     t.string   "downloadKey"
@@ -266,9 +247,8 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string "label"
     t.string "lowerLabel"
     t.string "url"
+    t.index ["lowerLabel"], name: "entries_by_lower_label"
   end
-
-  add_index "subject_local_authority_entries", ["lowerLabel"], name: "entries_by_lower_label"
 
   create_table "sufia_features", force: :cascade do |t|
     t.string   "key",                        null: false
@@ -296,10 +276,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string   "file_set_uri"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["file_set_uri"], name: "index_uploaded_files_on_file_set_uri"
+    t.index ["user_id"], name: "index_uploaded_files_on_user_id"
   end
-
-  add_index "uploaded_files", ["file_set_uri"], name: "index_uploaded_files_on_file_set_uri"
-  add_index "uploaded_files", ["user_id"], name: "index_uploaded_files_on_user_id"
 
   create_table "user_stats", force: :cascade do |t|
     t.integer  "user_id"
@@ -309,9 +288,8 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "work_views"
+    t.index ["user_id"], name: "index_user_stats_on_user_id"
   end
-
-  add_index "user_stats", ["user_id"], name: "index_user_stats_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -350,10 +328,9 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.string   "arkivo_subscription"
     t.binary   "zotero_token"
     t.string   "zotero_userid"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
   create_table "version_committers", force: :cascade do |t|
     t.string   "obj_id"
@@ -371,9 +348,8 @@ ActiveRecord::Schema.define(version: 20161130221423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
+    t.index ["user_id"], name: "index_work_view_stats_on_user_id"
+    t.index ["work_id"], name: "index_work_view_stats_on_work_id"
   end
-
-  add_index "work_view_stats", ["user_id"], name: "index_work_view_stats_on_user_id"
-  add_index "work_view_stats", ["work_id"], name: "index_work_view_stats_on_work_id"
 
 end

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '5.0.0.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -59,6 +59,9 @@ gem 'flipflop', github: 'jcoyne/flipflop', branch: 'hydra'
 gem 'hydra-role-management'
 
 gem 'active-fedora', '11.0.0.rc7'
+gem 'railties', '~> 5.0'
+gem 'curation_concerns', '1.6.3'
+gem 'browse-everything', '0.10.5'
 
 group :development, :test do
   gem 'capybara', '~> 2.6.0'
@@ -70,6 +73,7 @@ group :development, :test do
   gem 'unicorn', '~> 5.1.0'
   gem 'solr_wrapper', '>= 0.3'
   gem 'database_cleaner', '~> 1.3'
+  gem 'rails-controller-testing', '~> 0'
 end
 
 gem 'rsolr', '~> 1.0'

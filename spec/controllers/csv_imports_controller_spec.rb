@@ -23,13 +23,13 @@ describe CsvImportsController do
   describe "#create" do
     context "enquing a update job" do
       it "is successful" do
-        params = {
+        parameters = {
           csv_source: csv_source,
           uploaded_files: [upload1.id.to_s],
           selected_files: {},
           csv_import_item: {visibility: 'open'}
         }
-        post :create, params
+        post :create, params: parameters
         expect(response).to redirect_to Sufia::Engine.routes.url_helpers.dashboard_works_path
         expect(flash[:notice]).to include("Successfully imported records!")
       end

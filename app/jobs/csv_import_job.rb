@@ -1,5 +1,5 @@
 require 'csv_parser'
-class CsvImportJob < ActiveJob::Base
+class CsvImportJob < ApplicationJob
   queue_as :ingest
 
   before_enqueue do |job|
