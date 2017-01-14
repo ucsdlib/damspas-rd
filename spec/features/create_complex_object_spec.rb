@@ -23,7 +23,7 @@ feature 'Create a complex Object' do
     end
 
     scenario 'should display all components of a complex object' do
-      visit curation_concerns_object_resource_path parent.id
+      visit hyrax_object_resource_path parent.id
       expect(parent.ordered_members.to_a.length).to eq 3
       expect(page).to have_content 'Parent Object'
       expect(page).to have_content 'Child 1'

@@ -112,7 +112,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read and edit any public collections' do
-      visit "#{collection_path public_collection.id}"
+      visit "#{hyrax.collection_path public_collection.id}"
       expect(page).to have_content 'Public Collection Title'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Public Collection Title - Editor Edited'
@@ -121,7 +121,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read and edit any any campus only collections' do
-      visit "#{collection_path campus_only_collection.id}"
+      visit "#{hyrax.collection_path campus_only_collection.id}"
       expect(page).to have_content 'Campus Only Collection Title'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Campus Only Collection Title - Editor Edited'
@@ -130,7 +130,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read and edit any private collections' do
-      visit "#{collection_path private_collection.id}"
+      visit "#{hyrax.collection_path private_collection.id}"
       expect(page).to have_content 'Private Collection Title'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Private Collection Title - Editor Edited'
@@ -146,24 +146,24 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to create collections' do
-      visit new_collection_path
+      visit hyrax.new_collection_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
     scenario 'is allowed to read any public collections but no editing allowed' do
-      visit "#{collection_path public_collection.id}"
+      visit "#{hyrax.collection_path public_collection.id}"
       expect(page).to have_content 'Public Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'is allowed to read and edit any any campus only collections but no editing allowed' do
-      visit "#{collection_path campus_only_collection.id}"
+      visit "#{hyrax.collection_path campus_only_collection.id}"
       expect(page).to have_content 'Campus Only Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'is allowed to read and edit any private collections but no editing allowed' do
-      visit "#{collection_path private_collection.id}"
+      visit "#{hyrax.collection_path private_collection.id}"
       expect(page).to have_content 'Private Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
@@ -176,24 +176,24 @@ feature 'Create a Collection' do
     end
 
     scenario 'should not be able to create new collection'do
-      visit new_collection_path
+      visit hyrax.new_collection_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
     scenario 'should be able to read any public collections but no editing allowed' do
-      visit "#{collection_path public_collection.id}"
+      visit "#{hyrax.collection_path public_collection.id}"
       expect(page).to have_content 'Public Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only collections but no editing allowed' do
-      visit "#{collection_path campus_only_collection.id}"
+      visit "#{hyrax.collection_path campus_only_collection.id}"
       expect(page).to have_content 'Campus Only Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should not be able to read any private collections' do
-      visit "#{collection_path private_collection.id}"
+      visit "#{hyrax.collection_path private_collection.id}"
       expect(page).not_to have_content 'Private Collection Title'
       expect(page).to have_content 'You are not authorized to access this page'
     end
@@ -201,23 +201,23 @@ feature 'Create a Collection' do
 
   context 'an anonymous user' do
     scenario 'should not be able to create new collections'do
-      visit new_collection_path
+      visit hyrax.new_collection_path
       expect(page).to have_current_path new_user_session_path
     end
 
     scenario 'should be able to read any public collections but no editing allowed' do
-      visit "#{collection_path public_collection.id}"
+      visit "#{hyrax.collection_path public_collection.id}"
       expect(page).to have_content 'Public Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only collections' do
-      visit "#{collection_path campus_only_collection.id}"
+      visit "#{hyrax.collection_path campus_only_collection.id}"
       expect(page).to have_current_path new_user_session_path
     end
 
     scenario 'should not be able to read any private collections' do
-      visit "#{collection_path private_collection.id}"
+      visit "#{hyrax.collection_path private_collection.id}"
       expect(page).to have_current_path new_user_session_path
     end
   end

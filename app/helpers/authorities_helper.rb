@@ -4,7 +4,7 @@ module AuthoritiesHelper
   # @options
   # Render HTML for attributes
   def render_attribute (field, values, options = {})
-    renderer = ::CurationConcerns::Renderers::AttributeRenderer.new field, values, options
+    renderer = ::Hyrax::Renderers::AttributeRenderer.new field, values, options
     renderer.render
   end
 

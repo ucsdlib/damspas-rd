@@ -1,3 +1,3 @@
-class WorkSearchBuilder < CurationConcerns::WorkSearchBuilder
+class WorkSearchBuilder < Hyrax::WorkSearchBuilder
   include ::RolesBaseGatedSearchBuilder
 end

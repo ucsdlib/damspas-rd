@@ -1,43 +1,46 @@
   module CsvImportsControllerBehavior
     extend ActiveSupport::Concern
     include Hydra::Controller::ControllerBehavior
-    include CurationConcerns::CurationConcernController
+    include Hyrax::CurationConcernController
 
     included do
-      self.curation_concern_type = form_class.model_class
+      self.work_form_service = CsvImportsFormService
+      self.curation_concern_type = work_form_service.form_class.model_class
     end
 
     def create
       authenticate_user!
       create_update_job
-      flash[:notice] = t('csv_create', application_name: view_context.application_name)
+      flash[:notice] = t('hyrax.works.new.after_create_html', application_name: view_context.application_name)
       redirect_after_update
     end
 
-    module ClassMethods
-      def form_class
+#    def create
+#      authenticate_user!
+#      create_update_job
+#      flash[:notice] = t('csv_create', application_name: view_context.application_name)
+#      redirect_after_update
+#    end
+
+    # Gives the class of the form.
+    class CsvImportsFormService < Hyrax::WorkFormService
+      def self.form_class(_ = nil)
         ::CsvImportForm
       end
     end
 
     protected
 
-      # Gives the class of the form.
-      # This overrides CurationConcerns
-      def form_class
-        self.class.form_class
-      end
-
       def redirect_after_update
         if uploading_on_behalf_of?
-          redirect_to sufia.dashboard_shares_path
+          redirect_to hyrax.dashboard_shares_path
         else
-          redirect_to sufia.dashboard_works_path
+          redirect_to hyrax.dashboard_works_path
         end
       end
 
       def create_update_job
-        log = Sufia::BatchCreateOperation.create!(user: current_user,
+        log = Hyrax::BatchCreateOperation.create!(user: current_user,
                                            operation_type: "CSV Import")
 
         uploaded_files = params.fetch(:uploaded_files, [])

@@ -4,11 +4,11 @@ describe 'CsvImportJob' do
 
   before do
     allow(CharacterizeJob).to receive(:perform_later)
-    allow(CurationConcerns.config.callback).to receive(:run)
-    allow(CurationConcerns.config.callback).to receive(:set?)
+    allow(Hyrax.config.callback).to receive(:run)
+    allow(Hyrax.config.callback).to receive(:set?)
       .with(:after_batch_create_success)
       .and_return(true)
-    allow(CurationConcerns.config.callback).to receive(:set?)
+    allow(Hyrax.config.callback).to receive(:set?)
       .with(:after_batch_create_failure)
       .and_return(true)
   end
@@ -16,7 +16,7 @@ describe 'CsvImportJob' do
   describe "#perform" do
     let(:csv_source) { IO.read(fixture_path + '/csv_import_test.csv') }
     let(:file1) { File.open(fixture_path + '/file_1.jpg') }
-    let(:upload1) { Sufia::UploadedFile.create(user: user, file: file1) }
+    let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
     let(:metadata) { {} }
     let(:uploaded_files) { [upload1.id.to_s] }
     let(:selected_files) { [] }
@@ -34,9 +34,9 @@ describe 'CsvImportJob' do
     end
 
     it "updates work metadata" do
-      expect(CurationConcerns::CurationConcern).to receive(:actor).and_return(actor)
+      expect(Hyrax::CurationConcern).to receive(:actor).and_return(actor)
       expect(actor).to receive(:create).with( hash_including(title: ["Test Object One"], uploaded_files: [upload1.id.to_s])).and_return(true)
-      expect(CurationConcerns.config.callback).to receive(:run).with(:after_batch_create_success, user)
+      expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
       subject
       expect(log.status).to eq 'pending'
       expect(log.reload.status).to eq 'success'
@@ -66,9 +66,9 @@ describe 'CsvImportJob' do
 
     context "when user does not have permission to edit all of the works" do
       it "sends the failure message" do
-        expect(CurationConcerns::CurationConcern).to receive(:actor).and_return(actor)
+        expect(Hyrax::CurationConcern).to receive(:actor).and_return(actor)
         expect(actor).to receive(:create).and_return(false)
-        expect(CurationConcerns.config.callback).to receive(:run).with(:after_batch_create_failure, user)
+        expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_failure, user)
         subject
         expect(log.reload.status).to eq 'failure'
       end

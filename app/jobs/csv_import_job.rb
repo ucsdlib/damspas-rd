@@ -10,7 +10,7 @@ class CsvImportJob < ApplicationJob
   # This copies metadata from the passed in attribute to all of the works that
   # are members of the given upload set
   # @param [User] user
-  # @param [Array<Sufia::UploadedFile>] uploaded_files
+  # @param [Array<Hyrax::UploadedFile>] uploaded_files
   # @param [Hash] attributes attributes to apply to all works
   # @param [BatchCreateOperation] log
   def perform(user, csv_source, uploaded_files, selected_files, attributes, log)
@@ -27,7 +27,7 @@ class CsvImportJob < ApplicationJob
       remote_files_map = {}
 
       uploaded_files.each do |id|
-        f = Sufia::UploadedFile.find(id).file if !id.blank?
+        f = Hyrax::UploadedFile.find(id).file if !id.blank?
         uploaded_files_map[File.basename(f.current_path)] = id
       end
 
@@ -65,7 +65,7 @@ class CsvImportJob < ApplicationJob
         attributes = attributes.merge(attrs)
         attributes[:uploaded_files] = matched_files
         attributes[:remote_files] = remote_files
-        child_log = CurationConcerns::Operation.create!(user: user,
+        child_log = Hyrax::Operation.create!(user: user,
                                                       operation_type: "Create Work",
                                                       parent: log)
         IngestWorkJob.perform_later(user, model.to_s, attributes, child_log)
@@ -77,7 +77,7 @@ class CsvImportJob < ApplicationJob
     # @param [Hash] attributes
     # @return String the model to create
     def model_to_create(attributes)
-      Sufia.config.model_to_create.call(attributes)
+      Hyrax.config.model_to_create.call(attributes)
     end
 
     def authority_hash (attrs, key, model)

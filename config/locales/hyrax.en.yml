@@ -1,0 +1,67 @@
+en:
+  hyrax:
+    product_name:       "Hyrax"
+    product_twitter_handle: "@HydraSphere"
+    institution_name:   "Institution Name"
+#    institution_name_full:   "The Institution Name"
+    account_name:       "My Institution Account Id"
+    directory:
+      suffix:           "@example.org"
+    footer:
+      copyright_html: "<strong>Copyright &copy; 2016 Project Hydra</strong> Licensed under the Apache License, Version 2.0"
+    search:
+      form:
+        option:
+          my_works:
+            label_short:  "My Objects"
+            label_long:   "My Objects"
+    select_type:
+      name:        "Object"
+    share_button:       "Share Your Object"
+    homepage:
+      featured_works:
+        tab_label:          'Featured Objects'
+        title:              'Featured Objects'
+        no_works:           'No objects have been featured'
+    toolbar:
+      works:
+        menu: "Objects"
+        new: "New Object"
+        my: "My Objects"
+        batch: "Batch Create"
+        csv_import: "CSV Import"
+    dashboard:
+      heading_actions:
+        create_work:            "Create Object"
+        select_type_of_work:    "Select type of object"
+      view_works:               "View Objects"
+      create_work:              "Create Object"
+      transfer_works_link:      "Select objects to transfer"
+      no_transfer_requests:     "You haven't received any object transfer requests"
+      no_transfers:             "You haven't transferred any object"
+      stats:
+        works:              "Objects created"
+      my:
+        works:        "My Objects"
+        shares:       "Objects Shared with Me"
+        facet_label:
+          works:       "Filter your objects"
+    works:
+      new:
+        header: "Add New Object"
+        in_collections: This Object in Collections
+        in_this_work: Other Objects in this Object
+        in_other_works: This Object in Other Objects
+        after_create_html: "Your files are being processed by %{application_name} in the background. The metadata and access controls you specified are being applied. Files will be marked <span class=\"label label-danger\" title=\"Private\">Private</span> until this process is complete (shouldn't take too long, hang in there!). You may need to refresh this page to see these updates."
+      edit:
+        header: Edit Object
+        in_collections: This Object in Collections
+        in_this_work: Other Objects in this Object
+        in_other_works: This Object in Other Objects
+        additional_fields: "Additional fields"
+      progress:
+        header: "Save Object"
+  simple_form:
+    labels:
+      defaults:
+        description:               "Description"
