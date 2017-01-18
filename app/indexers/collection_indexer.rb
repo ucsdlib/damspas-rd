@@ -1,3 +1,3 @@
-class CollectionIndexer < CurationConcerns::CollectionIndexer
+class CollectionIndexer < Hyrax::CollectionIndexer
   include IndexesAttributes
 end

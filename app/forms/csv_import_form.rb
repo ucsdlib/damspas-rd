@@ -1,4 +1,4 @@
-class CsvImportForm < Sufia::Forms::WorkForm
+class CsvImportForm < Hyrax::Forms::WorkForm
   self.model_class = CsvImportItem
   include HydraEditor::Form::Permissions
 

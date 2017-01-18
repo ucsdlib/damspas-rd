@@ -21,8 +21,7 @@
 
 en:
   hello: "Hello world"
-  csv_create: "Successfully imported records!"
-  curation_concerns:
+  hyrax:
     institution_name:  &INSTITUTION_NAME "UCSD"
     institution:
       name: "Campus"

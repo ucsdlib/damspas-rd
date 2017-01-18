@@ -23,7 +23,7 @@ feature 'Create a Concept' do
     end
 
     scenario 'should be able to create Concept that links a closeMatch URL' do
-      visit "/records/new?type=Concept"
+      visit "/records/new?type=Concept&locale=en"
 
       expect(page).to have_selector 'h1', text: 'Create a New Concept Record'
 
@@ -35,7 +35,7 @@ feature 'Create a Concept' do
     end
 
     scenario 'should be able to edit Concept ' do
-      visit "/records/new?type=Concept"
+      visit "/records/new?type=Concept&locale=en"
 
       expect(page).to have_selector 'h1', text: 'Create a New Concept Record'
 

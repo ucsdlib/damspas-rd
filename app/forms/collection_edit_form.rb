@@ -1,4 +1,4 @@
-class CollectionEditForm < Sufia::Forms::CollectionForm
+class CollectionEditForm < Hyrax::Forms::CollectionForm
 
   self.terms += [:brief_description, :general_note, :location_of_originals, :table_of_contents]
   self.terms += [:spatial, :topic, :created_date, :extent, :local_attribution, :finding_aid, :exhibit, :resource_type]

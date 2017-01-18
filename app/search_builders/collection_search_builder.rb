@@ -1,5 +1,5 @@
 # Finds the child objects contained within a collection
-class CollectionSearchBuilder < CurationConcerns::MemberSearchBuilder
+class CollectionSearchBuilder < Hyrax::MemberWithFilesSearchBuilder
   include ::RolesBaseGatedSearchBuilder
 
   self.from_field = 'child_object_ids_ssim'
