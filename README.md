@@ -61,6 +61,11 @@ rails s
 ```
 Go to http://localhost:3000/ and register to start
 
+### Start Sidekiq in another window
+```
+bundle exec sidekiq
+```
+
 ### Adding an admin role to the last user
 ```bash
 rake add_admin_role
