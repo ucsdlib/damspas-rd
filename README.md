@@ -25,6 +25,15 @@ Please visit [Curation Concerns](https://github.com/projecthydra/curation_concer
 4. Update DB: ```bundle exec rake db:migrate```
 5. Edit config/browse_everything_providers.yml file_system home for server side files ingest.
 
+### Starting Resque
+```bash
+# Start Worker
+RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 QUEUE=* rake environment resque:work
+
+# Or start Resque pool
+RUN_AT_EXIT_HOOKS=true TERM_CHILD=1 rake resque:pool
+```
+
 ### Running Tests
 ```bash
 # Start the test servers

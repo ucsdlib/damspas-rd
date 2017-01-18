@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
   
+  require 'resque/server'
+  # Administrative URLs
+  namespace :admin do
+    # Job monitoring
+    constraints ResqueAdmin do
+      mount Resque::Server, at: 'queues'
+    end
+  end
+
   mount BrowseEverything::Engine => '/browse'
   mount Blacklight::Engine => '/'
   
