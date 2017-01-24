@@ -17,7 +17,7 @@ describe ObjectResource do
   let(:lan_obj) { described_class.new(title: ['Test Object Resource - Language'], language: ["http://lexvo.org/id/iso639-3/eng"]) }
   let(:lan_err_obj) { described_class.new(title: ['Test Object Resource - Language'], language: ["Not a url"]) }
 
-  describe 'Object Resource' do
+  context 'ObjectResource create/edit' do
 
     it 'should create object resource' do
       obj.save ({:validate => false})
@@ -80,6 +80,42 @@ describe ObjectResource do
       @obj = described_class.find lan_obj.id
       expect(@obj.title.first).to eq 'Test Object Resource - Language'
       expect(@obj.language).to eq ['http://lexvo.org/id/iso639-3/eng']
+    end
+  end
+
+  context 'Create new ObjectResource with default NOID' do
+    before do
+      @enable_noids = Hyrax.config.enable_noids
+      Hyrax.config.enable_noids = true
+    end
+    after do
+      Hyrax.config.enable_noids = @enable_noids
+    end
+    let (:noid_template) { Noid::Template.new Hyrax.config.noid_template }
+    it 'should match NOID pattern' do
+      obj.save ({:validate => false})
+      expect { obj.save }.to_not raise_error
+      expect(obj.id).to be_truthy
+      expect(noid_template.valid? obj.id).to be_truthy
+    end
+  end
+
+  context 'Create new ObjectResource with AF::NOID disabled that use Fedora UUID' do
+    before do
+      @enable_noids = Hyrax.config.enable_noids
+      Hyrax.config.enable_noids = false
+    end
+    after do
+      Hyrax.config.enable_noids = @enable_noids
+    end
+    let (:noid_template) { Noid::Template.new Hyrax.config.noid_template }
+    let (:uuid_pattern) { '[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}' }
+    it 'should not match NOID pattern' do
+      obj.save ({:validate => false})
+      expect { obj.save }.to_not raise_error
+      expect(obj.id).to be_truthy
+      expect(noid_template.valid? obj.id).not_to be_truthy
+      expect(obj.id.match(uuid_pattern)).to be_truthy
     end
   end
 end
