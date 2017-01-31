@@ -11,15 +11,19 @@ machine:
   environment:
     CIRCLE_ENV: test
     RAILS_ENV: test
+  java:
+    version: openjdk8
 
 dependencies:
   override:
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-                     
+                                 
 database:
   override:
     - bundle exec rake db:migrate
-
+        
 test:
-  override:    
+  override:
+    - bundle exec rake hydra:test_server:
+        background: true      
     - bundle exec rake spec
