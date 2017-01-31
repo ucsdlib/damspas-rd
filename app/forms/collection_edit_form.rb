@@ -12,6 +12,12 @@ class CollectionEditForm < Hyrax::Forms::CollectionForm
     attrs[:title] = Array(attrs[:title]) if attrs[:title]
     # local authorities hashing
     attrs = super(attrs)
+
+    begin
+    # language label conversion
+    language_converted = attrs['language'].collect { |v| LanguageSelectService.new.get_uri(v) || (raise ArgumentError.new('Invalid language error')) }
+    attrs['language'] = language_converted
+
     attrs.dup.each do |key, value|
       if value.is_a? Array
         attrs[key].map! { |v| to_hash(v) }
@@ -20,6 +26,9 @@ class CollectionEditForm < Hyrax::Forms::CollectionForm
       end
     end
 
+    # Invalid language input will be caught by validation
+    rescue ArgumentError => err
+    end
     attrs
   end
 

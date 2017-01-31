@@ -11,7 +11,7 @@ class ObjectResource < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
-  validates :language, url: true, allow_blank:true
+  validates :language, url: {message: 'Invalid label for language field!'}, allow_blank:true
 
   def self.indexer
     ::WorkIndexer

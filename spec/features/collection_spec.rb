@@ -63,17 +63,29 @@ feature 'Create a Collection' do
       expect(page).to have_content 'General Note'
     end
 
-    scenario 'should create collection with language url' do
+    scenario 'should create collection with language label' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional fields')
 
       fill_in 'collection_title', with: 'Test Collection - Language'
-      select 'Language', from: "collection_language"
+      fill_in 'collection_language', with: 'Language'
       click_button("Create Collection")
       expect(page).to have_selector 'h1', text: 'Test Collection - Language'
       expect(page).to have_selector 'a', text: 'Language'
+    end
+
+    scenario 'should get validation message with an invalid language label' do
+      visit '/dashboard'
+      first('#hydra-collection-add').click
+      expect(page).to have_content 'Create New Collection'
+      click_link('Additional fields')
+
+      fill_in 'collection_title', with: 'Test Collection - Language'
+      fill_in 'collection_language', with: 'Invalid Language'
+      click_button("Create Collection")
+      expect(page).to have_content 'Invalid label for language field!'
     end
 
     scenario 'should create collection with resource type label from type url' do

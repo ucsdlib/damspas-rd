@@ -19,6 +19,12 @@ module Hyrax
     def self.model_attributes(attrs)
       # local authorities hashing
       attrs = super(attrs)
+
+      begin
+      # language label conversion
+      language_converted = attrs['language'].dup.map! { |v| LanguageSelectService.new.get_uri(v) || (raise ArgumentError.new('Invalid language error')) }
+      attrs['language'] = language_converted
+
       attrs.dup.each do |key, value|
         if value.is_a? Array
           attrs[key].map! { |v| to_hash(v) }
@@ -27,6 +33,9 @@ module Hyrax
         end
       end
 
+      # Invalid language input will be caught by validation
+      rescue ArgumentError => err
+      end
       attrs
     end
 

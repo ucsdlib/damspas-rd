@@ -27,7 +27,13 @@ module Hyrax
     def build_form
       attrs = curation_concern.attributes.dup
       attrs.each do |key, val|
-        curation_concern.attributes[key] = hash_to_uri val
+        if key == 'language'
+          language_service = LanguageSelectService.new
+          val = val.collect { |v| language_service.get_label v }
+          curation_concern.attributes[key].clear.push val
+        else
+          curation_concern.attributes[key] = hash_to_uri val
+        end
       end
 
       @form = work_form_service.build(curation_concern, current_ability, self)

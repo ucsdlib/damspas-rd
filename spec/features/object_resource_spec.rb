@@ -65,10 +65,10 @@ feature 'Create a ObjectResource' do
       expect(page).to have_content 'Test Physical Description'
     end
 
-    scenario 'should create object with language url' do
+    scenario 'should create object with language label' do
       visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource - Language'
-      select 'Language', from: "object_resource_language"
+      fill_in 'object_resource_language', with: 'Language'
       click_button 'Save'
       expect(page).to have_selector 'h1', text: 'Test ObjectResource - Language'
       expect(page).to have_selector 'li.language', text: 'Language'

@@ -8,7 +8,13 @@ module Hyrax
   def form
     attrs = @collection.attributes.dup
     attrs.each do |key, val|
-      @collection.attributes[key] = hash_to_uri val
+      if key == 'language'
+        language_service = LanguageSelectService.new
+        val = val.collect { |v| language_service.get_label v }
+        @collection.attributes[key].clear.push val
+      else
+        @collection.attributes[key] = hash_to_uri val
+      end
     end
 
     @form ||= form_class.new(@collection)
