@@ -1,8 +1,7 @@
 class Ability
   include Hydra::Ability
-  
-  include CurationConcerns::Ability
-  include Sufia::Ability
+
+  include Hyrax::Ability
 
   # override user_groups method to use default institutional visibility for campus group access
   def user_groups
@@ -13,6 +12,7 @@ class Ability
 
   # Abilities that should only be granted to admin users
   def admin_permissions
+    return unless admin?
     can [:manage], :all
   end
 
@@ -48,6 +48,6 @@ class Ability
 
   private
     def curation_concerns
-      CurationConcerns.config.curation_concerns
+      Hyrax.config.curation_concerns
     end
 end

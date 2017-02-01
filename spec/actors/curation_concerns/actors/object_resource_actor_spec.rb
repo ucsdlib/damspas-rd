@@ -1,8 +1,8 @@
 # Generated via
-#  `rails generate curation_concerns:work ObjectResource`
+#  `rails generate hyrax:work ObjectResource`
 require 'rails_helper'
 
-describe CurationConcerns::Actors::ObjectResourceActor do
+describe Hyrax::Actors::ObjectResourceActor do
   it "has tests" do
     skip "Add your tests here"
   end

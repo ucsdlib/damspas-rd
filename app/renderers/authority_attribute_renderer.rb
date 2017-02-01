@@ -1,4 +1,4 @@
-class AuthorityAttributeRenderer < ::CurationConcerns::Renderers::AttributeRenderer
+class AuthorityAttributeRenderer < ::Hyrax::Renderers::AttributeRenderer
 
   # Draw the table row for the attribute
   def render

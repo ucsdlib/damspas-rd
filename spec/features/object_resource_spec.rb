@@ -1,5 +1,5 @@
 # Generated via
-#  `rails generate curation_concerns:work ObjectResource`
+#  `rails generate hyrax:work ObjectResource`
 require 'rails_helper'
 include Warden::Test::Helpers
 
@@ -28,7 +28,7 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should be able to create and edit private object'do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource'
       click_button 'Save'
       expect(page).to have_content 'Test ObjectResource'
@@ -39,7 +39,7 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should create object' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource'
       fill_in 'Description', with: 'Test Description'
       click_button 'Save'
@@ -48,7 +48,7 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should contains UCSD custom term General Note' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource'
       fill_in 'General note', with: 'Test General Note'
       click_button 'Save'
@@ -57,7 +57,7 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should has UCSD name space term Physical Description' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource'
       fill_in 'Physical description', with: 'Test Physical Description'
       click_button 'Save'
@@ -65,17 +65,17 @@ feature 'Create a ObjectResource' do
       expect(page).to have_content 'Test Physical Description'
     end
 
-    scenario 'should create object with language url' do
-      visit new_curation_concerns_object_resource_path
+    scenario 'should create object with language label' do
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource - Language'
-      select 'Language', from: "object_resource_language"
+      fill_in 'object_resource_language', with: 'Language'
       click_button 'Save'
       expect(page).to have_selector 'h1', text: 'Test ObjectResource - Language'
       expect(page).to have_selector 'li.language', text: 'Language'
     end
 
     scenario 'should create object with resource type label from type url' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource - Resource Type'
       select 'Data', from: "object_resource_resource_type"
       click_button 'Save'
@@ -91,7 +91,7 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should be able to create and edit private object' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource Editor'
       click_button 'Save'
       expect(page).to have_content 'Test ObjectResource Editor'
@@ -102,7 +102,7 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should be able to read and edit any private object' do
-      visit "#{curation_concerns_object_resource_path private_object_resource.id}"
+      visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).to have_content 'Private Object Title'
       find(:xpath, "(//a[text()='Edit'])[1]").click
       fill_in 'Title', with: 'Private Object Title - Editor Edited'
@@ -118,24 +118,24 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should not be able to create new object' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
     scenario 'should be able to read any public objects but no editing allowed' do
-      visit "#{curation_concerns_object_resource_path public_object_resource.id}"
+      visit "#{hyrax_object_resource_path public_object_resource.id}"
       expect(page).to have_content 'Public Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only objects but no editing allowed' do
-      visit "#{curation_concerns_object_resource_path campus_only_object_resource.id}"
+      visit "#{hyrax_object_resource_path campus_only_object_resource.id}"
       expect(page).to have_content 'Campus Only Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any private objects but no editing allowed' do
-      visit "#{curation_concerns_object_resource_path private_object_resource.id}"
+      visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).to have_content 'Private Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
@@ -148,24 +148,24 @@ feature 'Create a ObjectResource' do
     end
 
     scenario 'should not allow to create new object' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
     scenario 'should be able to read any public objects but no editing allowed' do
-      visit "#{curation_concerns_object_resource_path public_object_resource.id}"
+      visit "#{hyrax_object_resource_path public_object_resource.id}"
       expect(page).to have_content 'Public Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only objects but no editing allowed' do
-      visit "#{curation_concerns_object_resource_path campus_only_object_resource.id}"
+      visit "#{hyrax_object_resource_path campus_only_object_resource.id}"
       expect(page).to have_content 'Campus Only Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should not be able to read any private objects' do
-      visit "#{curation_concerns_object_resource_path private_object_resource.id}"
+      visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).not_to have_content 'Private Object Title'
       expect(page).to have_content 'Unauthorized'
     end
@@ -173,23 +173,23 @@ feature 'Create a ObjectResource' do
 
   context 'an anonymous user' do
     scenario 'should not allow to create new object' do
-      visit new_curation_concerns_object_resource_path
+      visit new_hyrax_object_resource_path
       expect(page).to have_current_path new_user_session_path
     end
 
     scenario 'should be able to read any public objects but no editing allowed' do
-      visit "#{curation_concerns_object_resource_path public_object_resource.id}"
+      visit "#{hyrax_object_resource_path public_object_resource.id}"
       expect(page).to have_content 'Public Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only objects' do
-      visit "#{curation_concerns_object_resource_path campus_only_object_resource.id}"
+      visit "#{hyrax_object_resource_path campus_only_object_resource.id}"
       expect(page).to have_current_path new_user_session_path
     end
 
     scenario 'should not be able to read any private objects' do
-      visit "#{curation_concerns_object_resource_path private_object_resource.id}"
+      visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).to have_current_path new_user_session_path
     end
   end

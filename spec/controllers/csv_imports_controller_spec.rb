@@ -2,7 +2,7 @@ describe CsvImportsController do
   let(:user) { create(:editor) }
   let(:csv_source) { Rack::Test::UploadedFile.new(File.open(fixture_path + '/csv_import_test.csv')) }
   let(:file1) { File.open(fixture_path + '/file_1.jpg') }
-  let(:upload1) { Sufia::UploadedFile.create(user: user, file: file1) }
+  let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
   let(:metadata) { {} }
   let(:uploaded_files) { [upload1.id.to_s] }
   let(:selected_files) { [] }
@@ -23,15 +23,15 @@ describe CsvImportsController do
   describe "#create" do
     context "enquing a update job" do
       it "is successful" do
-        params = {
+        parameters = {
           csv_source: csv_source,
           uploaded_files: [upload1.id.to_s],
           selected_files: {},
           csv_import_item: {visibility: 'open'}
         }
-        post :create, params
-        expect(response).to redirect_to Sufia::Engine.routes.url_helpers.dashboard_works_path
-        expect(flash[:notice]).to include("Successfully imported records!")
+        post :create, params: parameters
+        expect(response).to redirect_to Hyrax::Engine.routes.url_helpers.dashboard_works_path
+        expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
       end
     end
   end

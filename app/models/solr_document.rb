@@ -3,11 +3,8 @@ class SolrDocument
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
 
-  # Adds CurationConcerns behaviors to the SolrDocument.
-  include CurationConcerns::SolrDocumentBehavior
-  # Adds Sufia behaviors to the SolrDocument.
-  include Sufia::SolrDocumentBehavior
-
+  # Adds Hyrax behaviors to the SolrDocument.
+  include Hyrax::SolrDocumentBehavior
 
 
   # self.unique_key = 'id'
@@ -112,7 +109,7 @@ class SolrDocument
 
   # override itemtype for schema.org
   def itemtype
-    ResourceTypesService.microdata_type(resource_type.first) if !resource_type.nil? && !resource_type.empty?
+    Hyrax::ResourceTypesService.microdata_type(resource_type.first) if !resource_type.nil? && !resource_type.empty?
   end
 
   def language

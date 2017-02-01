@@ -1,5 +1,5 @@
 # Generated via
-#  `rails generate curation_concerns:work ObjectResource`
+#  `rails generate hyrax:work ObjectResource`
 require 'rails_helper'
 
 describe ObjectResource do
