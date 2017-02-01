@@ -13,6 +13,8 @@ machine:
     RAILS_ENV: test
   java:
     version: openjdk8
+  services:
+    - redis
 
 dependencies:
   override:
