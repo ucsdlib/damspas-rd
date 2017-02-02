@@ -27,5 +27,6 @@ database:
 test:
   override:
     - bundle exec rake hydra:test_server:
-        background: true      
+        background: true
+    - sleep 15      
     - bundle exec rake spec
