@@ -19,14 +19,15 @@ machine:
 dependencies:
   override:
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+  post:
+    - bundle exec rake hydra:test_server:
+        background: true  
+    - sleep 10 && wget --waitretry=5 --retry-connrefused -v http://localhost:8986/rest
                                  
 database:
   override:
     - bundle exec rake db:migrate
         
 test:
-  override:
-    - bundle exec rake hydra:test_server:
-        background: true
-    - sleep 10 && wget --waitretry=5 --retry-connrefused -v      
+  override:         
     - bundle exec rake spec
