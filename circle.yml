@@ -12,7 +12,7 @@ machine:
     CIRCLE_ENV: test
     RAILS_ENV: test
   java:
-    version: openjdk8
+    version: oraclejdk8
   services:
     - redis
 
