@@ -28,5 +28,5 @@ test:
   override:
     - bundle exec rake hydra:test_server:
         background: true
-    - sleep 15      
+    - sleep 10 && wget --waitretry=5 --retry-connrefused -v      
     - bundle exec rake spec
