@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+printf 'Starting Solr.'
+until $(curl --output /dev/null --silent --head --fail http://localhost:8985/solr); do
+    printf '.'
+    sleep 1
+done
+
+printf 'Starting Fedora.'
+until $(curl --output /dev/null --silent --head --fail http://localhost:8986/rest); do
+    printf '.'
+    sleep 1
+done
