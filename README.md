@@ -1,7 +1,8 @@
 # Horton
-A repository for doing shared R&amp;D on Sufia for the Development team.
+A digital collections application for the UC San Diego Library built using the [Hydra framework](https://projecthydra.org/), specifically using the [Hyrax front-end](https://github.com/projecthydra-labs/hyrax/), and the [Fedora Repository](http://fedorarepository.org/).
 
-**Note** This repository will be used for R&D [Development spikes](https://en.wikipedia.org/wiki/Spike_(software_development)) only.
+[![Coverage Status](https://coveralls.io/repos/github/ucsdlib/horton/badge.svg?branch=develop)](https://coveralls.io/github/ucsdlib/horton?branch=develop)
+[![Dependency Status](https://gemnasium.com/ucsdlib/horton.svg)](https://gemnasium.com/ucsdlib/horton)
 
 ## Prerequisites
 
@@ -24,6 +25,11 @@ Please visit [Curation Concerns](https://github.com/projecthydra/curation_concer
 3. Install gems: ```bundle install```
 4. Update DB: ```bundle exec rake db:migrate```
 5. Edit config/browse_everything_providers.yml file_system home for server side files ingest.
+
+### Start Redis
+```
+redis-server
+```
 
 ### Running Tests
 ```bash
