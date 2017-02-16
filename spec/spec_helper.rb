@@ -1,23 +1,17 @@
 ENV["RAILS_ENV"] ||= 'test'
 require "bundler/setup"
 
-def coverage_needed?
-  (!ENV['RAILS_VERSION'] || ENV['RAILS_VERSION'].start_with?('5.0')) &&
-    (ENV['COVERAGE'] || ENV['TRAVIS'])
+require 'simplecov'
+require 'coveralls'
+SimpleCov.root(File.expand_path('../..', __FILE__))
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start('rails') do
+  add_filter '/.internal_test_app'
+  add_filter '/lib/generators'
+  add_filter '/spec'
 end
+SimpleCov.command_name 'spec'
 
-if coverage_needed?
-  require 'simplecov'
-  require 'coveralls'
-  SimpleCov.root(File.expand_path('../..', __FILE__))
-  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-  SimpleCov.start('rails') do
-    add_filter '/.internal_test_app'
-    add_filter '/lib/generators'
-    add_filter '/spec'
-  end
-  SimpleCov.command_name 'spec'
-end
 
 require File.expand_path("../../config/environment", __FILE__)
 
