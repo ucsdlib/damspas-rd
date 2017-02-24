@@ -35,5 +35,5 @@ database:
     - bundle exec rake db:migrate
         
 test:
-  override:         
+  post:         
     - bundle exec rake spec
