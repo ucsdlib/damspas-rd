@@ -8,9 +8,9 @@ GIT
 
 GIT
   remote: git://github.com/projecthydra-labs/hyrax.git
-  revision: 0e2c05cc4f217a1a24a56283cefc2003de0568bc
+  revision: 9bef4c6b9bdff715c6376c55a349f9ffe2e56541
   specs:
-    hyrax (0.0.1.alpha)
+    hyrax (1.0.0.alpha)
       active_attr (~> 0.9.0)
       active_fedora-noid (~> 2.0)
       almond-rails (~> 0.0.1)
@@ -19,7 +19,7 @@ GIT
       blacklight-gallery (~> 0.7)
       breadcrumbs_on_rails (~> 3.0)
       browse-everything (>= 0.10.5)
-      carrierwave (~> 0.9)
+      carrierwave (~> 1.0)
       clipboard-rails (~> 1.5)
       daemons (~> 1.1)
       dry-equalizer (~> 0.2)
@@ -48,6 +48,7 @@ GIT
       rdf-rdfxml
       redis-namespace (~> 1.5.2)
       redlock (~> 0.1.2)
+      retriable (>= 2.9, < 4.0)
       select2-rails (~> 3.5.9)
       signet
       tinymce-rails (~> 4.1)
@@ -109,7 +110,7 @@ GEM
       activemodel (= 5.0.1)
       activesupport (= 5.0.1)
       arel (~> 7.0)
-    activerecord-import (0.17.0)
+    activerecord-import (0.17.1)
       activerecord (>= 3.2)
     activesupport (5.0.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -123,17 +124,17 @@ GEM
     almond-rails (0.0.3)
       rails (>= 4.2, < 6)
     arel (7.1.4)
-    autoprefixer-rails (6.7.2)
+    autoprefixer-rails (6.7.4)
       execjs
     awesome_nested_set (3.1.1)
       activerecord (>= 4.0.0, < 5.1)
-    aws-sdk (2.7.3)
-      aws-sdk-resources (= 2.7.3)
-    aws-sdk-core (2.7.3)
+    aws-sdk (2.7.12)
+      aws-sdk-resources (= 2.7.12)
+    aws-sdk-core (2.7.12)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.7.3)
-      aws-sdk-core (= 2.7.3)
+    aws-sdk-resources (2.7.12)
+      aws-sdk-core (= 2.7.12)
     aws-sigv4 (1.0.0)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -155,7 +156,7 @@ GEM
       blacklight (~> 6.0)
       cancancan (~> 1.8)
       deprecation (~> 1.0)
-    blacklight-gallery (0.7.0)
+    blacklight-gallery (0.8.0)
       blacklight (~> 6.3)
       bootstrap-sass (~> 3.0)
       openseadragon (>= 0.2.0)
@@ -181,7 +182,7 @@ GEM
       skydrive
     builder (3.2.3)
     byebug (9.0.6)
-    cancancan (1.15.0)
+    cancancan (1.16.0)
     capistrano (3.5.0)
       airbrussh (>= 1.0.0)
       capistrano-harrow
@@ -205,13 +206,11 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    carrierwave (0.11.2)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
-      json (>= 1.7)
+    carrierwave (1.0.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-      mimemagic (>= 0.3.0)
-    clipboard-rails (1.5.16)
+    clipboard-rails (1.6.0)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.2.x)
@@ -230,6 +229,8 @@ GEM
     daemons (1.2.4)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    declarative (0.0.9)
+    declarative-option (0.1.0)
     deprecation (1.0.0)
       activesupport
     devise (4.2.0)
@@ -244,7 +245,7 @@ GEM
     docile (1.1.5)
     dropbox-sdk (1.6.5)
       json
-    dry-configurable (0.5.0)
+    dry-configurable (0.6.0)
       concurrent-ruby (~> 1.0)
     dry-container (0.6.0)
       concurrent-ruby (~> 1.0)
@@ -297,15 +298,15 @@ GEM
       railties (>= 3.2, < 5.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
-    google-api-client (0.9.26)
+    google-api-client (0.10.0)
       addressable (~> 2.3)
       googleauth (~> 0.5)
       httpclient (~> 2.7)
       hurley (~> 0.1)
       memoist (~> 0.11)
       mime-types (>= 1.6)
-      representable (~> 2.3.0)
-      retriable (~> 2.0)
+      representable (~> 3.0)
+      retriable (>= 2.0, < 4.0)
     google_drive (2.1.2)
       google-api-client (>= 0.9.0, < 1.0.0)
       googleauth (>= 0.5.0, < 1.0.0)
@@ -396,7 +397,7 @@ GEM
     json-ld (2.1.2)
       multi_json (~> 1.12)
       rdf (~> 2.1)
-    json-schema (2.7.0)
+    json-schema (2.8.0)
       addressable (>= 2.4)
     jwt (1.5.6)
     kaminari (0.17.0)
@@ -405,7 +406,7 @@ GEM
     kaminari_route_prefix (0.0.2)
       kaminari (~> 0.16)
     kgio (2.11.0)
-    ldp (0.6.3)
+    ldp (0.6.4)
       deprecation
       faraday
       http_logger
@@ -438,7 +439,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
-    mini_magick (4.6.0)
+    mini_magick (4.6.1)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
@@ -548,15 +549,17 @@ GEM
     redic (1.5.0)
       hiredis
     redis (3.3.3)
-    redis-namespace (1.5.2)
+    redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
     redlock (0.1.8)
       redis (~> 3, >= 3.0.0)
-    representable (2.3.0)
-      uber (~> 0.0.7)
+    representable (3.0.3)
+      declarative (< 0.1.0)
+      declarative-option (< 0.2.0)
+      uber (< 0.2.0)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
-    retriable (2.1.0)
+    retriable (3.0.1)
     rsolr (1.1.2)
       builder (>= 2.1.2)
     rspec-activemodel-mocks (1.0.3)
@@ -662,7 +665,7 @@ GEM
     thread_safe (0.3.5)
     tilt (2.0.6)
     tins (1.6.0)
-    tinymce-rails (4.5.2)
+    tinymce-rails (4.5.3)
       railties (>= 3.1.1)
     tinymce-rails-imageupload (4.0.17.beta)
       railties (>= 3.2, < 6)
@@ -676,7 +679,7 @@ GEM
       railties (>= 3.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uber (0.0.15)
+    uber (0.1.0)
     uglifier (3.0.4)
       execjs (>= 0.3.0, < 3)
     unicorn (5.1.0)
@@ -720,7 +723,7 @@ DEPENDENCIES
   fcrepo_wrapper
   flipflop!
   hydra-role-management
-  hyrax (= 0.0.1.alpha)!
+  hyrax (= 1.0.0.alpha)!
   jbuilder (~> 2.5)
   jquery-rails
   json (~> 1.8.6)
@@ -749,4 +752,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.14.3
+   1.14.4

@@ -28,7 +28,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection'
       click_button("Create Collection")
@@ -43,7 +43,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection'
       click_button("Create Collection")
@@ -54,7 +54,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection'
       fill_in 'collection_general_note', with: 'General Note'
@@ -67,7 +67,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection - Language'
       fill_in 'collection_language', with: 'Language'
@@ -80,7 +80,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection - Language'
       fill_in 'collection_language', with: 'Invalid Language'
@@ -92,7 +92,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection - Resource Type'
       select 'Data', from: "collection_resource_type"
@@ -112,7 +112,7 @@ feature 'Create a Collection' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
-      click_link('Additional fields')
+      click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection - Editor'
       click_button("Create Collection")

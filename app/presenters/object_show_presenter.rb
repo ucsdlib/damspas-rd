@@ -8,6 +8,5 @@ class ObjectShowPresenter < ::Hyrax::WorkShowPresenter
   delegate :created_date, :event_date, to: :solr_document
   delegate :general_note, :physical_description, to: :solr_document
 
-  self.file_presenter_class = ::FileSetPresenter
 end
 
