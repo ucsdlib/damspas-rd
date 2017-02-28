@@ -4,13 +4,13 @@ module WowzaHelper
   #
   # @param obj_id
   # @param file_set_id
-  # @param fedora_file
-  # @media_type: 'audio', 'video'
+  # @param file_name
+  # @param request_ip
   # @return string or nil
   #---
 
-  def wowza_url(obj_id, file_set_id, fedora_file, media_type, request_ip)
-    plain_text = "#{obj_id} #{file_set_id} #{fedora_file} #{media_type} #{request_ip}"
+  def wowza_url(obj_id, file_set_id, file_name, request_ip)
+    plain_text = "#{obj_id} #{file_set_id} #{file_name} #{request_ip}"
     encrypted = encrypt_stream_name plain_text
     return Rails.configuration.wowza_baseurl + encrypted
   end

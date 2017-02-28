@@ -3,10 +3,9 @@ describe WowzaHelper, type: :helper do
   context 'encrypt audio URL without setting APPS_DHH_STREAMING_KEY key' do
     let (:obj_id) { '3j333268h' }
     let (:file_set_id) { 'd504rk75p' }
-    let (:fedora_file) { '34cddd4138eeb3686bdb095b9a26ac077919b0f0' }
-    let (:file_name) { 'mp3' }
+    let (:file_name) { 'p-mp3.mp3' }
     let (:request_ip) { '127.0.0.1' }
-    subject { helper.wowza_url(obj_id, file_set_id, fedora_file, file_name, request_ip) }
+    subject { helper.wowza_url(obj_id, file_set_id, file_name, request_ip) }
 
     it "should raise KeyError" do
       expect { raise KeyError }.to raise_error (KeyError)
@@ -22,10 +21,9 @@ describe WowzaHelper, type: :helper do
     end
     let (:obj_id) { '3j333268h' }
     let (:file_set_id) { 'd504rk75p' }
-    let (:fedora_file) { '34cddd4138eeb3686bdb095b9a26ac077919b0f0' }
-    let (:file_name) { 'mp3' }
+    let (:file_name) { 'p-mp3.mp3' }
     let (:request_ip) { '127.0.0.1' }
-    subject { helper.wowza_url(obj_id, file_set_id, fedora_file, file_name, request_ip) }
+    subject { helper.wowza_url(obj_id, file_set_id, file_name, request_ip) }
 
     it "forms the correct encryption" do
       expect(subject).to match(/,/)

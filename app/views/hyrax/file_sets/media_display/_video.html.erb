@@ -3,12 +3,9 @@
   solr_document = file_set.solr_document if (file_set.respond_to? :solr_document)
 
   parent_id = parent.id if defined?(parent) && !parent.nil?
-  fedora_file = solr_document['service_file_digest_ssim'].first.split(':')[-1] if !solr_document['service_file_digest_ssim'].nil?
+  file_name = "#{file_set.id.split('').each_slice(2).map(&:join)[-1]}-mp4.mp4"
 
-  file_ext = 'mp4'
-  file_ext = solr_document['label_tesim'].first.split('.')[-1] if solr_document['label_tesim'].first
-
-  wowzaURL = wowza_url(parent_id, file_set.id, fedora_file, file_ext, request.ip)
+  wowzaURL = wowza_url(parent_id, file_set.id, file_name, request.ip)
 %>
   <% if wowzaURL != nil %>
     <video controls="controls" id="dams-video">Loading the player...</video>
@@ -19,9 +16,9 @@
           [{
             sources:
               [
-                {file: "http://<%=wowzaURL%>/manifest.mpd"},
-                {file: "http://<%=wowzaURL%>/playlist.m3u8"},
-                {file: "rtmp://<%=wowzaURL%>"}
+                {file: "https://<%=wowzaURL%>/manifest.mpd"},
+                {file: "https://<%=wowzaURL%>/playlist.m3u8"},
+                {file: "rtmps://<%=wowzaURL%>"}
               ]
           }],
         width: "100%",
@@ -34,7 +31,8 @@
   <% end %>
 <% else %>
   <video controls="controls" class="video-js vjs-default-skin" data-setup="{}" preload="auto">
-    <source src="<%= hyrax.download_path(file_set, file: 'service_file') %>" type="video/mp4" />
+    <source src="<%= hyrax.download_path(file_set, file: 'webm') %>" type="video/webm" />
+    <source src="<%= hyrax.download_path(file_set, file: 'mp4') %>" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 <% end %>

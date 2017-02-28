@@ -3,12 +3,9 @@
   solr_document = file_set.solr_document if (file_set.respond_to? :solr_document)
 
   parent_id = parent.id if defined?(parent) && !parent.nil?
-  fedora_file = solr_document['service_file_digest_ssim'].first.split(':')[-1] if !solr_document['service_file_digest_ssim'].nil?
+  file_name = "#{file_set.id.split('').each_slice(2).map(&:join)[-1]}-mp3.mp3"
 
-  file_ext = 'mp3'
-  file_ext = solr_document['label_tesim'].first.split('.')[-1] if solr_document['label_tesim'].first
-
-  wowzaURL = wowza_url(parent_id, file_set.id, fedora_file, file_ext, request.ip)
+  wowzaURL = wowza_url(parent_id, file_set.id, file_name, request.ip)
 %>
   <% if wowzaURL != nil %>
     <div id="dams-audio">Loading the player...</div>
@@ -19,7 +16,8 @@
           [{
             sources:
               [
-                {file: "http://<%=wowzaURL%>/playlist.m3u8"}
+                {file: "rtmps://<%=wowzaURL%>"},
+                {file: "https://<%=wowzaURL%>/playlist.m3u8"}
               ]
            }],
         width: "100%",
@@ -31,7 +29,8 @@
   <% end %>
 <% else %>
   <audio controls="controls" class="audiojs" preload="auto">
-    <source src="<%= hyrax.download_path(file_set, file: 'service_file') %>" type="audio/mpeg" />
+    <source src="<%= hyrax.download_path(file_set, file: 'ogg') %>" type="audio/ogg" />
+    <source src="<%= hyrax.download_path(file_set, file: 'mp3') %>" type="audio/mpeg" />
     Your browser does not support the audio tag.
   </audio>
 <% end %>
