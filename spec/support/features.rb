@@ -1,6 +1,7 @@
 # spec/support/features.rb
-require File.expand_path('../features/session_helpers', __FILE__)
+Dir[Rails.root.join('spec/support/features/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.include Features::SessionHelpers, type: :feature
+  config.include Features::StubViewHelpers, type: :view
 end
