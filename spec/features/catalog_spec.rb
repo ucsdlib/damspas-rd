@@ -128,16 +128,16 @@ feature 'Visitor wants to browse and search' do
       sign_in user
     end
 
-    scenario 'topic facet page has a-z links' do
+    scenario 'topic facet page has A-Z links' do
       visit facet_catalog_path("topic_sim", :'facet.sort' => 'index')
-      expect(page).to have_link('a', href: '/catalog/facet/topic_sim?facet.prefix=a&facet.sort=index' )
-      expect(page).to have_link('z', href: '/catalog/facet/topic_sim?facet.prefix=z&facet.sort=index' )
+      expect(page).to have_link('A', href: '/catalog/facet/topic_sim?facet.prefix=A&facet.sort=index' )
+      expect(page).to have_link('Z', href: '/catalog/facet/topic_sim?facet.prefix=Z&facet.sort=index' )
     end
 
-    scenario 'creator facet page has a-z links' do
+    scenario 'creator facet page has A-Z links' do
       visit facet_catalog_path("creator_sim", :'facet.sort' => 'index')
-      expect(page).to have_link('a', href: '/catalog/facet/creator_sim?facet.prefix=a&facet.sort=index' )
-      expect(page).to have_link('z', href: '/catalog/facet/creator_sim?facet.prefix=z&facet.sort=index' )
+      expect(page).to have_link('A', href: '/catalog/facet/creator_sim?facet.prefix=A&facet.sort=index' )
+      expect(page).to have_link('Z', href: '/catalog/facet/creator_sim?facet.prefix=Z&facet.sort=index' )
     end
   end
 end
