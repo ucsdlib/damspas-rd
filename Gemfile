@@ -29,6 +29,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'json', '~> 1.8.6'
 gem 'coveralls', require: false
+gem "blacklight_advanced_search"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

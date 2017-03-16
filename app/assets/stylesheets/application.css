@@ -13,6 +13,9 @@
  *= require_tree .
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require_self
- */
+ 
+ *= require 'blacklight_advanced_search'
+
+*/
  ul.component_list { list-style-type: none; padding-left:10px; padding-bottom:0; margin:2px;}
  tr.attributes td a img {width:25px; height:25px;}
