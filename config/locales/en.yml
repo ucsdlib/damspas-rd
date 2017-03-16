@@ -25,3 +25,13 @@ en:
     institution_name:  &INSTITUTION_NAME "UCSD"
     institution:
       name: "Campus"
+  simple_form:
+    hints:
+      collection:
+        identifier: "A generic unique handle identifying the collection."
+      defaults:
+        identifier: "A generic unique handle identifying the work."
+  horton:
+    works:
+      edit:
+        identifiers: "Identifiers"

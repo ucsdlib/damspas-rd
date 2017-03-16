@@ -10,6 +10,11 @@ module CommonMetadata
       ActiveFedora::Indexers::GlobalIndexer.new([:stored_searchable, :symbol])
     )
 
+    # IdentifierSchema
+    apply_schema IdentifierSchema, ActiveFedora::SchemaIndexingStrategy.new(
+      ActiveFedora::Indexers::GlobalIndexer.new([:stored_searchable, :symbol])
+    )
+
     # xsd:URI with CVs
     property :resource_type, predicate: ::RDF::Vocab::DC.type
     property :language, predicate: ::RDF::Vocab::DC.language

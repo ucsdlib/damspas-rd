@@ -26,7 +26,14 @@ class SolrDocument
 
   use_extension( Hydra::ContentNegotiation )
 
- def topic
+  IdentifierSchema.properties.each do |prop|
+    term = prop.name.to_sym
+    self.send(:define_method, term) do
+      self[Solrizer.solr_name(term.to_s)]
+    end
+  end
+
+  def topic
    self[Solrizer.solr_name('topic')]
   end
 

@@ -82,6 +82,19 @@ feature 'Create a ObjectResource' do
       expect(page).to have_selector 'h1', text: 'Test ObjectResource - Resource Type'
       expect(page).to have_selector 'li.resource_type', text: 'Data'
     end
+
+    scenario 'should create object with identifiers' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Identifiers'
+      IdentifierSchema.properties.each do |prop|
+        fill_in "object_resource_#{prop.name.to_s}", with: "#{prop.name.to_s}#1"
+      end
+      click_button 'Save'
+      expect(page).to have_content 'Test ObjectResource - Identifiers'
+      IdentifierSchema.properties.each do |prop|
+        expect(page).to have_content "#{prop.name.to_s}#1"
+      end
+    end
   end
 
   context 'a logged in user in editor role' do

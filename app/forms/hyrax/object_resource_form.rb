@@ -10,9 +10,16 @@ module Hyrax
     delegate :created_date, :event_date, to: :model
     delegate :general_note, :physical_description, to: :model
     delegate :resource_type, :language, to: :model
+    delegate :language, to: :model
 
     self.terms += [:created_date, :event_date, :spatial, :topic, :general_note, :physical_description, :resource_type]
     self.required_fields = [:title, :rights]
+
+    IdentifierSchema.properties.each do |prop|
+      term = prop.name.to_sym
+      delegate term, to: :model
+      self.terms += [term]
+    end
 
     NESTED_ASSOCIATIONS = [:creator, :contributor, :publisher, :created_date, :event_date, :spatial, :topic].freeze;
 
@@ -28,6 +35,8 @@ module Hyrax
       attrs.dup.each do |key, value|
         if value.is_a? Array
           attrs[key].map! { |v| to_hash(v) }
+        elsif value.nil? || value.to_s.strip.blank?
+          attrs.delete key
         else
           attrs[key] = to_hash(value)
         end

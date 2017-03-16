@@ -8,6 +8,12 @@ class CollectionEditForm < Hyrax::Forms::CollectionForm
   delegate :brief_description, :general_note, :location_of_originals, :table_of_contents, to: :model
   delegate :resource_type, :language, to: :model
 
+  IdentifierSchema.properties.each do |prop|
+    term = prop.name.to_sym
+    delegate term, to: :model
+    self.terms += [term]
+  end
+
   def self.model_attributes(attrs)
     attrs[:title] = Array(attrs[:title]) if attrs[:title]
     # local authorities hashing
@@ -21,6 +27,8 @@ class CollectionEditForm < Hyrax::Forms::CollectionForm
     attrs.dup.each do |key, value|
       if value.is_a? Array
         attrs[key].map! { |v| to_hash(v) }
+      elsif value.nil? || value.to_s.strip.blank?
+          attrs.delete key
       else
         attrs[key] = to_hash(value)
       end

@@ -9,6 +9,7 @@ describe Collection do
   let(:topic) { Concept.create( label: ['Test Topic'] ) }
   let(:col) { described_class.new(title: ['Test Collection'], description: ['Test Description Text']) }
   let(:cre_col) { described_class.new(title: ['Test Collection'], creator: [creator.uri], contributor: [contributor.uri]) }
+  let(:id_col) { described_class.new(title: ['Test Collection - Local identifier'], local: 'local_id') }
   let(:pub_col) { described_class.new(title: ['Test Collection - Publisher'], creator: [creator_a.uri], publisher: [publisher.uri]) }
   let(:top_col) { described_class.new(title: ['Test Collection - Topic'], creator: [creator_b.uri], topic: [topic.uri]) }
   let(:brd_col) { described_class.new(title: ['Test Collection - Brief Description'], brief_description: "Test Brief Description") }
@@ -27,6 +28,15 @@ describe Collection do
       @col = described_class.find col.id
       expect(@col.title.first).to eq 'Test Collection'
       expect(@col.description.first).to eq 'Test Description Text'
+    end
+
+    it 'should create Collection with local identifier' do
+      id_col.save ({:validate => false})
+      expect { id_col.save }.to_not raise_error
+      expect(id_col.id).to be_truthy
+      @id_col = described_class.find id_col.id
+      expect(@id_col.title.first).to eq 'Test Collection - Local identifier'
+      expect(@id_col.local).to eq 'local_id'
     end
 
     it 'should customized term Brief Description' do

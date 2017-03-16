@@ -20,6 +20,10 @@ module Hyrax
     @form ||= form_class.new(@collection)
   end
 
+  def presenter_class
+    ::CollectionShowPresenter
+  end
+
   def form_class
     ::CollectionEditForm
   end

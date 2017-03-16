@@ -8,5 +8,9 @@ class ObjectShowPresenter < ::Hyrax::WorkShowPresenter
   delegate :created_date, :event_date, to: :solr_document
   delegate :general_note, :physical_description, to: :solr_document
 
+  IdentifierSchema.properties.each do |prop|
+    term = prop.name.to_sym
+    delegate term, to: :solr_document
+  end
 end
 
