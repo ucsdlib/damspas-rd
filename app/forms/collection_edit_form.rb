@@ -1,18 +1,5 @@
 class CollectionEditForm < Hyrax::Forms::CollectionForm
-
-  self.terms += [:brief_description, :general_note, :location_of_originals, :table_of_contents]
-  self.terms += [:spatial, :topic, :created_date, :extent, :local_attribution, :finding_aid, :exhibit, :resource_type]
-  delegate :creator, :topic, :spatial, to: :model
-  delegate :created_date, to: :model
-  delegate :extent, :local_attribution, :finding_aid, :exhibit, to: :model
-  delegate :brief_description, :general_note, :location_of_originals, :table_of_contents, to: :model
-  delegate :resource_type, :language, to: :model
-
-  IdentifierSchema.properties.each do |prop|
-    term = prop.name.to_sym
-    delegate term, to: :model
-    self.terms += [term]
-  end
+  include SchemaEditFormBehavior
 
   def self.model_attributes(attrs)
     attrs[:title] = Array(attrs[:title]) if attrs[:title]
