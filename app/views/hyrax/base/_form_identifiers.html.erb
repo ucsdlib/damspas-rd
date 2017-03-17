@@ -1,0 +1,5 @@
+<fieldset class="optional prompt">
+  <% IdentifierSchema.properties.each do |prop| %>
+    <%= f.input prop.name.to_sym %>
+  <% end %>
+</fieldset>
