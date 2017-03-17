@@ -11,6 +11,7 @@ describe ObjectResource do
   let(:topic) { Concept.create( label: ['Object Topic'] ) }
   let(:obj) { described_class.new(title: ['Test Object Resource'], description:  ['Test Description Text']) }
   let(:cre_obj) { described_class.new(title: ['Test Object Resource'], creator: [creator.uri], contributor: [contributor.uri]) }
+  let(:id_obj) { described_class.new(title: ['Test Object Resource - Local identifier'], local: 'local_id') }
   let(:pub_obj) { described_class.new(title: ['Test Object Resource - Publisher'], creator: [creator_a.uri], publisher: [publisher.uri]) }
   let(:top_obj) { described_class.new(title: ['Test Object Resource - Topic'], creator: [creator_b.uri], topic: [topic.uri]) }
   let(:phd_obj) { described_class.new(title: ['Test Object Resource - Physical Description'], physical_description: ["Test physical description"]) }
@@ -27,7 +28,16 @@ describe ObjectResource do
       expect(@obj.title.first).to eq 'Test Object Resource'
       expect(@obj.description.first).to eq 'Test Description Text'
     end
- 
+
+    it 'should create object resource with local identifier' do
+      id_obj.save ({:validate => false})
+      expect { id_obj.save }.to_not raise_error
+      expect(id_obj.id).to be_truthy
+      @id_obj = described_class.find id_obj.id
+      expect(@id_obj.title.first).to eq 'Test Object Resource - Local identifier'
+      expect(@id_obj.local).to eq 'local_id'
+    end
+
     it 'should has creator and contributor' do
       cre_obj.save ({:validate => false})
       expect { cre_obj.save }.to_not raise_error

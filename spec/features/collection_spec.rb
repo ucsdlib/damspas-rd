@@ -100,6 +100,19 @@ feature 'Create a Collection' do
       expect(page).to have_selector 'h1', text: 'Test Collection - Resource Type'
       expect(page).to have_selector 'a', text: 'Data'
     end
+
+    scenario 'should create collection with doi identifier' do
+      visit '/dashboard'
+      first('#hydra-collection-add').click
+      expect(page).to have_content 'Create New Collection'
+      click_link('Additional Fields')
+
+      fill_in 'Title', with: 'Test Collection - DOI Identifier'
+      fill_in "collection_doi", with: "http://doi.example.com/any"
+      click_button("Create Collection")
+      expect(page).to have_content 'Test Collection - DOI Identifier'
+      expect(page).to have_content "http://doi.example.com/any"
+    end
   end
 
   context 'a logged in user with editor role' do

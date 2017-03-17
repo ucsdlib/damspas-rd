@@ -18,3 +18,13 @@
           <%= render "form_additional_information", f: f %>
         </div>
 
+        <%= link_to t('horton.works.edit.identifiers'),
+                    '#id-terms',
+                    class: 'btn btn-default additional-fields',
+                    data: { toggle: 'collapse' },
+                    role: "button",
+                    'aria-expanded'=> "false",
+                    'aria-controls'=> "id-terms" %>
+        <div id="id-terms" class='collapse'>
+          <%= render "form_identifiers", f: f %>
+        </div>

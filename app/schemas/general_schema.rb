@@ -41,7 +41,6 @@ class GeneralSchema < ActiveTriples::Schema
 
 
   # predicates that required xsd:anyURI value
-  property :identifier, predicate: ::RDF::Vocab::DC.identifier, multiple: false
   property :area, predicate: ::UcsdTerms.area
   property :depiction, predicate: ::UcsdTerms.depiction
   property :exhibit, predicate: ::UcsdTerms.exhibit, multiple: false

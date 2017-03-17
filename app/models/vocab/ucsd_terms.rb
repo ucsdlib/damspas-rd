@@ -33,4 +33,21 @@ class UcsdTerms < RDF::StrictVocabulary('http://library.ucsd.edu/ontology/dams5.
   term :anatomy, label: "anatomy".freeze, type: 'rdf:Property'.freeze
   term :series, label: "series".freeze, type: 'rdf:Property'.freeze
   term :vesselName, label: "vesselName".freeze, type: 'rdf:Property'.freeze
+  term :accessionId, label: "accession id".freeze, type: 'rdf:Property'.freeze
+  term :arkId, label: "ark id".freeze, type: 'rdf:Property'.freeze
+  term :basketId, label: "basket id".freeze, type: 'rdf:Property'.freeze
+  term :collectionNumberId, label: "collection number".freeze, type: 'rdf:Property'.freeze
+  term :edmId, label: "edm id".freeze, type: 'rdf:Property'.freeze
+  term :eventId, label: "event id".freeze, type: 'rdf:Property'.freeze
+  term :filenameId, label: "filename".freeze, type: 'rdf:Property'.freeze
+  term :igsnId, label: "igsn id".freeze, type: 'rdf:Property'.freeze
+  term :locusId, label: "locus id".freeze, type: 'rdf:Property'.freeze
+  term :negativeId, label: "negative id".freeze, type: 'rdf:Property'.freeze
+  term :newsReleaseId, label: "news release id".freeze, type: 'rdf:Property'.freeze
+  term :oclcId, label: "oclc id".freeze, type: 'rdf:Property'.freeze
+  term :registrationId, label: "registration id".freeze, type: 'rdf:Property'.freeze
+  term :rogerId, label: "roger id".freeze, type: 'rdf:Property'.freeze
+  term :sampleId, label: "sample id".freeze, type: 'rdf:Property'.freeze
+  term :sequenceId, label: "sequence id".freeze, type: 'rdf:Property'.freeze
+  term :sharedShelfId, label: "shared-shelf id".freeze, type: 'rdf:Property'.freeze
 end
