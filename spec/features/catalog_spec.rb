@@ -140,4 +140,27 @@ feature 'Visitor wants to browse and search' do
       expect(page).to have_link('Z', href: '/catalog/facet/creator_sim?facet.prefix=Z&facet.sort=index' )
     end
   end
+
+feature 'Visitor goes to advanced search page' do
+  let!(:admin_user) { FactoryGirl.create(:admin) }
+  let!(:object_resource) { FactoryGirl.create(:object_resource, title: ["Object Title"], subject: ["New Subject"], :user => admin_user) }
+
+  scenario 'to search by title' do
+    visit "/advanced"
+    expect(page).to have_selector('h1', :text => 'More Search Options')
+    
+    fill_in 'Title', with: "Object Title"
+    click_button 'Search'
+    expect(page).to have_content 'Object Title'
+  end
+
+  scenario 'to search by subject' do
+    visit "/advanced"
+    expect(page).to have_selector('h3', :text => 'have these attributes')
+    
+    fill_in 'Subject', with: "New Subject"
+    click_button 'Search'
+    expect(page).to have_content 'New Subject'
+  end
+ end
 end
