@@ -23,6 +23,7 @@ class Ability
     can [:read, :create, :edit, :update, :destroy], Collection
     can [:read, :create, :edit, :update, :destroy], Authority
     can [:read, :create, :edit], CsvImportItem
+    can [:read, :create, :edit, :update, :destroy], Page
   end
 
   def curator_permissions
