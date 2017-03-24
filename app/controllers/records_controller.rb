@@ -2,7 +2,6 @@
 class RecordsController < ApplicationController
   include RecordsControllerBehavior
   include LocalAuthorityHashConverter
-  include LocalAuthorityHashAccessor
 
   def index
     redirect_to "/"
@@ -14,7 +13,7 @@ class RecordsController < ApplicationController
       flash[:error] = "Resource doesn't exist: #{params[:id]}"
       redirect_to "/"
     else
-      redirect_to "/dams_authorities/#{resource.class.name.downcase}/#{params[:id]}"
+      redirect_to "/dams_authorities/#{resource.class.name.underscore}/#{params[:id]}"
     end
   end
 
@@ -36,6 +35,6 @@ class RecordsController < ApplicationController
     end
 
     def redirect_after_update
-      "/dams_authorities/#{resource.class.name.downcase}/#{resource.id}"
+      "/dams_authorities/#{resource.class.name.underscore}/#{resource.id}"
     end
 end

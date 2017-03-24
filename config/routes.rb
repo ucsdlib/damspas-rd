@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   resources :csv_imports, only: [:new, :create], controller: 'csv_imports'
 
-  get 'dams_authorities/:authority/:id', to: 'dams_authorities#show', as: 'authority', :constraints => { authority: /(agent|concept|place)/ }
+  get 'dams_authorities/:authority/:id', to: 'dams_authorities#show', as: 'authority', :constraints => { authority: /(ucsd_agent|concept|place)/ }
   resources :records
 
   resources :bookmarks do

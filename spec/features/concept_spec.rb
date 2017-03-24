@@ -9,7 +9,7 @@ feature 'Create a Concept' do
       sign_in user
     end
 
-    let(:subject) { Concept.create(label: ['Test Linked Concept']) }
+    let(:subject) { Concept.create(label: 'Test Linked Concept') }
     scenario 'should be able to access the Concept form and create Concept' do
       visit root_path
       expect(page).to have_link 'New Subject'

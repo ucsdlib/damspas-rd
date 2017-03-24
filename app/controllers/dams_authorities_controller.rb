@@ -1,26 +1,20 @@
 class DamsAuthoritiesController < ApplicationController
-  include LocalAuthorityHashAccessor
+  include Blacklight::Base
 
   def show
-    path = Rails.application.routes.recognize_path(request.env['PATH_INFO'])
-    authority_type = path[:authority]
-
-    if ["agent", "concept", "place", "resourcetype"].include?(authority_type)
-      @obj = ActiveFedora::Base.find(params[:id])
-
-      @obj.attributes.dup.map { |key, value|
-        if (value.is_a? ActiveTriples::Relation) || (value.is_a? Array) 
-          values = Marshal.load(Marshal.dump(value))
-          @obj.attributes[key].clear
-          values.each { |v|
-            v = v.id if v.respond_to?(:id)
-            @obj.attributes[key] << to_hash(v)
-          }
-        end
-      }
-    else
-      redirect_to "/"
-    end
-
+    presenter
   end
+
+  private
+    def presenter
+      @presenter ||= begin
+        # Query Solr for the collection.
+        # run the solr query to find the collection members
+        q = {q: "id:#{params[:id]}"}
+        response = repository.search(q)
+        curation_concern = response.documents.first
+        raise CanCan::AccessDenied unless curation_concern
+        AuthorityShowPresenter.new(curation_concern, current_ability)
+      end
+    end
 end

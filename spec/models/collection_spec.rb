@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Collection do
-  let(:creator) { Agent.create( label: ['Test Creator'] ) }
-  let(:creator_a) { Agent.create( label: ['Creator A'] ) }
-  let(:creator_b) { Agent.create( label: ['Creator B'] ) }
-  let(:contributor) { Agent.create( label: ['Test Contributor'] ) }
-  let(:publisher) { Agent.create( label: ['Test Publisher'] ) }
-  let(:topic) { Concept.create( label: ['Test Topic'] ) }
+  let(:creator) { UcsdAgent.create( label: 'Test Creator', agent_type:'Person' ) }
+  let(:creator_a) { UcsdAgent.create( label: 'Creator A', agent_type:'Person' ) }
+  let(:creator_b) { UcsdAgent.create( label: 'Creator B', agent_type:'Person' ) }
+  let(:contributor) { UcsdAgent.create( label: 'Test Contributor', agent_type:'Organization' ) }
+  let(:publisher) { UcsdAgent.create( label: 'Test Publisher', agent_type:'Organization' ) }
+  let(:topic) { Concept.create( label: 'Test Topic' ) }
   let(:col) { described_class.new(title: ['Test Collection'], description: ['Test Description Text']) }
   let(:cre_col) { described_class.new(title: ['Test Collection'], creator: [creator.uri], contributor: [contributor.uri]) }
   let(:id_col) { described_class.new(title: ['Test Collection - Local identifier'], local: 'local_id') }
@@ -54,8 +54,8 @@ describe Collection do
       expect(cre_col.id).to be_truthy
       @col = described_class.find cre_col.id
       expect(@col.title.first).to eq 'Test Collection'
-      expect(@col.creator.first.label.first).to eq 'Test Creator'
-      expect(@col.contributor.first.label.first).to eq 'Test Contributor'
+      expect(@col.creator.first.label).to eq 'Test Creator'
+      expect(@col.contributor.first.label).to eq 'Test Contributor'
     end
 
     it 'should has publisher' do
@@ -64,8 +64,8 @@ describe Collection do
       expect(pub_col.id).to be_truthy
       @col = described_class.find pub_col.id
       expect(@col.title.first).to eq 'Test Collection - Publisher'
-      expect(@col.creator.first.label.first).to eq 'Creator A'
-      expect(@col.publisher.first.label.first).to eq 'Test Publisher'
+      expect(@col.creator.first.label).to eq 'Creator A'
+      expect(@col.publisher.first.label).to eq 'Test Publisher'
     end
 
     it 'should has topic' do
@@ -75,8 +75,8 @@ describe Collection do
       expect(top_col.id).to be_truthy
       @col = described_class.find top_col.id
       expect(@col.title.first).to eq 'Test Collection - Topic'
-      expect(@col.creator.first.label.first).to eq 'Creator B'
-      expect(@col.topic.first.label.first).to eq 'Test Topic'
+      expect(@col.creator.first.label).to eq 'Creator B'
+      expect(@col.topic.first.label).to eq 'Test Topic'
     end
 
     it 'should contains Location Of Originals' do
