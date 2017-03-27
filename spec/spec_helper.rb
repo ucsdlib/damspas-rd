@@ -66,6 +66,10 @@ RSpec.configure do |config|
     end
   end
 
+  config.after :each do
+    DatabaseCleaner.clean
+  end
+
   config.before(:all, type: :feature) do
     # Assets take a long time to compile. This causes two problems:
     # 1) the profile will show the first feature test taking much longer than it

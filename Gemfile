@@ -82,7 +82,7 @@ group :development, :test do
   gem 'rails_autolink', '~> 1.1.6'
   gem 'unicorn', '~> 5.1.0'
   gem 'solr_wrapper', '>= 0.3'
-  gem 'database_cleaner', '~> 1.3'
+  gem 'database_cleaner', '~> 1.5.3'
   gem 'rails-controller-testing', '~> 0'
 end
 
