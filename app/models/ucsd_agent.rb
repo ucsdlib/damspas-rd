@@ -4,7 +4,7 @@ class UcsdAgent < Agent
   configure type: ::UcsdTerms.UcsdAgent
 
   property :agent_type, predicate: ::UcsdTerms.agent_type, multiple: false
-  property :has_orcid, predicate: ::RDF::URI.new("http://id.loc.gov/vocabulary/identifiers#orcid"), multiple: false
+  property :orcid, predicate: ::RDF::URI.new("http://id.loc.gov/vocabulary/identifiers#orcid"), multiple: false
 
   # xsd:anyURI
   property :close_match, predicate: ::RDF::Vocab::SKOS.closeMatch, multiple: true
@@ -20,7 +20,7 @@ class UcsdAgent < Agent
   def to_solr(solr_doc = {})
     super.tap do |solr_doc|
       solr_doc[Solrizer.solr_name('agent_type', :stored_searchable)] = agent_type
-      solr_doc[Solrizer.solr_name('has_orcid', :stored_searchable)] = has_orcid
+      solr_doc[Solrizer.solr_name('orcid', :stored_searchable)] = orcid
 
       index_authorities solr_doc, :close_match, close_match
       index_authorities solr_doc, :related_match, related_match

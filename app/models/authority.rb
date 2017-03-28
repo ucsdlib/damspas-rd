@@ -13,7 +13,7 @@ class Authority < ActiveFedora::Base
   validates :exact_match, url: true, allow_blank: true
 
   def self.is_authority?(record)
-    record.is_a?(Authority) || record.class.ancestors.include?(Authority) || record.is_a?(UcsdAgent) || record.is_a?(Concept)
+    record.is_a?(Authority) || record.class.ancestors.include?(Authority)
   end
 
   def to_solr(solr_doc = {})
@@ -41,10 +41,11 @@ class Authority < ActiveFedora::Base
       return if obj.nil? || obj.to_s.blank?
       return obj.label if Authority.is_authority? obj
       obj = obj.id if obj.is_a? ActiveTriples::Resource
-      obj = begin
+      return obj unless obj.to_s.start_with?(ActiveFedora.fedora.host) || obj.to_s.start_with?(Rails.configuration.authority_path)
+      begin
         ActiveFedora::Base.find(obj.split("/")[-1]).label
       rescue
-      end if obj.to_s.start_with?(ActiveFedora.fedora.host) || obj.to_s.start_with?(Rails.configuration.authority_path)
-      obj
+        obj
+      end
     end
 end

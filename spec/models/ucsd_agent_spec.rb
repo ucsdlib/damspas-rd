@@ -26,10 +26,10 @@ describe UcsdAgent do
   end
 
   describe '#hasOrcid' do
-    let(:subject) { described_class.new(label: 'Test Agent', agent_type: 'Person', has_orcid: 'http://test.com/orcid/any') }
+    let(:subject) { described_class.new(label: 'Test Agent', agent_type: 'Person', orcid: 'http://test.com/orcid/any') }
     it 'has a label' do
       expect(subject.label).to eq 'Test Agent'
-      expect(subject.has_orcid).to eq 'http://test.com/orcid/any'
+      expect(subject.orcid).to eq 'http://test.com/orcid/any'
     end
   end
 

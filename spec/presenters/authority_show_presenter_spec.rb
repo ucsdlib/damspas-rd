@@ -13,7 +13,7 @@ describe AuthorityShowPresenter do
   describe ".terms" do
     subject { described_class.terms }
     it do
-      is_expected.to eq [:agent_type, :label, :alternate_label, :has_orcid, :exact_match, 
+      is_expected.to eq [:agent_type, :label, :alternate_label, :orcid, :exact_match, 
          :close_match, :related_match, :different_from, :note, :point]
     end
   end

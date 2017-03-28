@@ -19,7 +19,7 @@ feature 'Create a UcsdAgent' do
 
       select 'Person', from: "ucsd_agent_agent_type"
       fill_in 'ucsd_agent_label', with: 'Test Create New UCSD Agent'
-      fill_in 'ucsd_agent_has_orcid', with: 'http://test.com/orcid/any'
+      fill_in 'ucsd_agent_orcid', with: 'http://test.com/orcid/any'
       click_button 'Save'
       expect(page).to have_content 'Test Create New UCSD Agent'
       expect(page).to have_content 'Person'
