@@ -15,12 +15,8 @@ class Concept < Authority
 
   def to_solr(solr_doc = {})
     super.tap do |solr_doc|
-      close_match.each do |obj|
-        solr_doc[Solrizer.solr_name('close_match', :stored_searchable)] = authority_label(obj)
-      end
-      related_match.each do |obj|
-        solr_doc[Solrizer.solr_name('related_match', :stored_searchable)] = authority_label(obj)
-      end
+      index_authorities solr_doc, :close_match, close_match
+      index_authorities solr_doc, :related_match, related_match
       note.each do |val|
         solr_doc[Solrizer.solr_name('note', :stored_searchable)] = val
       end

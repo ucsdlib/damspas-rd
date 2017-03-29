@@ -1,1 +1,1 @@
-HydraEditor.models = ["Agent","Concept","Place","ResourceType"]
+HydraEditor.models = ["UcsdAgent","Concept","Place"]

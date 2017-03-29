@@ -35,3 +35,7 @@ en:
     works:
       edit:
         identifiers: "Identifiers"
+  hydra_editor:
+    form:
+      model_label:
+        UcsdAgent: "UCSD Agent"

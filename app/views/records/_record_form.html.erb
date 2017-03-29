@@ -1,4 +1,5 @@
 <style>input#place_point {width: 555px;}</style>
+<% agent_types = %w(Person Group Organization) %>
 <%= simple_form_for form, url: record_form_action_url(form), html: { class: 'editor' } do |f| %>
 
   <%= hidden_field_tag :type, params[:type] %>
@@ -7,7 +8,14 @@
 
     <div class="well">
       <% (f.object.terms).each do |term| %>
-        <%= render_edit_field_partial(term, f: f) %>
+        <% if term.to_s == 'agent_type' %>
+          <%= f.input :agent_type,
+            collection: agent_types,
+            include_blank: true,
+            input_html: { class: 'form-control' } %>
+        <% else %>
+          <%= render_edit_field_partial(term, f: f) %>
+        <% end %>
       <% end %>
     </div>
   </div>

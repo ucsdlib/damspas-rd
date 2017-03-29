@@ -50,4 +50,6 @@ class UcsdTerms < RDF::StrictVocabulary('http://library.ucsd.edu/ontology/dams5.
   term :sampleId, label: "sample id".freeze, type: 'rdf:Property'.freeze
   term :sequenceId, label: "sequence id".freeze, type: 'rdf:Property'.freeze
   term :sharedShelfId, label: "shared-shelf id".freeze, type: 'rdf:Property'.freeze
+  term :UcsdAgent, label: "UCSD Agent".freeze, type: 'rdf:Property'.freeze
+  term :agent_type, label: "Agent Type".freeze, type: 'rdf:Property'.freeze
 end
