@@ -5,7 +5,16 @@ Please use the following process for creating a new [Pull Request](https://help.
 
 1. Create a feature branch for new work.
 2. Push commits to the feature branch, with appropriate test coverage (and tests passing).
-3. Prior to creating a Pull Request, pull from the remote 'develop' branch to make sure your feature branch is up to date. Fix any merge conflicts and make sure all tests still pass.
+3. Prior to creating a Pull Request, make sure your branch is up to date with its parent branch (usually
+   `develop`)
+   - Pull and Rebase against parent branch
+   ```
+git checkout develop
+git pull --rebase
+git checkout <your-feature-branch>
+git rebase develop
+```
+ - Run your tests again.
 4. Create a pull request by going to the branch in github (e.g. https://github.com/ucsdlib/horton/tree/branchname/) and clicking on the pull request button (green arrows going in a circle). Make sure the PR can be merged automatically, if it can't go back to Step 3.
 5. Give the pull request a short meaningful title, and put a link to the relevant Github issue (following the ISSUE_TEMPLATE syntax).
 6. The entire `@ucsdlib/developers` team has an opportunity to review. At least
