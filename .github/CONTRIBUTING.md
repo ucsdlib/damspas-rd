@@ -13,9 +13,8 @@ git checkout <your-feature-branch>
 git rebase develop
 ```
 4. Run your tests again.
-5. Push your changes to a remote branch `git push origin <your-feature-branch>`
-
-  _Note: If you already have pushed your feature branch to Github, you may have to_: `git push --force-with-lease origin <your-feature-branch>`
+5. Push your changes to a remote branch. If you already have pushed your feature branch to Github, you may have to use the  
+`git push --force-with-lease origin <your-feature-branch>` option instead.
 6. Create a pull request by going to the branch in github (e.g. https://github.com/ucsdlib/horton/tree/branchname/) and clicking on the pull request button (green arrows going in a circle). Make sure the PR can be merged automatically, if it can't go back to Step 3.
 7. Give the pull request a short meaningful title, and put a link to the relevant Github issue (following the ISSUE_TEMPLATE syntax).
 8. The entire `@ucsdlib/developers` team has an opportunity to review. At least
