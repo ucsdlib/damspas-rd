@@ -11,9 +11,9 @@ class PagesController < ApplicationController
     @pages = Page.all
   end
 
-  # GET /pages/code/view
+  # GET /pages/slug/view
   def view
-    @page = Page.find_by code: params[:id]
+    @page = Page.find_by slug: params[:id]
   end
 
   # ---------------
@@ -30,7 +30,7 @@ class PagesController < ApplicationController
     @page = Page.new(page_params)
 
     if @page.save
-      redirect_to pages_url, notice: 'Page was successfully created.'
+      redirect_to pages_url, notice: t('pages.create_notice')
     else
       render action: 'new'
     end
@@ -47,7 +47,7 @@ class PagesController < ApplicationController
   # PATCH/PUT /pages/1
   def update
     if @page.update(page_params)
-      redirect_to edit_page_path(@page), notice: 'Page successfully updated.'
+      redirect_to edit_page_path(@page), notice: t('pages.update_notice')
     else
       render action: 'edit'
     end
@@ -56,7 +56,7 @@ class PagesController < ApplicationController
   # DELETE /pages/1
   def destroy
     @page.destroy
-    redirect_to pages_url, notice: 'Page was successfully destroyed.'
+    redirect_to pages_url, notice: t('pages.destory_notice')
   end
 
   private
@@ -71,6 +71,6 @@ class PagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def page_params
-      params.require(:page).permit(:code, :title, :body)
+      params.require(:page).permit(:slug, :title, :body)
     end
 end

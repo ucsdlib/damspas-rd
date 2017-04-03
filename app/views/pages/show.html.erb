@@ -1,19 +1,19 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Code:</strong>
-  <%= @page.code %>
+  <strong><%= t('pages.slug') %></strong>
+  <%= @page.slug %>
 </p>
 
 <p>
-  <strong>Title:</strong>
+  <strong><%= t('pages.title') %></strong>
   <%= @page.title %>
 </p>
 
 <p>
-  <strong>Body:</strong>
+  <strong><%= t('pages.body') %></strong>
   <%= @page.body %>
 </p>
 
-<%= link_to 'Edit', edit_page_path(@page) %> |
-<%= link_to 'Page List', pages_path %>
+<%= link_to t('pages.edit_page'), edit_page_path(@page) %> |
+<%= link_to t('pages.page_list'), pages_path %>

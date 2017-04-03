@@ -1,10 +1,10 @@
-<h1>Editing Page</h1>
+<h1><%= t('pages.edit.title') %></h1>
 
 <%# render 'form', submit_button: 'save' %>
 <%= form_for @page do |f| %>
   <p>
-    <%= f.label :code %>
-    <%= f.text_field :code %>
+    <%= f.label :slug %>
+    <%= f.text_field :slug %>
   </p>
 
   <p>
@@ -16,10 +16,10 @@
     <%= f.label :body %>
     <%= f.text_area :body, size: '70x30' %>
   </p>
-  <script src="//cdn.ckeditor.com/4.4.4/standard/ckeditor.js"></script>
+  <script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
   <script>CKEDITOR.replace('page_body')</script>
 
-  <%= f.submit "Save Page", class: "btn btn-primary" %>
-  <%= link_to 'View', view_page_path(@page.code), class: "btn btn-primary" %>
-  <%= link_to 'Page List', pages_path, class: "btn btn-primary" %>
+  <%= f.submit t('pages.save_page'), class: "btn btn-primary" %>
+  <%= link_to t('pages.view_page'), view_page_path(@page.slug), class: "btn btn-primary" %>
+  <%= link_to t('pages.page_list'), pages_path, class: "btn btn-primary" %>
 <% end %>

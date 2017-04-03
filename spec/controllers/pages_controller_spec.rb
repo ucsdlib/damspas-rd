@@ -13,7 +13,7 @@ describe PagesController do
     describe "GET view" do
       it "assigns the requested page as @page" do
         @page = create(:page)
-        get :view, {:id => @page.code}
+        get :view, {:id => @page.slug}
         expect(assigns(:page)).to eq(@page)
       end
     end
@@ -44,7 +44,7 @@ describe PagesController do
     describe "POST create" do
       context "with valid params" do
         before do
-          post :create, page: attributes_for(:page, code: "page_code")
+          post :create, page: attributes_for(:page, slug: "page_slug")
         end
 
         it "creates a new Page" do
@@ -58,7 +58,7 @@ describe PagesController do
   
       context "with invalid params" do
         before do
-          post :create, page: attributes_for(:page, code: "invalid value")
+          post :create, page: attributes_for(:page, slug: "invalid value")
         end
 
         it "sets @page" do
@@ -79,12 +79,12 @@ describe PagesController do
       context "with valid params" do
         before(:each) do
           @page = create(:page)
-          put :update, id: @page, page: attributes_for(:page, code: "my_code")
+          put :update, id: @page, page: attributes_for(:page, slug: "my_slug")
           @page.reload
         end
 
         it "updates the requested page" do
-          expect(@page.code).to eq("my_code")
+          expect(@page.slug).to eq("my_slug")
         end
   
         it "redirects to the page" do
@@ -95,7 +95,7 @@ describe PagesController do
       context "with invalid params" do
         before(:each) do
          @page = create(:page)
-          put :update, id: @page, page: attributes_for(:page, code: "invalid value")
+          put :update, id: @page, page: attributes_for(:page, slug: "invalid value")
           @page.reload
         end
 

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Page do
   subject { Page.new }
-  it "should have a code" do
-    subject.code = "foo"
-    expect(subject.code).to eq("foo")
+  it "should have a slug" do
+    subject.slug = "foo"
+    expect(subject.slug).to eq("foo")
   end
   it "should have a title" do
     subject.title = "Foo Page"

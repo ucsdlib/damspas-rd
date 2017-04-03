@@ -1,6 +1,6 @@
 <% @page_title = @page.title %>
 <% if can? :edit, @page %>
-  <%= link_to 'Edit Page', edit_page_path(@page), class: "btn btn-primary pull-right" %>
+  <%= link_to t('pages.edit_page'), edit_page_path(@page), class: "btn btn-primary pull-right" %>
 <% end %>
 
 <p id="notice"><%= notice %></p>

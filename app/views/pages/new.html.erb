@@ -1,8 +1,8 @@
-<h1>New Page</h1>
+<h1><%= t('pages.new.title') %></h1>
 <%= form_for(@page) do |f| %>
   <% if @page.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@page.errors.count, "error") %> prohibited this page from being saved:</h2>
+      <h2><%= pluralize(@page.errors.count, "error") %> <%= t('pages.new.error_message') %></h2>
 
       <ul>
       <% @page.errors.full_messages.each do |msg| %>
@@ -13,8 +13,8 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :code %><br>
-    <%= f.text_field :code %>
+    <%= f.label :slug %><br>
+    <%= f.text_field :slug %>
   </div>
   <div class="field">
     <%= f.label :title %><br>
@@ -24,10 +24,10 @@
     <%= f.label :body %>
     <%= f.text_area :body, size: '70x30' %>
   </div>
-  <script src="//cdn.ckeditor.com/4.4.4/standard/ckeditor.js"></script>
+  <script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
   <script>CKEDITOR.replace('page_body')</script>
 
   <br/>
-  <%= f.submit 'Create Page', class: "btn btn-primary" %>
-  <%= link_to 'Page List', pages_path, class: "btn btn-primary" %>
+  <%= f.submit t('pages.create_page'), class: "btn btn-primary" %>
+  <%= link_to t('pages.page_list'), pages_path, class: "btn btn-primary" %>
 <% end %>
