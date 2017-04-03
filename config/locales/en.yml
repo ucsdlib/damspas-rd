@@ -39,3 +39,27 @@ en:
     form:
       model_label:
         UcsdAgent: "UCSD Agent"
+  pages:
+    save_page: "Save Page"
+    create_page: "Create Page"
+    view_page: "View Page"
+    edit_page: "Edit Page"
+    delete_page: "Delete Page"
+    add_page: "Add Page"
+    page_list: "Page List"
+    slug: "Slug"
+    title: "Title"
+    actions: "Actions"
+    body: "Body"
+    create_notice: "Page was successfully created."
+    update_notice: "Page successfully updated."
+    destory_notice: "Page was successfully destroyed."
+    edit:
+      title: "Editing Page"
+    index:
+      title: "Pages"
+      confirm_message: "Are you sure?"
+    new:
+      title: "New Page"
+      error_message: "prohibited this page from being saved:"
+      
