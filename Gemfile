@@ -69,6 +69,7 @@ gem 'hyrax', '1.0.0.alpha', github: 'projecthydra-labs/hyrax'
 gem 'flipflop', github: 'jcoyne/flipflop', branch: 'hydra'
 gem 'hydra-role-management'
 
+gem 'nokogiri', '~> 1.7.1'
 gem 'sidekiq'
 
 gem 'active-fedora', '11.0.0.rc7'
