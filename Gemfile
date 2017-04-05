@@ -71,6 +71,7 @@ gem 'hydra-role-management'
 
 gem 'nokogiri', '~> 1.7.1'
 gem 'sidekiq'
+gem 'rubyXL'
 
 gem 'active-fedora', '11.0.0.rc7'
 

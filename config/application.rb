@@ -14,6 +14,7 @@ module MyApp
     end
 
     config.active_job.queue_adapter = :sidekiq
+    config.autoload_paths << Rails.root.join('lib')
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

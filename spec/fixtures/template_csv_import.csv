@@ -1,3 +1,0 @@
-title,file_1,file_2,Topic,Creator,Language,Type
-Test CSV Import Object One,file_1.tif,,Topic about CSV import,Tester,http://id.loc.gov/vocabulary/iso639-2/enm,http://id.loc.gov/vocabulary/resourceTypes/img
-Test CSV Import Object Two,file_2.tif,image.jpg,Topic batch import|Topic about CSV import,CSV Tester,http://id.loc.gov/vocabulary/iso639-2/eng|http://id.loc.gov/vocabulary/iso639-2/spa,http://id.loc.gov/vocabulary/resourceTypes/img|http://id.loc.gov/vocabulary/resourceTypes/mix
