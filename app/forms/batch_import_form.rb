@@ -1,5 +1,5 @@
-class CsvImportForm < Hyrax::Forms::WorkForm
-  self.model_class = CsvImportItem
+class BatchImportForm < Hyrax::Forms::WorkForm
+  self.model_class = BatchImportItem
   include HydraEditor::Form::Permissions
 
   # The WorkForm delegates `#depositor` to `:model`, but `:model` in the
@@ -31,12 +31,12 @@ class CsvImportForm < Hyrax::Forms::WorkForm
     self.class.model_name
   end
 
-  # This is required for routing to the CsvImportsController
+  # This is required for routing to the BatchImportsController
   def to_model
     self
   end
 
-  # A model name that provides correct routes for the CsvImportsController
+  # A model name that provides correct routes for the BatchImportsController
   # without changing the param key.
   #
   # Example:
@@ -44,12 +44,12 @@ class CsvImportForm < Hyrax::Forms::WorkForm
   #   name.param_key
   #   # => 'generic_work'
   #   name.route_key
-  #   # => 'csv_imports'
+  #   # => 'batch_imports'
   #
   class Name < ActiveModel::Name
     def initialize(klass, namespace = nil, name = nil)
       super
-      @route_key          = 'csv_imports'
+      @route_key          = 'batch_imports'
       @singular_route_key = ActiveSupport::Inflector.singularize(@route_key)
       @route_key
     end

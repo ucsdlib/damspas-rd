@@ -1,4 +1,4 @@
-class CsvImportJob < ApplicationJob
+class BatchImportJob < ApplicationJob
   queue_as :ingest
 
   before_enqueue do |job|

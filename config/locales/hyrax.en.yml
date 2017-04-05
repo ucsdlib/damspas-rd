@@ -29,7 +29,7 @@ en:
         new: "New Object"
         my: "My Objects"
         batch: "Batch Create"
-        csv_import: "CSV Import"
+        batch_imports: "Batch Imports"
     dashboard:
       heading_actions:
         create_work:            "Create Object"

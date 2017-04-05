@@ -1,7 +1,7 @@
-# This stands in for an object to be created from the CsvImportForm.
+# This stands in for an object to be created from the BatchImportForm.
 # It should never actually be persisted in the repository.
 # The properties on this form should be copied to a real work type.
-class CsvImportItem < ActiveFedora::Base
+class BatchImportItem < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::Hyrax::BasicMetadata
 

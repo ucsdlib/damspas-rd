@@ -1,4 +1,4 @@
-describe 'CsvImportJob' do
+describe 'BatchImportJob' do
   let(:user) { create(:user) }
   let(:log) { create(:batch_create_operation, user: user) }
 
@@ -26,7 +26,7 @@ describe 'CsvImportJob' do
     let(:actor) { double(curation_concern: work) }
 
     subject do
-      CsvImportJob.perform_later(user,
+      BatchImportJob.perform_later(user,
                                     source_metadata,
                                     uploaded_files,
                                     selected_files,

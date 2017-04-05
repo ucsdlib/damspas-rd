@@ -1,4 +1,4 @@
-describe CsvImportsController do
+describe BatchImportsController do
   let(:user) { create(:editor) }
   let(:source_metadata) {}
   let(:file1) { File.open(fixture_path + '/files/file_1.jpg') }
@@ -16,7 +16,7 @@ describe CsvImportsController do
     it "is successful" do
       get :new
       expect(response).to be_successful
-      expect(assigns[:form]).to be_kind_of CsvImportForm
+      expect(assigns[:form]).to be_kind_of BatchImportForm
     end
   end
 
@@ -26,10 +26,10 @@ describe CsvImportsController do
       context "enquing a update job" do
         it "is successful" do
           parameters = {
-            csv_source: source_metadata,
+            source_metadata: source_metadata,
             uploaded_files: [upload1.id.to_s],
             selected_files: {},
-            csv_import_item: {visibility: 'open'}
+            batch_import_item: {visibility: 'open'}
           }
           post :create, params: parameters
           expect(response).to redirect_to Hyrax::Engine.routes.url_helpers.dashboard_works_path
@@ -42,10 +42,10 @@ describe CsvImportsController do
       subject { controller.send(:attributes_for_actor) }
 
       before do
-        controller.params = { csv_source: source_metadata,
+        controller.params = { source_metadata: source_metadata,
                               uploaded_files: [upload1.id.to_s],
                               selected_files: {},
-                              csv_import_item: { visibility: 'open' } }
+                              batch_import_item: { visibility: 'open' } }
       end
       let(:expected_params) do
           ActionController::Parameters.new(visibility: 'open').permit!
@@ -62,10 +62,10 @@ describe CsvImportsController do
       context "enquing a update job" do
         it "is successful" do
           parameters = {
-            csv_source: source_metadata,
+            source_metadata: source_metadata,
             uploaded_files: [upload1.id.to_s],
             selected_files: {},
-            csv_import_item: {visibility: 'open'}
+            batch_import_item: {visibility: 'open'}
           }
           post :create, params: parameters
           expect(response).to redirect_to Hyrax::Engine.routes.url_helpers.dashboard_works_path
@@ -78,10 +78,10 @@ describe CsvImportsController do
       subject { controller.send(:attributes_for_actor) }
 
       before do
-        controller.params = { csv_source: source_metadata,
+        controller.params = { source_metadata: source_metadata,
                               uploaded_files: [upload1.id.to_s],
                               selected_files: {},
-                              csv_import_item: { visibility: 'open' } }
+                              batch_import_item: { visibility: 'open' } }
       end
       let(:expected_params) do
           ActionController::Parameters.new(visibility: 'open').permit!

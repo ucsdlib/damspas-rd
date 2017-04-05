@@ -1,10 +1,10 @@
-  module CsvImportsControllerBehavior
+  module BatchImportsControllerBehavior
     extend ActiveSupport::Concern
     include Hydra::Controller::ControllerBehavior
     include Hyrax::CurationConcernController
 
     included do
-      self.work_form_service = CsvImportsFormService
+      self.work_form_service = BatchImportsFormService
       self.curation_concern_type = work_form_service.form_class.model_class
     end
 
@@ -16,9 +16,9 @@
     end
 
     # Gives the class of the form.
-    class CsvImportsFormService < Hyrax::WorkFormService
+    class BatchImportsFormService < Hyrax::WorkFormService
       def self.form_class(_ = nil)
-        ::CsvImportForm
+        ::BatchImportForm
       end
     end
 
@@ -34,7 +34,7 @@
 
       def create_update_job
         log = Hyrax::BatchCreateOperation.create!(user: current_user,
-                                           operation_type: "CSV Import")
+                                           operation_type: "Batch Imports")
 
         uploaded_files = params.fetch(:uploaded_files, [])
         selected_files = params.fetch(:selected_files, {}).values
@@ -45,10 +45,10 @@
         browse_everything_files = selected_files
                                   .select { |v| uploaded_files.include?(v[:url]) }
 
-        source_file = write_source_file(params[:csv_source], params[:csv_source].original_filename)
+        source_file = write_source_file(params[:source_metadata], params[:source_metadata].original_filename)
         import_template = File.join(Rails.root, "imports", "object_import_template.xlsx")
 
-        CsvImportJob.perform_later(current_user,
+        BatchImportJob.perform_later(current_user,
                                      source_file,
                                      uploaded_files - browse_everything_urls,
                                      browse_everything_files,
