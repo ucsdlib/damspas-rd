@@ -2,12 +2,12 @@
 class LocalAuthoritySchema < ActiveTriples::Schema
     # xsd:URI with CVs
     property :resource_type, predicate: ::RDF::Vocab::DC.type
-    property :language, predicate: ::RDF::Vocab::DC.language
+    property :language, predicate: ::RDF::Vocab::DC11.language
 
     # creator: edm:Agent
-    property :creator, predicate: ::RDF::Vocab::DC.creator, class_name: Agent
-    property :contributor, predicate: RDF::Vocab::DC.contributor, class_name: Agent
-    property :publisher, predicate: ::RDF::Vocab::DC.publisher, class_name: Agent 
+    property :creator, predicate: ::RDF::Vocab::DC11.creator, class_name: Agent
+    property :contributor, predicate: RDF::Vocab::DC11.contributor, class_name: Agent
+    property :publisher, predicate: ::RDF::Vocab::DC11.publisher, class_name: Agent 
 
     property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder, class_name: Agent
     property :name, predicate: ::RDF::Vocab::FOAF.name, class_name: Agent
@@ -21,7 +21,7 @@ class LocalAuthoritySchema < ActiveTriples::Schema
     property :cruise, predicate: ::RDF::URI.new("http://schema.geolink.org/hasCruise"), class_name: Agent
 
     # topic: skos:Concept
-    property :topic, predicate: ::RDF::Vocab::DC.subject, class_name: Concept
+    property :topic, predicate: ::RDF::Vocab::DC11.subject, class_name: Concept
 
     property :anatomy, predicate: ::UcsdTerms.anatomy, class_name: Concept
     property :genre_form, predicate: ::RDF::Vocab::Bibframe.genre, class_name: Concept
@@ -39,10 +39,9 @@ class LocalAuthoritySchema < ActiveTriples::Schema
     property :created_date, predicate: RDF::Vocab::DC.created, class_name: TimeSpan
     property :event_date, predicate: UcsdTerms.eventDate, class_name: TimeSpan
     property :collection_date, predicate: UcsdTerms.collectionDate, class_name: TimeSpan
-    property :copyright_date, predicate: RDF::Vocab::DC.dateCopyrighted, class_name: TimeSpan
+    property :copyrighted_date, predicate: RDF::Vocab::DC.dateCopyrighted, class_name: TimeSpan
     property :issue_date, predicate: RDF::Vocab::DC.issued, class_name: TimeSpan
 
     # temporal: edm:TimeSpan
     property :temporal, predicate: RDF::Vocab::DC.temporal, class_name: TimeSpan
-    property :rightsOverrideExpiration, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverrideExpiration"), class_name: TimeSpan
 end

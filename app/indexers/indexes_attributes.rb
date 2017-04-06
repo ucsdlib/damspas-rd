@@ -4,7 +4,7 @@ module IndexesAttributes extend ActiveSupport::Concern
   CREATED_DATE = Solrizer.solr_name('created_date', :stored_searchable)
   EVENT_DATE = Solrizer.solr_name('event_date', :stored_searchable)
   COLLECTION_DATE = Solrizer.solr_name('collection_date', :stored_searchable)
-  COPYRIGHT_DATE = Solrizer.solr_name('date_copyrighted', :stored_searchable)
+  COPYRIGHT_DATE = Solrizer.solr_name('copyrighted_date', :stored_searchable)
   ISSUE_DATE = Solrizer.solr_name('issue_date', :stored_searchable)
 
   SORTABLE_DATE = Solrizer.solr_name('date', :sortable)
@@ -25,7 +25,7 @@ module IndexesAttributes extend ActiveSupport::Concern
       solr_doc[CREATED_DATE] = created_date
       solr_doc[EVENT_DATE] = display_date('event_date')
       solr_doc[COLLECTION_DATE] = display_date('collection_date')
-      solr_doc[COPYRIGHT_DATE] = display_date('copyright_date')
+      solr_doc[COPYRIGHT_DATE] = display_date('copyrighted_date')
       solr_doc[ISSUE_DATE] = display_date('issue_date')
 
       # facet field in general schema
