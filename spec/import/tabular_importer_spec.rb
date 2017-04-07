@@ -16,7 +16,7 @@ describe Import::TabularImporter do
   end
 
   describe "#perform" do
-    let(:csv_source) { File.join(fixture_path, '/imports', '/csv_import_test.csv') }
+    let(:source_metadata) {}
     let(:template) { File.join(Rails.root, 'imports', 'object_import_template.xlsx') }
     let(:file1) { File.open(fixture_path + '/files/file_1.jpg') }
     let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
@@ -31,7 +31,7 @@ describe Import::TabularImporter do
 
     subject do
        described_class.new(user,
-                                    csv_source,
+                                    source_metadata,
                                     uploaded_files,
                                     remote_files,
                                     metadata,
@@ -39,44 +39,67 @@ describe Import::TabularImporter do
                                     log).import
     end
 
-    it "ingest object with components and files" do
-      expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-      expect(actor).to receive(:create).with( hash_including(title: ["Test Object One"])).and_return(true)
-      expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
-      expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])).and_return(true)
-      expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
-      expect(subject.status).to eq true
-    end
+    context 'with Excel XL source metadata' do
+      let(:source_metadata) { File.join(fixture_path, '/imports', '/excel_xl_import_test.xlsx') }
 
-    context "when permissions_attributes are passed" do
-      let(:metadata) do
-        { "permissions_attributes" => [{ "type" => "group", "name" => "public", "access" => "read" }] }
-      end
-      it "sets the groups" do
-        subject
-        work = ObjectResource.last
-        expect(work.read_groups).to include "public"
-      end
-    end
-
-    context "when visibility is passed" do
-      let(:metadata) do
-        { "visibility" => "open" }
-      end
-      it "sets public read access" do
-        subject
-        work = ObjectResource.last
-        expect(work.reload.read_groups).to eq ['public']
-      end
-    end
-
-    context "when user does not have permission to edit all of the works" do
-      it "sends the failure message" do
+      it "ingest object with components and files" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).exactly(3).times.and_return(false)
-        expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_failure, user)
+        expect(actor).to receive(:create).with( hash_including(title: ["Test Object One"])).and_return(true)
+        expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
+        expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])).and_return(true)
+        expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
+        expect(subject.status).to eq true
+      end
+
+      it "has component association" do
         subject
-        expect(log.reload.status).to eq 'failure'
+        work = ObjectResource.first
+        expect(work.ordered_members.association).not_to be_nil
+      end
+
+      context "when permissions_attributes are passed" do
+        let(:metadata) do
+          { "permissions_attributes" => [{ "type" => "group", "name" => "public", "access" => "read" }] }
+        end
+        it "sets the groups" do
+          subject
+          work = ObjectResource.last
+          expect(work.read_groups).to include "public"
+        end
+      end
+
+      context "when visibility is passed" do
+        let(:metadata) do
+          { "visibility" => "open" }
+        end
+        it "sets public read access" do
+          subject
+          work = ObjectResource.last
+          expect(work.reload.read_groups).to eq ['public']
+        end
+      end
+
+      context "when user does not have permission to edit all of the works" do
+        it "sends the failure message" do
+          expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
+          expect(actor).to receive(:create).exactly(3).times.and_return(false)
+          expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_failure, user)
+          subject
+          expect(log.reload.status).to eq 'failure'
+        end
+      end
+    end
+
+    context 'with CSV source metadata' do
+      let(:source_metadata) { File.join(fixture_path, '/imports', '/csv_import_test.csv') }
+
+      it "ingest object with components and files" do
+        expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
+        expect(actor).to receive(:create).with( hash_including(title: ["Test Object One"])).and_return(true)
+        expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
+        expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])).and_return(true)
+        expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
+        expect(subject.status).to eq true
       end
     end
   end

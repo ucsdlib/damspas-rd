@@ -46,7 +46,9 @@ module AuthoritiesService
       mod = Object.const_get(model)
       records = ActiveFedora::Base.where("has_model_ssim:#{model} AND label_tesim:\"#{label}\"").collect { |rec| rec  if is_authority_matched rec, label, alt_label }
       return records.first if records.count > 0
-      return mod.create(label: label, alternate_label: alt_label) if agent_type.blank?
+      return mod.create(label: label, alternate_label: alt_label) if agent_type.blank? && model != 'UcsdAgent'
+      # agent_type required, default to Person
+      agent_type ||= 'Person'
       mod.create(label: label, alternate_label: alt_label, agent_type: agent_type)
     end
 

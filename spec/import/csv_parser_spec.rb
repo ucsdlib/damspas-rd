@@ -17,9 +17,9 @@ describe Import::CSVParser do
 
       expect(first_record["date:created"]).to eq ['Decenber 10, 2016 @{begin=2016-12-10 ; end=2016-12-10 }']
 
-      expect(first_record["type of resource"]).to eq ['http://id.loc.gov/vocabulary/resourceTypes/img', 'http://id.loc.gov/vocabulary/resourceTypes/mix']
+      expect(first_record["type of resource"]).to eq ["mixed material", "still image"]
 
-      expect(first_record.keys).to match_array ["object unique id", "level", "title", "date:created", "type of resource"]
+      expect(first_record.keys).to match_array ["object unique id", "level", "title", "subject:topic", "agent:creator", "agent:contributor", "subject:spatial", "date:created", "note:note", "identifier:doi", "language", "type of resource", "copyright jurisdiction", "copyright status"]
     end
   end
 end

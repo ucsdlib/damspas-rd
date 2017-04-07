@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Import::ImportTemplate do
   let(:template) { described_class.from_file(file) }
-  let(:file) { 'spec/fixtures/imports/object_import_template.xlsx' }
+  let(:file) { File.join(Rails.root, 'imports', 'object_import_template.xlsx')  }
   let(:headers) { template.headers }
   let(:control_values) { template.control_values }
   let(:key_values) { template.key_values }
