@@ -39,14 +39,14 @@ module Import
             extract_field(header, row[index], attrs)
             attrs.dup.each do |k, v|
               attrs.delete k
-              splict_values(k, v, attrs)
+              split_values(k, v, attrs)
             end
           end
         end
       end
 
       # attributes in a record
-      def splict_values(key, values, attrs)
+      def split_values(key, values, attrs)
         attrs[key] ||= []
         values.each do |val|
           vals = parse_value(val)

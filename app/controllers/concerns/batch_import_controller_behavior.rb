@@ -1,10 +1,10 @@
-  module BatchImportsControllerBehavior
+  module BatchImportControllerBehavior
     extend ActiveSupport::Concern
     include Hydra::Controller::ControllerBehavior
     include Hyrax::CurationConcernController
 
     included do
-      self.work_form_service = BatchImportsFormService
+      self.work_form_service = BatchImportFormService
       self.curation_concern_type = work_form_service.form_class.model_class
     end
 
@@ -16,7 +16,7 @@
     end
 
     # Gives the class of the form.
-    class BatchImportsFormService < Hyrax::WorkFormService
+    class BatchImportFormService < Hyrax::WorkFormService
       def self.form_class(_ = nil)
         ::BatchImportForm
       end

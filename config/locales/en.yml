@@ -62,4 +62,8 @@ en:
     new:
       title: "New Page"
       error_message: "prohibited this page from being saved:"
-      
+  batch_import:
+    title: "Batch Import"
+    metadata_source: "Metadata Source"
+    metadata_source_file: "Source file..."
+    tool_tip: "To create single objects, go to"

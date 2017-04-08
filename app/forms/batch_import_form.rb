@@ -3,7 +3,7 @@ class BatchImportForm < Hyrax::Forms::WorkForm
   include HydraEditor::Form::Permissions
 
   # The WorkForm delegates `#depositor` to `:model`, but `:model` in the
-  # CsvImport context is a blank work with a `nil` depositor
+  # BatchImport context is a blank work with a `nil` depositor
   # value. This causes the "Sharing With" widget to display the Depositor as
   # "()". We should be able to reliably pull back the depositor of the new
   # batch of works by asking the form's Ability what its `current_user` is.
@@ -31,12 +31,12 @@ class BatchImportForm < Hyrax::Forms::WorkForm
     self.class.model_name
   end
 
-  # This is required for routing to the BatchImportsController
+  # This is required for routing to the BatchImportController
   def to_model
     self
   end
 
-  # A model name that provides correct routes for the BatchImportsController
+  # A model name that provides correct routes for the BatchImportController
   # without changing the param key.
   #
   # Example:
@@ -44,14 +44,12 @@ class BatchImportForm < Hyrax::Forms::WorkForm
   #   name.param_key
   #   # => 'generic_work'
   #   name.route_key
-  #   # => 'batch_imports'
+  #   # => 'batch_import'
   #
   class Name < ActiveModel::Name
     def initialize(klass, namespace = nil, name = nil)
       super
-      @route_key          = 'batch_imports'
-      @singular_route_key = ActiveSupport::Inflector.singularize(@route_key)
-      @route_key
+      @route_key = 'batch_import_index'
     end
   end
 end

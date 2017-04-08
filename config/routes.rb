@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     concerns :exportable
   end
 
-  resources :batch_imports, only: [:new, :create], controller: 'batch_imports'
+  resources :batch_import, only: [:new, :create], controller: 'batch_import'
 
   resources :pages
   get '/p/:id', to: 'pages#view', :as => 'view_page'

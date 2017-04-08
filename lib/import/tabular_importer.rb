@@ -70,23 +70,8 @@ module Import
         license = attrs.delete :license
 
 
-        # file path: when appearing ignore uploaded files
-        file_path = attrs.delete(:file_path).first if attrs.key? :file_path
-        if file_path.nil?
-          matched_uploaded_files = []
-          matched_remote_files = []
-          map_files attrs, :file_1_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files if attrs.include?(:file_1_name)
-          map_files attrs, :file_2_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files if attrs.include?(:file_2_name)
-
-          attrs[:uploaded_files] = matched_uploaded_files
-          attrs[:remote_files] = matched_remote_files
-        else
-          attrs[:remote_files] = []
-          file_1_name = attrs.delete(:file_1_name).first if attrs.key? :file_1_name
-          file_2_name = attrs.delete :file_2_name.first if attrs.key? :file_2_name
-          attrs[:remote_files] << { :url => "file://#{file_path}/#{file_1_name}", :file_name => "#{file_1_name}"}.with_indifferent_access if file_1_name.nil?
-          attrs[:remote_files] << { :url => "file://#{file_path}/#{file_2_name}", :file_name => "#{file_2_name}"}.with_indifferent_access if file_2_name.nil?
-        end
+        # source file
+        process_source_file attrs
 
         attrs = attrs.merge @form_attributes
 
@@ -261,6 +246,27 @@ module Import
           au = AuthoritiesService.find_or_create(model, label)
           raise "Unable to create new #{model} #{label} for #{type}." if au.id.nil?
           ActiveFedora::Base.id_to_uri(au.id)
+        end
+      end
+
+      def process_source_file(attrs)
+
+        # file path: when appearing ignore uploaded files
+        file_path = attrs.delete(:file_path).first if attrs.key? :file_path
+        if file_path.nil?
+          matched_uploaded_files = []
+          matched_remote_files = []
+          map_files attrs, :file_1_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files if attrs.include?(:file_1_name)
+          map_files attrs, :file_2_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files if attrs.include?(:file_2_name)
+
+          attrs[:uploaded_files] = matched_uploaded_files
+          attrs[:remote_files] = matched_remote_files
+        else
+          attrs[:remote_files] = []
+          file_1_name = attrs.delete(:file_1_name).first if attrs.key? :file_1_name
+          file_2_name = attrs.delete(:file_2_name).first if attrs.key? :file_2_name
+          attrs[:remote_files] << { :url => "file://#{file_path}/#{file_1_name}", :file_name => "#{file_1_name}"}.with_indifferent_access if !file_1_name.nil?
+          attrs[:remote_files] << { :url => "file://#{file_path}/#{file_2_name}", :file_name => "#{file_2_name}"}.with_indifferent_access if !file_2_name.nil?
         end
       end
 

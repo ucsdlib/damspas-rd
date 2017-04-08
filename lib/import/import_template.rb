@@ -22,7 +22,7 @@ module Import
       # field value
       def field_value(cell)
         val = cell.value if cell
-        val.nil? ? val : val.to_s.strip
+        val.nil? ? "" : val.to_s.strip
       end
 
       def extract_headers(sheet)

@@ -3,13 +3,13 @@ module Import
     private 
       # valid header fields
       def parse_headers(row)
-        headers = []
-        $i = 0
-        while $i < row.size() do
-          headers << field_value(row[$i])
-          $i = $i + 1
+        [].tap do |headers|
+          i = 0
+          while i < row.size() do
+            headers << field_value(row[i])
+            i = i + 1
+          end
         end
-        headers
       end
 
       # attributes for a record
@@ -24,14 +24,14 @@ module Import
       # attributes in a record
       def extract_field(header, cell, attrs = {})
         val = field_value cell
-        return unless !val.blank?
+        return if val.empty?
         attrs[header] ||= []
         attrs[header] << val
       end
 
       # extract field value
       def field_value(cell)
-        cell.nil? ? cell : cell.to_s.strip
+        cell.nil? ? "" : cell.to_s.strip
       end
   end
 end

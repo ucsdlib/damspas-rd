@@ -61,6 +61,9 @@ class IngestWorkJob < CreateWorkJob
 
       end
 
+      # set default thumbnail for the complex object
+      set_thumbnail works
+
       # save the object with the component member relationship
       begin
         parent.save
@@ -84,5 +87,13 @@ class IngestWorkJob < CreateWorkJob
       rescue
         val
       end
+    end
+
+    # set complex object thumbnail if not set yet.
+    # @params [ObjectResource] works
+    def set_thumbnail(works)
+      return unless works.count > 1 && works.first.thumbnail.nil?
+      work = works.detect { |work| !work.thumbnail.nil? }
+      works.first.thumbnail = work.thumbnail if work
     end
 end

@@ -1,4 +1,4 @@
-describe BatchImportsController do
+describe BatchImportController do
   let(:user) { create(:editor) }
   let(:source_metadata) {}
   let(:file1) { File.open(fixture_path + '/files/file_1.jpg') }
