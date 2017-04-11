@@ -10,7 +10,7 @@ describe IngestLocalFileJob do
 
   before do
     Dir.mkdir mock_upload_directory unless File.exist? mock_upload_directory
-    FileUtils.copy(File.expand_path('../../fixtures/file_1.jpg', __FILE__), mock_upload_directory)
+    FileUtils.copy(File.expand_path('../../fixtures/files/file_1.jpg', __FILE__), mock_upload_directory)
     allow(Hyrax::Actors::FileSetActor).to receive(:new).with(file_set, user).and_return(actor)
   end
 

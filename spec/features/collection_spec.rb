@@ -50,14 +50,14 @@ feature 'Create a Collection' do
       expect(page).to have_selector 'h1', text: 'Test Collection'
     end
 
-    scenario 'should see collection customized General Note' do
+    scenario 'should see collection customized Note' do
       visit '/dashboard'
       first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
       fill_in 'collection_title', with: 'Test Collection'
-      fill_in 'collection_general_note', with: 'General Note'
+      fill_in 'collection_note', with: 'General Note'
       click_button("Create Collection")
       expect(page).to have_selector 'h1', text: 'Test Collection'
       expect(page).to have_content 'General Note'

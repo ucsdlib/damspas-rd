@@ -2,7 +2,7 @@
 class MarcrelSchema < ActiveTriples::Schema
   property :analyst, predicate: ::RDF::Vocab::MARCRelators.anl, class_name: Agent
   property :artist, predicate: ::RDF::Vocab::MARCRelators.art, class_name: Agent
-  property :associatedName, predicate: ::RDF::Vocab::MARCRelators.asn, class_name: Agent
+  property :associated_name, predicate: ::RDF::Vocab::MARCRelators.asn, class_name: Agent
   property :author, predicate: ::RDF::Vocab::MARCRelators.aut, class_name: Agent
   property :collector, predicate: ::RDF::Vocab::MARCRelators.col, class_name: Agent
   property :composer, predicate: ::RDF::Vocab::MARCRelators.cmp, class_name: Agent
@@ -10,7 +10,7 @@ class MarcrelSchema < ActiveTriples::Schema
   # property :coprincipal_investigator, predicate: ::UcsdTerms.coPrincipalInvestigator, class_name: Agent
   property :curator, predicate: ::RDF::Vocab::MARCRelators.cur, class_name: Agent
   property :dancer, predicate: ::RDF::Vocab::MARCRelators.dnc, class_name: Agent
-  property :data_manager, predicate: ::RDF::Vocab::MARCRelators.dtm, class_name: Agent
+  property :data_manager, predicate: ::RDF::URI.new("http://id.loc.gov/vocabulary/relators/dat"), class_name: Agent
   property :donor, predicate: ::RDF::Vocab::MARCRelators.dnr, class_name: Agent
   property :editor, predicate: ::RDF::Vocab::MARCRelators.edt, class_name: Agent
   # property :field_assistant, predicate: ::UcsdTerms.fieldAssistant, class_name: Agent

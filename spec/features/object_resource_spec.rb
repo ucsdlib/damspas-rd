@@ -47,10 +47,10 @@ feature 'Create a ObjectResource' do
       expect(page).to have_content 'Test Description'
     end
 
-    scenario 'should contains UCSD custom term General Note' do
+    scenario 'should contains UCSD custom term Note' do
       visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource'
-      fill_in 'General note', with: 'Test General Note'
+      fill_in 'Note', with: 'Test General Note'
       click_button 'Save'
       expect(page).to have_content 'Test ObjectResource'
       expect(page).to have_content 'Test General Note'

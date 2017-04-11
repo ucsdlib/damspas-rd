@@ -6,23 +6,77 @@ class IngestWorkJob < CreateWorkJob
   # @param [String] model
   # @param [Hash] attributes
   # @param [BatchCreateOperation] log
-  def perform(user, model, attributes, log)
+  def perform(user, model, components, log)
+    levels = []
+    works = []
+    status = []
     log.performing!
-    attributes.each do |key, value|
-      if value.is_a? Array
-        value.map! { |v| to_hash(v) }
-      else
-        to_hash(value)
+
+    components.each do |attributes|
+      levels << Import::TabularImporter.const_get(attributes.delete(:level).gsub('-', '').upcase)
+
+      attributes.each do |key, value|
+        if value.is_a? Array
+          value.map! { |v| to_hash(v) }
+        else
+          to_hash(value)
+        end
       end
+
+      work = model.constantize.new
+      works << work
+      actor = work_actor(work, user)
+      status << actor.create(attributes)
     end
 
-    work = model.constantize.new
-    actor = work_actor(work, user)
+    if components.count <= 1
+      return log.fail!('No records ingested!') if components.count == 0
+      return log.success! if status.first
+      log.fail!(works.first.errors.full_messages.join(' '))
+    else
+      # construct components to complex object
+      parent = works.first
+      previous_level = levels.first
+      levels.each_with_index do |level, index|
+        next unless index > 0
+        if level < previous_level
 
-    status = actor.create(attributes)
+          # changing from sub-component to component, save the component with sub-components members
+          begin
+            parent.save
+          rescue exception => e
+            status[0] = false
+            parent.errors.add(:base, :add_child_relationship_failed, message: e.to_s)
+          end
 
-    return log.success! if status
-    log.fail!(work.errors.full_messages.join(' '))
+          # parent changed to the object
+          parent = works.first
+        elsif level > previous_level
+          # changing from component to sub-component, parent change form the object to the previous component
+          parent = works[index - 1]
+        end
+
+        previous_level = level
+        parent.ordered_members << works[index]
+
+      end
+
+      # set default thumbnail for the complex object
+      set_thumbnail works
+
+      # save the object with the component member relationship
+      begin
+        parent.save
+        works.first.save if parent != works.first
+      rescue Exception => e
+        parent.errors.add(:base, :add_child_relationship_failed, message: e.to_s)
+        status[0] = false
+      end
+
+      # report the ingest status
+      return log.fail!(works.select {|work| work.errors.full_messages.join(' ') if work.errors.count > 0}) if status.select { |s| s == false }.count > 0
+      log.success!
+    end
   end
 
   private
@@ -33,5 +87,13 @@ class IngestWorkJob < CreateWorkJob
       rescue
         val
       end
+    end
+
+    # set complex object thumbnail if not set yet.
+    # @params [ObjectResource] works
+    def set_thumbnail(works)
+      return unless works.count > 1 && works.first.thumbnail.nil?
+      work = works.detect { |work| !work.thumbnail.nil? }
+      works.first.thumbnail = work.thumbnail if work
     end
 end

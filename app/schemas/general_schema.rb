@@ -1,8 +1,8 @@
 # rubocop:disable Metrics/ClassLength
 class GeneralSchema < ActiveTriples::Schema
 
-  property :description, predicate: ::RDF::Vocab::DC.description
-  property :preferred_citation, predicate: ::RDF::Vocab::Bibframe.preferredCitation
+  property :description, predicate: ::RDF::Vocab::DC11.description
+  property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation
   property :table_of_contents, predicate: ::RDF::Vocab::DC.tableOfContents
   property :arrangement, predicate: ::RDF::Vocab::Bibframe.materialArrangement
   property :biography, predicate: ::UcsdTerms.biography
@@ -12,7 +12,7 @@ class GeneralSchema < ActiveTriples::Schema
   property :edition, predicate: ::RDF::Vocab::Bibframe.edition
   property :finds, predicate: ::UcsdTerms.finds
   property :funding, predicate: ::UcsdTerms.funding
-  property :general_note, predicate: ::RDF::Vocab::DC.abstract
+  property :note, predicate: ::RDF::Vocab::DC.abstract
   property :inscription, predicate: ::UcsdTerms.inscription
   property :limits, predicate: ::UcsdTerms.limits
   property :local_attribution, predicate: ::UcsdTerms.localAttribution
@@ -32,13 +32,14 @@ class GeneralSchema < ActiveTriples::Schema
   property :extent, predicate: ::RDF::Vocab::DC.extent
   property :relation, predicate: ::RDF::Vocab::DC11.relation
   property :rights_note, predicate: ::RDF::Vocab::DC11.rights
-  property :copyright_jurisiction, predicate: ::RDF::Vocab::PREMIS.hasCopyrightJurisdiction
   property :title, predicate: ::RDF::Vocab::DC.title
   property :alternative, predicate: ::RDF::Vocab::DC.alternative
   property :part_name, predicate: ::RDF::Vocab::MODS.partName
   property :part_number, predicate: ::RDF::Vocab::MODS.partNumber
   property :subtitle, predicate: ::RDF::URI.new("http://www.loc.gov/mods/rdf/v1#subTitle")
-
+  property :work_featured, predicate: ::UcsdTerms.workFeatured
+  property :venue, predicate: ::UcsdTerms.venue
+  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
 
   # predicates that required xsd:anyURI value
   property :area, predicate: ::UcsdTerms.area
@@ -48,11 +49,17 @@ class GeneralSchema < ActiveTriples::Schema
   property :locus, predicate: ::UcsdTerms.locus
   property :news_release, predicate: ::UcsdTerms.newsRelease
   property :stratum, predicate: ::UcsdTerms.stratum
-  property :rights, predicate: ::RDF::Vocab::EDM.rights
+
+  # Literal with CVs: string (controlled ISO ALPHA-2 Code)
+  property :copyright_jurisdiction, predicate: ::RDF::Vocab::PREMIS.hasCopyrightJurisdiction
 
   # xsd:anyURI with CVs
   property :rightsOverride, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverride")
   property :copyright_status, predicate: ::RDF::Vocab::PREMIS.hasCopyrightStatus
+  property :rights, predicate: ::RDF::Vocab::DC.rights
+
+  # xsd:dateTime
+  property :rightsOverrideExpiration, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverrideExpiration")
 
   # predicates that need discussions?
   #? property :location, predicate: ::RDF::Vocab::DC.spatial	dpla:Place -- deleted

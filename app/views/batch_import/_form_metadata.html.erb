@@ -9,11 +9,11 @@
         input_html: { class: 'form-control' } %>
 
     <div class="with-headroom" style="padding-bottom:25px;">
-        <label>CSV Metadata Source</label><br />
+        <label><%= t("batch_import.metadata_source") %></label><br />
         <div class="btn btn-success fileinput-button">
             <span class="glyphicon glyphicon-plus"></span>
-            <span>CSV file...</span>
-            <input id="csv_source" type="file" name="csv_source">
+            <span><%= t("batch_import.metadata_source_file") %></span>
+            <input id="source_metadata" type="file" name="source_metadata">
         </div>
     </div>
 
