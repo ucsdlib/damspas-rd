@@ -14,8 +14,6 @@ describe Collection do
   let(:top_col) { described_class.new(title: ['Test Collection - Topic'], creator: [creator_b.uri], topic: [topic.uri]) }
   let(:brd_col) { described_class.new(title: ['Test Collection - Brief Description'], brief_description: "Test Brief Description") }
   let(:loc_col) { described_class.new(title: ['Test Collection - Location Of Originals'], physical_description: ["Test Location Of Originals"]) }
-  let(:fin_col) { described_class.new(title: ['Test Collection - Finding Aid'], finding_aid: "http://test.com/finding/aid") }
-  let(:finn_col) { described_class.new(title: ['Test Collection - Finding Aid'], finding_aid: "Not a url") }
   let(:lan_col) { described_class.new(title: ['Test Collection - Language'], language: ["http://lexvo.org/id/iso639-3/eng"]) }
   let(:lan_err_col) { described_class.new(title: ['Test Collection - Language'], language: ["Not a url"]) }
 
@@ -88,20 +86,6 @@ describe Collection do
       expect(@col.physical_description.first).to eq 'Test Location Of Originals'
     end
 
-    it 'should contains Finding Aid url' do
-      fin_col.save ({:validate => false})
-      expect { fin_col.save }.to_not raise_error
-      expect(fin_col.id).to be_truthy
-      @col = described_class.find fin_col.id
-      expect(@col.title.first).to eq 'Test Collection - Finding Aid'
-      expect(@col.finding_aid).to eq 'http://test.com/finding/aid'
-    end
-
-    it 'should not created with a non URL Finding Aid value' do
-      finn_col.save
-      expect { finn_col.save! }.to raise_error Exception
-    end
-
     it 'should throw validation error with invalid URL for language' do
       lan_err_col.save
       expect { lan_err_col.save! }.to raise_error Exception
@@ -116,5 +100,37 @@ describe Collection do
       expect(@col.language).to eq ['http://lexvo.org/id/iso639-3/eng']
     end
 
+  end
+
+  context 'with related resource' do
+    let(:attributes) {{ title: ['Test Collection'], related_resource_attributes: [{related_type: ['relation'], name: ['Name'], url:['http://test.com/related/resource']}] }}
+    let(:col) { described_class.new()}
+
+    describe 'create related resource' do
+      it 'should create nested related resource record' do
+        col.attributes = attributes
+        col.save({:validate => false})
+        expect { col.save }.to_not raise_error
+        expect(col.id).to be_truthy
+        @col = described_class.find col.id
+        expect(@col.title.first).to eq 'Test Collection'
+        expect(@col.related_resource.first.name).to eq ['Name']
+        expect(@col.related_resource.first.url).to eq ['http://test.com/related/resource']
+      end
+    end
+
+    describe 'update related resource' do
+      let(:attrs_updated) {{ title: ['Test Collection'], related_resource_attributes: [{related_type: ['relation'], name: ['Name updated'], url:['http://test.com/related/resource/updated']}] }}
+      it 'should update nested related resource record' do
+        col.attributes = attrs_updated
+        col.save({:validate => false})
+        expect { col.save }.to_not raise_error
+        expect(col.id).to be_truthy
+        @col = described_class.find col.id
+        expect(@col.title.first).to eq 'Test Collection'
+        expect(@col.related_resource.first.name).to eq ['Name updated']
+        expect(@col.related_resource.first.url).to eq ['http://test.com/related/resource/updated']
+      end
+    end
   end
 end

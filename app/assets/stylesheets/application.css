@@ -17,5 +17,11 @@
  *= require 'blacklight_advanced_search'
 
 */
- ul.component_list { list-style-type: none; padding-left:10px; padding-bottom:0; margin:2px;}
- tr.attributes td a img {width:25px; height:25px;}
+ul.component_list { list-style-type: none; padding-left:10px; padding-bottom:0; margin:2px;}
+tr.attributes td a img {width:25px; height:25px;}
+.col-md-1 {width: 80px;}
+.col-md-5 {width: 364px;}
+div.row {margin:0px 10px; padding: 4px 0px 2px 0px; }
+li > div.row {background-color: #eee;}
+.form-group.time_span ul.listing {list-style-type: none; padding: 0; margin: 0; max-width: 530px}
+.form-group.multi_value ul.listing {list-style-type: none; padding: 0; margin: 0; max-width: 535px}

@@ -44,4 +44,7 @@ class LocalAuthoritySchema < ActiveTriples::Schema
 
     # temporal: edm:TimeSpan
     property :temporal, predicate: RDF::Vocab::DC.temporal, class_name: TimeSpan
+
+    # related resource: UcsdTerms:RelatedResource
+    property :related_resource, predicate: RDF::Vocab::DC.relation, class_name: RelatedResource
 end

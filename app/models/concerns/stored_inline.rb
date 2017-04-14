@@ -1,11 +1,11 @@
 module StoredInline
   extend ActiveSupport::Concern
 
-  def initialize(uri = RDF::Node.new, parent = nil)
-    uri = if uri.try(:node?)
-            RDF::URI("#timespan_#{uri.to_s.gsub('_:', '')}")
-          elsif uri.to_s.include?('#')
-            RDF::URI(uri)
+  def initialize(uri=RDF::Node.new, parent)
+    if uri.try(:node?)
+      uri = RDF::URI("#nested_#{uri.to_s.gsub('_:', '')}")
+    elsif uri.start_with?("#")
+      uri = RDF::URI(uri)
     end
     super
   end

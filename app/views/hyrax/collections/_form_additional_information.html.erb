@@ -18,8 +18,10 @@
     collection: AuthoritiesService.find_all_places,
     include_blank: true,
     input_html: { class: 'form-control' } %>
-  <%= f.input :finding_aid %>
+
   <%= f.input :location_of_originals %>
   <%= f.input :table_of_contents, as: :multi_value, input_html: { rows: '4', type: 'textarea'}%>
 
+  <%= f.input :created_date, as: :time_span %>
+  <%= f.input :related_resource, as: :related_resource %>
 </fieldset>

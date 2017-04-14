@@ -9,7 +9,7 @@ module LocalAuthorityHashConverter
       values.map { |x|
         if Authority.is_authority? x
           arg << x.uri.to_s
-        elsif (x.is_a? ActiveTriples::Resource) && !(x.is_a? TimeSpan)
+        elsif (x.is_a? ActiveTriples::Resource) && !(x.is_a?(TimeSpan) || x.is_a?(RelatedResource))
           arg << x.id
         else
           arg << x

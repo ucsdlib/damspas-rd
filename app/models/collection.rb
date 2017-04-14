@@ -8,8 +8,6 @@ class Collection < ActiveFedora::Base
 
   include NestedAttributes
 
-  validates :finding_aid, url: true, allow_blank:true
-  validates :exhibit, url: true, allow_blank:true
   validates :language, url: {message: 'Invalid label for language field!'}, allow_blank:true
 
   def self.indexer

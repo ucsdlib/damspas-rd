@@ -30,4 +30,9 @@ describe 'MetadataService' do
     subject { MetadataService.local_attribution_list.count }
     it { is_expected.to be > 0 }
   end
+
+  describe "find_all_related_resource_types" do
+    subject { MetadataService.find_all_related_resource_types.count }
+    it { is_expected.to be > 0 }
+  end
 end

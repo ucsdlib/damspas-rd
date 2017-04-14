@@ -128,4 +128,36 @@ describe ObjectResource do
       expect(obj.id.match(uuid_pattern)).to be_truthy
     end
   end
+
+  context 'with nested attributes' do
+    let(:attributes) {{ title: ['Test Object Resource'], related_resource_attributes: [{related_type: ['relation'], name: ['Name'], url:['http://test.com/related/resource']}] }}
+    let(:obj) { described_class.new()}
+
+    describe 'create related resource' do
+      it 'should create nested related resource record' do
+        obj.attributes = attributes
+        obj.save({:validate => false})
+        expect { obj.save }.to_not raise_error
+        expect(obj.id).to be_truthy
+        @obj = described_class.find obj.id
+        expect(@obj.title.first).to eq 'Test Object Resource'
+        expect(@obj.related_resource.first.name).to eq ['Name']
+        expect(@obj.related_resource.first.url).to eq ['http://test.com/related/resource']
+      end
+    end
+
+    describe 'update related resource' do
+      let(:attrs_updated) {{ title: ['Test Object Resource'], related_resource_attributes: [{related_type: ['relation'], name: ['Name updated'], url:['http://test.com/related/resource/updated']}] }}
+      it 'should update nested related resource record' do
+        obj.attributes = attrs_updated
+        obj.save({:validate => false})
+        expect { obj.save }.to_not raise_error
+        expect(obj.id).to be_truthy
+        @obj = described_class.find obj.id
+        expect(@obj.title.first).to eq 'Test Object Resource'
+        expect(@obj.related_resource.first.name).to eq ['Name updated']
+        expect(@obj.related_resource.first.url).to eq ['http://test.com/related/resource/updated']
+      end
+    end
+  end
 end

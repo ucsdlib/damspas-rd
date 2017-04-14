@@ -42,6 +42,12 @@ module IndexesAttributes extend ActiveSupport::Concern
         facet_searchable solr_doc, 'language', label
         solr_doc[Solrizer.solr_name('resource_type', :searchable)] = uri
       end
+
+      # related resource: RelatedResource
+      object.related_resource.each do |res|
+        facet_searchable solr_doc, 'related_resource', res.display_label
+        solr_doc[Solrizer.solr_name("related_resource_json", :stored_searchable)] = res.to_json
+      end
     end
   end
 
