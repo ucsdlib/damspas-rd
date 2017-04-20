@@ -3,7 +3,6 @@
 # The properties on this form should be copied to a real work type.
 class BatchImportItem < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-  include ::Hyrax::BasicMetadata
 
   include ::CommonMetadata
 

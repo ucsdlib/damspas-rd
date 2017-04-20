@@ -130,20 +130,20 @@ feature 'Visitor wants to browse and search' do
 
     scenario 'topic facet page has A-Z links' do
       visit facet_catalog_path("topic_sim", :'facet.sort' => 'index')
-      expect(page).to have_link('A', href: '/catalog/facet/topic_sim?facet.prefix=A&facet.sort=index' )
-      expect(page).to have_link('Z', href: '/catalog/facet/topic_sim?facet.prefix=Z&facet.sort=index' )
+      expect(page).to have_link('A', href: '/catalog/facet/topic_sim?facet.prefix=A&facet.sort=index&locale=en' )
+      expect(page).to have_link('Z', href: '/catalog/facet/topic_sim?facet.prefix=Z&facet.sort=index&locale=en' )
     end
 
     scenario 'creator facet page has A-Z links' do
       visit facet_catalog_path("creator_sim", :'facet.sort' => 'index')
-      expect(page).to have_link('A', href: '/catalog/facet/creator_sim?facet.prefix=A&facet.sort=index' )
-      expect(page).to have_link('Z', href: '/catalog/facet/creator_sim?facet.prefix=Z&facet.sort=index' )
+      expect(page).to have_link('A', href: '/catalog/facet/creator_sim?facet.prefix=A&facet.sort=index&locale=en' )
+      expect(page).to have_link('Z', href: '/catalog/facet/creator_sim?facet.prefix=Z&facet.sort=index&locale=en' )
     end
   end
 
 feature 'Visitor goes to advanced search page' do
   let!(:admin_user) { FactoryGirl.create(:admin) }
-  let!(:object_resource) { FactoryGirl.create(:object_resource, title: ["Object Title"], subject: ["New Subject"], :user => admin_user) }
+  let!(:object_resource) { FactoryGirl.create(:object_resource, title: ["Object Title"], topic: ["New Subject"], :user => admin_user) }
 
   scenario 'to search by title' do
     visit "/advanced"

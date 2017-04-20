@@ -39,9 +39,15 @@ describe 'BatchImportJob' do
       let(:source_metadata) { File.join(fixture_path, 'imports', '/excel_xl_import_test.xlsx') }
       it "updates work metadata" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Object One'])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'])).and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Object One'])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Sub-component One'])
+        end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
         subject
         expect(log.status).to eq 'pending'
@@ -86,9 +92,15 @@ describe 'BatchImportJob' do
 
       it "updates work metadata" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Object One'])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'])).and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Object One'])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Sub-component One'])
+        end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
         subject
         expect(log.status).to eq 'pending'

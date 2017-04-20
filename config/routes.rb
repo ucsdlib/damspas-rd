@@ -14,7 +14,10 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
+  get '/batch_uploads/new', to: redirect('/batch_import/new')
+
   devise_for :users
+  mount Hydra::RoleManagement::Engine => '/'
   mount Qa::Engine => '/authorities'
   mount Hyrax::Engine, at: '/'
   resources :welcome, only: 'index'

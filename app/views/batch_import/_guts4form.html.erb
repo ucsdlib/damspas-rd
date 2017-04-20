@@ -1,7 +1,8 @@
 <% # we will yield to content_for for each tab, e.g. :files_tab %>
 <% tabs ||= %w[metadata files] # default tab order %>
 <div class="row">
-  <div class="col-xs-12 col-sm-8" role="main">
+  <div class="col-xs-12 col-sm-8">
+    <div class="panel panel-default tabs" role="main">
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
@@ -12,7 +13,7 @@
           <li role="presentation">
         <% end %>
             <a href="#<%= tab %>" aria-controls="<%= tab %>" role="tab" data-toggle="tab">
-              <i class="fa icon-<%= tab %>"></i> <%= t("hyrax.works.edit.tab.#{tab}") %>
+              <i class="fa icon-<%= tab %>"></i> <%= t("hyrax.works.form.tab.#{tab}") %>
             </a>
           </li>
       <% end %>
@@ -37,6 +38,7 @@
           <div class="form-tab-content">
             <%= render "form_share", f: f %>
           </div>
+        </div>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
   module BatchImportControllerBehavior
     extend ActiveSupport::Concern
     include Hydra::Controller::ControllerBehavior
-    include Hyrax::CurationConcernController
+    include Hyrax::WorksControllerBehavior
 
     included do
       self.work_form_service = BatchImportFormService
@@ -45,6 +45,11 @@
         browse_everything_files = selected_files
                                   .select { |v| uploaded_files.include?(v[:url]) }
 
+        # clean up the parameters for file upload
+        form_attributes = attributes_for_actor
+        form_attributes.delete :uploaded_files if form_attributes.key? :uploaded_files
+        form_attributes.delete :remote_files if form_attributes.key? :remote_files
+
         source_file = write_source_file(params[:source_metadata], params[:source_metadata].original_filename)
         import_template = File.join(Rails.root, "imports", "object_import_template.xlsx")
 
@@ -52,7 +57,7 @@
                                      source_file,
                                      uploaded_files - browse_everything_urls,
                                      browse_everything_files,
-                                     attributes_for_actor.to_h,
+                                     form_attributes.to_h,
                                      import_template,
                                      log)
       end

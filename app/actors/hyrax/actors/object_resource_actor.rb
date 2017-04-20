@@ -6,14 +6,13 @@ module Hyrax
 
       protected
         # override to clear the existing nested attribute that will be replaced.
-        def apply_save_data_to_curation_concern(attributes)
-
+        def apply_save_data_to_curation_concern(env)
           # remove existing attributes that are carried from nested attributes
-          attributes.dup.each do |k, v|
-            next unless (k.ends_with? '_attributes') && (!curation_concern.attributes[k.gsub('_attributes', '')].nil?)
-            curation_concern.attributes[k.gsub('_attributes', '')].clear
+          env.attributes.dup.each do |k, v|
+            next unless (k.to_s.ends_with? '_attributes') && (!env.curation_concern.attributes[k.to_s.gsub('_attributes', '')].nil?)
+            env.curation_concern.attributes[k.to_s.gsub('_attributes', '')].clear
+            env.attributes[k] = v.values if v.respond_to? 'key?'
           end
-          attributes
           super
         end
 

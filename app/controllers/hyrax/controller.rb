@@ -7,7 +7,7 @@ module Hyrax::Controller
     # Adds Hydra behaviors into the application controller
     include Hydra::Controller::ControllerBehavior
     helper_method :create_work_presenter
-    #before_action :set_locale
+    before_action :set_locale
     rescue_from ActiveFedora::ObjectNotFoundError, with: :not_found_response
     rescue_from Blacklight::Exceptions::InvalidSolrID, with: :not_found_response
   end
@@ -19,7 +19,7 @@ module Hyrax::Controller
 
   # Override Devise method to redirect to dashboard after signing in
   def after_sign_in_path_for(_resource)
-    hyrax.dashboard_index_path
+    hyrax.dashboard_path
   end
 
   # A presenter for selecting a work type to create
@@ -29,9 +29,9 @@ module Hyrax::Controller
   end
 
   # Ensure that the locale choice is persistent across requests
-  #def default_url_options
-  #  super.merge(locale: I18n.locale)
-  #end
+  def default_url_options
+    super.merge(locale: I18n.locale)
+  end
 
   # Override Blacklight to use the Hyrax::SearchState
   def search_state

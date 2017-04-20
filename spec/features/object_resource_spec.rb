@@ -221,7 +221,7 @@ feature 'Create a ObjectResource' do
   context 'an anonymous user' do
     scenario 'should not allow to create new object' do
       visit new_hyrax_object_resource_path
-      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
 
     scenario 'should be able to read any public objects but no editing allowed' do
@@ -232,12 +232,12 @@ feature 'Create a ObjectResource' do
 
     scenario 'should be able to read any campus only objects' do
       visit "#{hyrax_object_resource_path campus_only_object_resource.id}"
-      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
 
     scenario 'should not be able to read any private objects' do
       visit "#{hyrax_object_resource_path private_object_resource.id}"
-      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
   end
 end

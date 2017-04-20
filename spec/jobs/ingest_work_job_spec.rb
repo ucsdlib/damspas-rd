@@ -28,9 +28,15 @@ describe IngestWorkJob do
 
     it "ingest complex object metadata" do
       expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-      expect(actor).to receive(:create).with( hash_including(title: ['Test Object One'])).and_return(true)
-      expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'])).and_return(true)
-      expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'])).and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Object One'])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Component One'])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Sub-component One'])
+        end.and_return(true)
       expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
       subject
       expect(log.status).to eq 'pending'

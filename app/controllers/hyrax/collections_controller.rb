@@ -5,6 +5,11 @@ module Hyrax
 
   include LocalAuthorityHashConverter
 
+  # The search builder to find the collection
+  self.single_item_search_builder_class = ::SingleCollectionSearchBuilder
+  # The search builder to find the collections' members
+  self.member_search_builder_class = ::CollectionMemberSearchBuilder
+
   def form
     attrs = @collection.attributes.dup
     attrs.each do |key, val|
@@ -42,10 +47,6 @@ module Hyrax
 
   def form_class
     ::CollectionEditForm
-  end
-
-  def single_item_search_builder
-    ::WorkSearchBuilder.new(self).with(params.except(:q, :page))
   end
 
   # If any attributes are blank remove them

@@ -58,7 +58,7 @@ module NestedAttributes
     end
 
     resource_class.send(:define_method, :time_span_attributes) do
-      [:start, :start_qualifier, :finish, :finish_qualifier, :label, :note]
+      [:start, :finish, :label]
     end
 
     resource_class.send(:define_method, :related_resource_blank) do |attributes|

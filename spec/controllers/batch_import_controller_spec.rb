@@ -32,7 +32,7 @@ describe BatchImportController do
             batch_import_item: {visibility: 'open'}
           }
           post :create, params: parameters
-          expect(response).to redirect_to Hyrax::Engine.routes.url_helpers.dashboard_works_path
+          expect(response).to redirect_to "#{Hyrax::Engine.routes.url_helpers.dashboard_works_path}?locale=en"
           expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
         end
       end
@@ -48,7 +48,7 @@ describe BatchImportController do
                               batch_import_item: { visibility: 'open' } }
       end
       let(:expected_params) do
-          ActionController::Parameters.new(visibility: 'open').permit!
+        ActionController::Parameters.new(visibility: 'open', "remote_files"=>[], "uploaded_files"=>["1"]).permit!
       end
       it "excludes uploaded_files" do
         expect(subject).to eq expected_params
@@ -68,7 +68,7 @@ describe BatchImportController do
             batch_import_item: {visibility: 'open'}
           }
           post :create, params: parameters
-          expect(response).to redirect_to Hyrax::Engine.routes.url_helpers.dashboard_works_path
+          expect(response).to redirect_to "#{Hyrax::Engine.routes.url_helpers.dashboard_works_path}?locale=en"
           expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
         end
       end
@@ -84,7 +84,7 @@ describe BatchImportController do
                               batch_import_item: { visibility: 'open' } }
       end
       let(:expected_params) do
-          ActionController::Parameters.new(visibility: 'open').permit!
+        ActionController::Parameters.new(visibility: 'open', "remote_files"=>[], "uploaded_files"=>["1"]).permit!
       end
       it "excludes uploaded_files" do
         expect(subject).to eq expected_params

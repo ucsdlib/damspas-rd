@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 20170403173356) do
     t.date     "release_date"
     t.string   "release_period"
     t.integer  "workflow_id"
-    t.index ["admin_set_id"], name: "index_permission_templates_on_admin_set_id"
+    t.index ["admin_set_id"], name: "index_permission_templates_on_admin_set_id", unique: true
     t.index ["workflow_id"], name: "index_permission_templates_on_workflow_id"
   end
 
@@ -411,12 +411,15 @@ ActiveRecord::Schema.define(version: 20170403173356) do
   end
 
   create_table "sipity_workflows", force: :cascade do |t|
-    t.string   "name",        null: false
+    t.string   "name",                   null: false
     t.string   "label"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["name"], name: "index_sipity_workflows_on_name", unique: true
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "permission_template_id"
+    t.boolean  "active"
+    t.boolean  "allows_access_grant"
+    t.index ["permission_template_id", "name"], name: "index_sipity_workflows_on_permission_template_and_name", unique: true
   end
 
   create_table "tinymce_assets", force: :cascade do |t|

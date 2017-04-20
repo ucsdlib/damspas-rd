@@ -18,6 +18,8 @@ feature 'Create a Collection' do
           local_authority: language_authority_name,
           label: 'Language',
           uri: language_uri)
+      visit '/dashboard'
+      click_link 'New Collection'
     end
 
     after do
@@ -25,8 +27,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to create collections' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -40,8 +40,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'should see collection specific Brief Description text' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -51,8 +49,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'should see collection customized Note' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -64,8 +60,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'should create collection with language label' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -77,8 +71,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'should get validation message with an invalid language label' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -89,8 +81,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'should create collection with resource type label from type url' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -102,8 +92,6 @@ feature 'Create a Collection' do
     end
 
     scenario 'should create collection with doi identifier' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -128,7 +116,7 @@ feature 'Create a Collection' do
 
     scenario 'can create' do
       visit '/dashboard'
-      first('#hydra-collection-add').click
+      click_link 'New Collection'
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -160,8 +148,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to create collections' do
-      visit '/dashboard'
-      first('#hydra-collection-add').click
+      visit '/collections/new'
       expect(page).to have_content 'Create New Collection'
       click_link('Additional Fields')
 
@@ -276,12 +263,12 @@ feature 'Create a Collection' do
 
     scenario 'should be able to read any campus only collections' do
       visit "#{hyrax.collection_path campus_only_collection.id}"
-      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
 
     scenario 'should not be able to read any private collections' do
       visit "#{hyrax.collection_path private_collection.id}"
-      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
   end
 end
