@@ -115,6 +115,44 @@ feature 'Create a Collection' do
     end
   end
 
+  context 'collection with related resources' do
+    let(:user) { create(:admin) }
+    before do
+      sign_in user
+      @col_nested = Collection.create(title: ["Test Collection - Related resource"], related_resource_attributes: [{related_type: ['relation'], name: ['Name'], url: ['http://test.com/related']}])
+    end
+
+    after do
+      @col_nested.delete
+    end
+
+    scenario 'can create' do
+      visit '/dashboard'
+      first('#hydra-collection-add').click
+      expect(page).to have_content 'Create New Collection'
+      click_link('Additional Fields')
+
+      fill_in 'Title', with: 'Test Collection - Related resource'
+      select 'relation', from: "related_resource_0_related_type"
+      fill_in "collection_related_resource_0_name", with: "related_resource_name"
+      fill_in "collection_related_resource_0_url", with: "http://test.com/related_resource_url"
+      click_button("Create Collection")
+      expect(page).to have_content 'Test Collection - Related resource'
+      expect(page).to have_content "related_resource_name"
+    end
+
+    scenario 'can update' do
+      visit "#{hyrax.collection_path @col_nested.id}"
+      expect(page).to have_content 'Test Collection - Related resource'
+      find(:xpath, "//a[text()='Edit']").click
+      fill_in 'collection_title', with: 'Test Collection - Related resource updated'
+      fill_in "collection_related_resource_0_name", with: 'related_resource_name updated'
+      click_button 'Update Collection'
+      expect(page).to have_content 'Test Collection - Related resource updated'
+      expect(page).to have_content 'related_resource_name updated'
+    end
+  end
+
   context 'a logged in user with editor role' do
     let(:user) { create(:editor) }
     before do

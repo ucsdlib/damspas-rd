@@ -3,7 +3,7 @@ class IdentifierSchema < ActiveTriples::Schema
   property :identifier, predicate: ::RDF::Vocab::DC.identifier, multiple: false
   property :accession, predicate: ::UcsdTerms.accessionId, multiple: false
   property :ark, predicate: ::UcsdTerms.arkId, multiple: false
-  property :basket, predicate: ::UcsdTerms.basketId, multiple: false
+  property :basket_number, predicate: ::UcsdTerms.basketId, multiple: false
   property :call_number, predicate: ::RDF::Vocab::MODS.locationShelfLocator, multiple: false
   property :collection_number, predicate: ::UcsdTerms.collectionNumberId, multiple: false
   property :doi, predicate: ::RDF::URI.new("http://id.loc.gov/vocabulary/identifiers#doi"), multiple: false

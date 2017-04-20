@@ -1,0 +1,24 @@
+terms:
+  - id: relation
+    term: relation
+  - id: area
+    term: Area
+  - id: artifact
+    term: artifact
+  - id: basket
+    term: basket
+  - id: depiction
+    term: depiction
+  - id: journalEntry
+    term: journal entry
+
+  - id: exhibit
+    term: exhibit
+  - id: findingAid
+    term: finding aid
+  - id: locus
+    term: locus
+  - id: news release
+    term: news release
+  - id: stratum
+    term: stratum

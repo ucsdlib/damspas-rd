@@ -10,6 +10,11 @@ module MetadataService
       find_authority_list('resource_types')
     end
 
+    # Returns all RelatedResource types
+    def find_all_related_resource_types
+      find_authority_list('related_resource_types')
+    end
+
     # Returns all Languages
     def find_all_languages
       find_authority_list('languages')

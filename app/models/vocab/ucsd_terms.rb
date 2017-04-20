@@ -54,4 +54,6 @@ class UcsdTerms < RDF::StrictVocabulary('http://library.ucsd.edu/ontology/dams5.
   term :agent_type, label: "Agent Type".freeze, type: 'rdf:Property'.freeze
   term :workFeatured, label: "work featured".freeze, type: 'rdf:Property'.freeze
   term :venue, label: "venue".freeze, type: 'rdf:Property'.freeze
+  term :relatedType, label: "Related Type".freeze, type: 'rdf:Property'.freeze
+  term :RelatedResource, label: "Related Resource".freeze, type: 'rdf:Class'.freeze
 end

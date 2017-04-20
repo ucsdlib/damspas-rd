@@ -140,6 +140,9 @@ module Import
                 rescue ArgumentError
                   is_kv_valid = false
                 end
+              when /relatedType:?/
+                control_values = @template.control_values['RelatedResource Type']
+                is_kv_valid = false if !control_values.include?(v)
               end
             end
 
@@ -189,9 +192,12 @@ module Import
                 ori_attrs["finish"] = ori_attrs.delete("end") if ori_attrs.key? "end"
               end
               process["#{attr_key.to_s}_attributes"] = nested_attrs
-            when /^(related resource:)/
-              # convert related resource: Intangible
-              process["#{attr_key.to_s}_attributes"] = convert_nested_attribute val, 'name'
+            when 'related resource'
+              # convert related resource: RelatedResource
+              nested_attrs = convert_nested_attribute val, 'name'
+              # rename key: type to related_type
+              nested_attrs.each { |ori_attrs| ori_attrs["related_type"] = ori_attrs.delete("relatedType") if ori_attrs.key? "relatedType" }
+              process["#{attr_key.to_s}_attributes"] = nested_attrs
             when 'subject:spatial'
               # convert Place
               process[attr_key] = authority_hash key, val, 'Place'

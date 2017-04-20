@@ -23,7 +23,7 @@ describe Import::ImportTemplate do
     it 'should contain key values' do
       expect(key_values.count).not_to eql(0)
 
-      expect(key_values).to include({"Allowed key" => ["begin:", "end:", "uri:"]})
+      expect(key_values).to include({"Allowed key" => ["begin:", "end:", "url:", "relatedType:"]})
     end
   end
 end

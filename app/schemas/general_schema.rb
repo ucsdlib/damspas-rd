@@ -30,7 +30,7 @@ class GeneralSchema < ActiveTriples::Schema
   property :water_depth, predicate: ::UcsdTerms.waterDepth
   property :format, predicate: ::RDF::Vocab::DC11.format
   property :extent, predicate: ::RDF::Vocab::DC.extent
-  property :relation, predicate: ::RDF::Vocab::DC11.relation
+  # property :relation, predicate: ::RDF::Vocab::DC11.relation
   property :rights_note, predicate: ::RDF::Vocab::DC11.rights
   property :title, predicate: ::RDF::Vocab::DC.title
   property :alternative, predicate: ::RDF::Vocab::DC.alternative
@@ -40,15 +40,6 @@ class GeneralSchema < ActiveTriples::Schema
   property :work_featured, predicate: ::UcsdTerms.workFeatured
   property :venue, predicate: ::UcsdTerms.venue
   property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
-
-  # predicates that required xsd:anyURI value
-  property :area, predicate: ::UcsdTerms.area
-  property :depiction, predicate: ::UcsdTerms.depiction
-  property :exhibit, predicate: ::UcsdTerms.exhibit, multiple: false
-  property :finding_aid, predicate: ::UcsdTerms.findingAid, multiple: false
-  property :locus, predicate: ::UcsdTerms.locus
-  property :news_release, predicate: ::UcsdTerms.newsRelease
-  property :stratum, predicate: ::UcsdTerms.stratum
 
   # Literal with CVs: string (controlled ISO ALPHA-2 Code)
   property :copyright_jurisdiction, predicate: ::RDF::Vocab::PREMIS.hasCopyrightJurisdiction

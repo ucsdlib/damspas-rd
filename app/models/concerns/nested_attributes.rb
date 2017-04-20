@@ -28,6 +28,9 @@ module NestedAttributes
     accepts_nested_attributes_for :copyrighted_date, reject_if: :time_span_blank, allow_destroy: true
     accepts_nested_attributes_for :issue_date, reject_if: :time_span_blank, allow_destroy: true
 
+    # related resource
+    accepts_nested_attributes_for :related_resource, reject_if: :related_resource_blank, allow_destroy: true
+
     resource_class.send(:define_method, :agent_blank) do |attributes|
       agent_attributes.all? do |key|
         Array(attributes[key]).all?(&:blank?)
@@ -56,6 +59,16 @@ module NestedAttributes
 
     resource_class.send(:define_method, :time_span_attributes) do
       [:start, :start_qualifier, :finish, :finish_qualifier, :label, :note]
+    end
+
+    resource_class.send(:define_method, :related_resource_blank) do |attributes|
+      related_attributes.all? do |key|
+        Array(attributes[key]).all?(&:blank?)
+      end
+    end
+
+    resource_class.send(:define_method, :related_attributes) do
+      [:related_type, :name, :url]
     end
   end
 end

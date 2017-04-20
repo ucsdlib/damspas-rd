@@ -715,7 +715,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active-fedora (= 11.0.0.rc7)
   blacklight_advanced_search
   byebug
   capistrano (~> 3.5.0)

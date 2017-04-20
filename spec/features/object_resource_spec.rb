@@ -97,6 +97,40 @@ feature 'Create a ObjectResource' do
     end
   end
 
+  context 'object resource with related resource' do
+    let(:user) { create(:admin) }
+    before do
+      sign_in user
+      @obj_nested = ObjectResource.create(title: ["Test ObjectResource - Related resource"], related_resource_attributes: [{related_type: ['relation'], name: ['Name'], url: ['http://test.com/related']}])
+    end
+
+    after do
+      @obj_nested.delete
+    end
+
+    scenario 'can create' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Related resource'
+      select 'relation', from: "related_resource_0_related_type"
+      fill_in "object_resource_related_resource_0_name", with: "related_resource_name"
+      fill_in "object_resource_related_resource_0_url", with: "http://test.com/related_resource_url-1"
+      click_button 'Save'
+      expect(page).to have_content 'Test ObjectResource - Related resource'
+      expect(page).to have_content 'related_resource_name'
+    end
+
+    scenario 'can update' do
+      visit "#{hyrax_object_resource_path @obj_nested.id}"
+      expect(page).to have_content 'Test ObjectResource - Related resource'
+      find(:xpath, "//a[text()='Edit']").click
+      fill_in 'object_resource_title', with: 'Test ObjectResource - Related resource updated'
+      fill_in "object_resource_related_resource_0_name", with: 'related_resource_name updated'
+      click_button 'Save'
+      expect(page).to have_content 'Test ObjectResource - Related resource updated'
+      expect(page).to have_content 'related_resource_name updated'
+    end
+  end
+
   context 'a logged in user in editor role' do
     let(:user) { create(:editor) }
     before do

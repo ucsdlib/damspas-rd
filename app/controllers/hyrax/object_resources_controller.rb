@@ -16,11 +16,15 @@ module Hyrax
     # Display the form the the user.
     def new
       curation_concern.created_date_attributes = [{label: 'LABEL'}]
+      # trick to trigger the form for nested attributes
+      curation_concern.related_resource_attributes = [{name: 'LABEL'}]
       super
     end
 
     def edit
-      curation_concern.created_date_attributes = [{label: 'LABEL', note: ''}] if curation_concern.created_date.nil? || curation_concern.created_date.empty?
+      curation_concern.created_date_attributes = [{label: 'LABEL'}] if curation_concern.created_date.nil? || curation_concern.created_date.empty?
+      # trick to trigger the form for nested attributes
+      curation_concern.related_resource_attributes = [{name: 'LABEL'}] if curation_concern.related_resource.nil? || curation_concern.related_resource.empty?
       super
     end
 

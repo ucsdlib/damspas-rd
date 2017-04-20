@@ -73,8 +73,6 @@ gem 'nokogiri', '~> 1.7.1'
 gem 'sidekiq'
 gem 'rubyXL'
 
-gem 'active-fedora', '11.0.0.rc7'
-
 group :development, :test do
   gem 'capybara', '~> 2.6.0'
   gem 'factory_girl_rails', '~> 4.4'
