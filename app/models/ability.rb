@@ -39,7 +39,6 @@ class Ability
   def curator_permissions
     can [:read], :all
     can [:download], FileSet
-    cannot :manage, :admin_dashboard
   end
 
   def campus_permissions
