@@ -30,6 +30,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'json', '~> 1.8.6'
 gem 'coveralls', require: false
 gem "blacklight_advanced_search"
+gem 'sitemap_generator', '~> 5.3.1'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
