@@ -3,12 +3,16 @@ SitemapGenerator::Sitemap.default_host = "http://library.ucsd.edu/dc"
 SitemapGenerator::Sitemap.compress = :all_but_first
 
 SitemapGenerator::Sitemap.create do
-  add '/about'
-  add '/help'
-  add '/contact'
   add '/catalog/facet/creator_sim?facet.sort=index'
   add '/catalog/facet/topic_sim?facet.sort=index'
   add '/catalog/facet/resource_type_sim?facet.sort=index'
+
+  Page.find_each do |page|
+     add view_page_path(page.slug), :lastmod => page.updated_at
+     if SitemapGenerator::Sitemap.verbose
+          Rails.logger.info "page title: #{page.slug}, lastmod: #{page.updated_at} "
+     end
+  end
 
 #hyrax solr resources
   resources = {
