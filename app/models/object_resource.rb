@@ -2,7 +2,6 @@
 #  `rails generate hyrax:work ObjectResource`
 class ObjectResource < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-  include ::Hyrax::BasicMetadata
 
   include ::CommonMetadata
   include NestedAttributes

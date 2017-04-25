@@ -47,7 +47,7 @@ class GeneralSchema < ActiveTriples::Schema
   # xsd:anyURI with CVs
   property :rightsOverride, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverride")
   property :copyright_status, predicate: ::RDF::Vocab::PREMIS.hasCopyrightStatus
-  property :rights, predicate: ::RDF::Vocab::DC.rights
+  property :license, predicate: ::RDF::Vocab::DC.rights
 
   # xsd:dateTime
   property :rightsOverrideExpiration, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverrideExpiration")

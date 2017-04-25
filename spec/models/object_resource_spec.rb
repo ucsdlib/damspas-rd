@@ -95,7 +95,7 @@ describe ObjectResource do
 
   context 'Create new ObjectResource with default NOID' do
     before do
-      @enable_noids = Hyrax.config.enable_noids
+      @enable_noids = Hyrax.config.enable_noids?
       Hyrax.config.enable_noids = true
     end
     after do
@@ -112,7 +112,7 @@ describe ObjectResource do
 
   context 'Create new ObjectResource with AF::NOID disabled that use Fedora UUID' do
     before do
-      @enable_noids = Hyrax.config.enable_noids
+      @enable_noids = Hyrax.config.enable_noids?
       Hyrax.config.enable_noids = false
     end
     after do

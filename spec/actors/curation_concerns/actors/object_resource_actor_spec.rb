@@ -16,7 +16,7 @@ describe Hyrax::Actors::ObjectResourceActor do
   end
 
   subject do
-    Hyrax::CurationConcern.actor(curation_concern, user)
+    Hyrax::CurationConcern.actor
   end
 
   describe '#nested attributes' do
@@ -26,10 +26,12 @@ describe Hyrax::Actors::ObjectResourceActor do
       let(:attributes) do
         { title: ['Test Object'], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
           related_resource_attributes: {"0" => {related_type:['relation'], name: ['Related resource name'], url: ['http://test.com/any/url']}},
-          identifier: ' ', rights: ['http://creativecommons.org/licenses/by/3.0/us/'] }
+          identifier: ' ', license: ['http://creativecommons.org/licenses/by/3.0/us/'] }
       end
+      let(:env) {Hyrax::Actors::Environment.new(curation_concern, Ability.new(user), attributes)}
+
       it 'creates nested related resource' do
-        subject.update(attributes)
+        subject.update(env)
         expect(curation_concern.related_resource.count).to eq 1
         expect(curation_concern.related_resource.first.related_type).to eq ['relation']
         expect(curation_concern.related_resource.first.name).to eq ['Related resource name']
@@ -44,10 +46,12 @@ describe Hyrax::Actors::ObjectResourceActor do
       let(:attributes) do
         { title: ['Test Object Updated'], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
           related_resource_attributes: {"0" => {related_type:['relation'], name: ['Related resource name updated'], url: ['http://test.com/any/url']}},
-          identifier: ' ', rights: ['http://creativecommons.org/licenses/by/3.0/us/'] }
+          identifier: ' ', license: ['http://creativecommons.org/licenses/by/3.0/us/'] }
       end
+      let(:env) {Hyrax::Actors::Environment.new(curation_concern, Ability.new(user), attributes)}
+
       it 'updates the nested related resource' do
-        subject.update(attributes)
+        subject.update(env)
         expect(curation_concern.related_resource.count).to eq 1
         expect(curation_concern.related_resource.first.related_type).to eq ['relation']
         expect(curation_concern.related_resource.first.name).to eq ['Related resource name updated']

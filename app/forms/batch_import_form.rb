@@ -1,6 +1,8 @@
 class BatchImportForm < Hyrax::Forms::WorkForm
   self.model_class = BatchImportItem
-  include HydraEditor::Form::Permissions
+  include SchemaEditFormBehavior
+
+   self.required_fields = [:license]
 
   # The WorkForm delegates `#depositor` to `:model`, but `:model` in the
   # BatchImport context is a blank work with a `nil` depositor

@@ -44,10 +44,15 @@ describe Import::TabularImporter do
 
       it "ingest object with components and files" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( hash_including(title: ["Test Object One"])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])).and_return(true)
-        expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Object One'])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])
+        end.and_return(true)
         expect(subject.status).to eq true
       end
 
@@ -95,9 +100,15 @@ describe Import::TabularImporter do
 
       it "ingest object with components and files" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( hash_including(title: ["Test Object One"])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])).and_return(true)
-        expect(actor).to receive(:create).with( hash_including(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])).and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Object One'])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
+        end.and_return(true)
+        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+          expect(env.attributes).to include(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])
+        end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
         expect(subject.status).to eq true
       end

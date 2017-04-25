@@ -7,7 +7,7 @@ module InputBase
   protected
     # Delegate this completely to the form.
     def collection
-      @collection ||= Array.wrap(object[attribute_name]).reject { |value| value.to_s.strip.blank? }
+      @collection ||= object[attribute_name].reject { |value| value.to_s.strip.blank? }
     end
 
     def build_field(value, index)

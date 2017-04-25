@@ -17,18 +17,28 @@ class Ability
   end
 
   def editor_permissions
-    can [:read, :create, :update, :destroy], SolrDocument
-    can [:read, :create, :edit, :update, :destroy, :file_manager], curation_concerns
-    can [:read, :create, :edit, :update, :download, :destroy], FileSet
-    can [:read, :create, :edit, :update, :destroy], Collection
-    can [:read, :create, :edit, :update, :destroy], Authority
-    can [:read, :create, :edit], BatchImportItem
+    alias_action :edit, to: :update
+    alias_action :show, to: :read
+    alias_action :discover, to: :read
+
+    # user can version if they can edit
+    alias_action :versions, to: :update
+    alias_action :file_manager, to: :update
+
+    can :read, :all
+    can :manage, [AdminSet, Hyrax::PermissionTemplate, Hyrax::PermissionTemplateAccess]
+    can [:create, :edit, :update, :destroy], Hyrax::PermissionTemplate
+    can [:create, :edit, :update, :destroy], Hyrax::PermissionTemplateAccess
+
+    can [:create, :update, :destroy], SolrDocument
+    can [:create, :edit, :update, :destroy], ActiveFedora::Base
+    can [:create, :edit, :update, :download, :destroy], FileSet
+    can [:create, :edit], BatchImportItem
   end
 
   def curator_permissions
-    can [:read], curation_concerns
-    can [:read, :download], FileSet
-    can [:read], Collection
+    can [:read], :all
+    can [:download], FileSet
   end
 
   def campus_permissions

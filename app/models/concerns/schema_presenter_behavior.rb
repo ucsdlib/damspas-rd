@@ -15,7 +15,7 @@ module SchemaPresenterBehavior
 
     def terms
       [:total_items, :size, :resource_type, :creator, :contributor, :keyword,
-       :rights, :publisher, :date_created, :subject, :language, :identifier,
+       :license, :publisher, :date_created, :subject, :language, :identifier,
        :based_near, :related_url].tap do |terms|
         all_properties.each do |prop|
           term = prop.name.to_sym

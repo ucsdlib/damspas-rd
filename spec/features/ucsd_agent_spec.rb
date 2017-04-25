@@ -6,6 +6,11 @@ feature 'Create a UcsdAgent' do
     let(:user) { create(:admin) }
 
     before do
+      create(:permission_template_access,
+             :deposit,
+             permission_template: create(:permission_template, with_admin_set: true),
+             agent_type: 'user',
+             agent_id: user.user_key)
       sign_in user
     end
 

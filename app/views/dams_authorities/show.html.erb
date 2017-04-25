@@ -4,8 +4,8 @@
   <h2 class="lower"><%= @presenter.label %></h2>(<%= auth_model %>)
 <% end %>
 
-  <%= link_to "Edit", "#{records_path}/#{@presenter.id}/edit", class: 'btn btn-default btn-edit' %>&nbsp;
-  <%= link_to "New #{auth_model}", "#{records_path}/new?utf8=%E2%9C%93&type=#{auth_model}&commit=Next", class: 'btn btn-default btn-new' %>
+  <%= link_to "Edit", "#{edit_record_path @presenter.id}", class: 'btn btn-default btn-edit' %>&nbsp;
+  <%= link_to "New #{auth_model}", "#{new_record_path}&utf8=%E2%9C%93&type=#{auth_model}&commit=Next", class: 'btn btn-default btn-new' %>
   <style>
     .label {color: #333; font-weight: normal; font-size: 14px;}
     th {width: 200px;}

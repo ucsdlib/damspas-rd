@@ -60,13 +60,10 @@ gem 'capistrano-rails', '~> 1.1.7'
 gem 'capistrano-rbenv', '~> 2.0.4'
 gem 'capistrano-bundler', '~> 1.1.3'
 
-gem 'newrelic_rpm', '3.16.0.318'
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'hyrax', '1.0.0.alpha', github: 'projecthydra-labs/hyrax'
-gem 'flipflop', github: 'jcoyne/flipflop', branch: 'hydra'
+gem 'hyrax', '2.0.0.alpha', github: 'projecthydra-labs/hyrax'
 gem 'hydra-role-management'
 
 gem 'nokogiri', '~> 1.7.1'

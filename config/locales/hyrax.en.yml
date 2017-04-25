@@ -1,4 +1,8 @@
 en:
+  helpers:
+    action:
+      batch:
+        new: "Batch Import"
   hyrax:
     product_name:       "Hyrax"
     product_twitter_handle: "@HydraSphere"
@@ -29,6 +33,11 @@ en:
         new: "New Object"
         my: "My Objects"
         batch: "Batch Create"
+        toolbar:
+      collections:
+        menu: "Collections"
+        new: "New Collection"
+        my: "My Collections"
     dashboard:
       heading_actions:
         create_work:            "Create Object"

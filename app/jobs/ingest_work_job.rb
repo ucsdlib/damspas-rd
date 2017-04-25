@@ -25,8 +25,9 @@ class IngestWorkJob < CreateWorkJob
 
       work = model.constantize.new
       works << work
-      actor = work_actor(work, user)
-      status << actor.create(attributes)
+      current_ability = Ability.new(user)
+      env = Hyrax::Actors::Environment.new(work, current_ability, attributes)
+      status << work_actor.create(env)
     end
 
     if components.count <= 1
