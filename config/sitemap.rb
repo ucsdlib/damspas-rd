@@ -1,5 +1,5 @@
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "http://library.ucsd.edu/hyrax"
+SitemapGenerator::Sitemap.default_host = "http://library.ucsd.edu/dc"
 SitemapGenerator::Sitemap.compress = :all_but_first
 
 SitemapGenerator::Sitemap.create do
@@ -22,14 +22,14 @@ SitemapGenerator::Sitemap.create do
       total = 0
       more_records = true
       solr_url = ActiveFedora.solr_config[:url]
-      puts "solr: #{solr_url}"
+      Rails.logger.info "solr: #{solr_url}"
       solr = RSolr.connect( :url => solr_url )
       while ( more_records )
         solr_response = solr.get 'select', :params => {:q => "has_model_ssim:#{record_type} AND read_access_group_ssim:public", :rows => rows, :wt => :ruby, :start => done, :sort => 'id asc'}
         response = solr_response['response']
         if done == 0
           if SitemapGenerator::Sitemap.verbose
-            puts "#{record_type}: #{response['numFound']} records"
+            Rails.logger.info "#{record_type}: #{response['numFound']} records"
           end
           total = response["numFound"]
         end
@@ -41,7 +41,7 @@ SitemapGenerator::Sitemap.create do
           id = rec['id']
           lastmod = rec['timestamp']
           if SitemapGenerator::Sitemap.verbose
-            puts "#{record_type}: #{id}, lastmod: #{lastmod}"
+            Rails.logger.info "#{record_type}: #{id}, lastmod: #{lastmod}"
           end
           add "#{record_path}/#{id}", priority: 0.9, :changefreq => 'monthly', :lastmod => lastmod
         end
@@ -52,7 +52,7 @@ SitemapGenerator::Sitemap.create do
         end
       end
     rescue Exception => e
-      puts e.backtrace
+      Rails.logger.info e.backtrace
     end
   end
 end

@@ -4,4 +4,4 @@
 # User-agent: *
 # Disallow: /
 
-Sitemap: http://library.ucsd.edu/hyrax/sitemap.xml
+Sitemap: http://library.ucsd.edu/dc/sitemap.xml
