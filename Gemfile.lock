@@ -629,6 +629,8 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    sitemap_generator (5.3.1)
+      builder (~> 3.0)
     skydrive (1.2.0)
       activesupport
       httmultiparty
@@ -750,6 +752,7 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   sidekiq
   simplecov (~> 0.11.2)
+  sitemap_generator (~> 5.3.1)
   solr_wrapper (>= 0.3)
   spring
   spring-watcher-listen (~> 2.0.0)
