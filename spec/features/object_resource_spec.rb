@@ -3,12 +3,15 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-feature 'Create a ObjectResource' do
+feature 'ObjectResource' do
 
   let!(:admin_user) { FactoryGirl.create(:admin) }
   let!(:public_object_resource) { FactoryGirl.create(:object_resource, title: ["Public Object Title"], :user => admin_user) }
   let!(:campus_only_object_resource) { FactoryGirl.create(:campus_only_object_resource, title: ["Campus Only Object Title"], user: admin_user) }
   let!(:private_object_resource) { FactoryGirl.create(:private_object_resource, title: ["Private Object Title"], user: admin_user) }
+  let!(:test_collection) { FactoryGirl.create(:collection, title: ["Collection Title"], user: admin_user) }
+  let!(:test_object) {FactoryGirl.create(:object_resource, title: ["Object Title"], member_of_collections: [test_collection], user: admin_user)}
+
 
   context 'a logged in user in admin role' do
     let(:user) { create(:admin) }
@@ -93,6 +96,13 @@ feature 'Create a ObjectResource' do
       expect(page).to have_content 'Test ObjectResource - Identifiers'
       IdentifierSchema.properties.each do |prop|
         expect(page).to have_content "#{prop.name.to_s}#1"
+      end
+    end
+
+    scenario 'should see the Collection in breadcrumb after logged in' do
+      visit "#{hyrax_object_resource_path test_object.id}"
+      within(:xpath, '//ul[@class="breadcrumb"]/li[2]') do
+        expect(page).to have_content("Collection Title")
       end
     end
   end
@@ -238,6 +248,13 @@ feature 'Create a ObjectResource' do
     scenario 'should not be able to read any private objects' do
       visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+    end
+
+    scenario 'should see the Collection in breadcrumb in public view' do
+      visit "#{hyrax_object_resource_path test_object.id}"
+      within(:xpath, '//ul[@class="breadcrumb"]/li[1]') do
+       expect(page).to have_content("Collection Title")
+      end
     end
   end
 end
