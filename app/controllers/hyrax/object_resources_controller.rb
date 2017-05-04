@@ -50,5 +50,27 @@ module Hyrax
     def show_presenter
       ::ObjectShowPresenter
     end
+
+    def add_breadcrumb_relation
+      if action_name == 'edit' || action_name == 'show'
+        @document = ::SolrDocument.find(params[:id])
+        if !@document[:member_of_collections_ssim].blank?
+          collection_name = @document[:member_of_collections_ssim].first
+          collection_id = @document[:member_of_collection_ids_ssim].first
+          add_breadcrumb collection_name, hyrax.collection_path(collection_id)
+        end
+      end
+    end
+
+    def build_breadcrumbs
+      if action_name == 'show'
+        default_trail
+      else
+        add_breadcrumb t(:'hyrax.controls.home'), root_path
+        add_breadcrumb t(:'hyrax.dashboard.breadcrumbs.admin'), hyrax.dashboard_path
+      end
+        add_breadcrumb_relation
+        add_breadcrumb_for_action
+    end
   end
 end
