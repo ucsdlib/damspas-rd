@@ -26,6 +26,7 @@ require 'rspec/active_model/mocks'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'support/features'
+require 'support/factory_helpers'
 require 'byebug' unless ENV['TRAVIS']
 require 'database_cleaner'
 
