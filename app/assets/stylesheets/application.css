@@ -25,3 +25,4 @@ div.row {margin:0px 10px; padding: 4px 0px 2px 0px; }
 li > div.row {background-color: #eee;}
 .form-group.time_span ul.listing {list-style-type: none; padding: 0; margin: 0; max-width: 530px}
 .form-group.multi_value ul.listing {list-style-type: none; padding: 0; margin: 0; max-width: 535px}
+.object_resource_visibility_after_embargo {visibility: hidden;}

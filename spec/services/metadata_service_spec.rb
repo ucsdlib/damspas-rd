@@ -21,6 +21,30 @@ describe 'MetadataService' do
     end
   end
 
+  describe "Country Codes" do
+    before do
+      @country_code_auth = Qa::LocalAuthority.find_or_create_by(name: 'country_codes')
+      @country_code = ::Qa::LocalAuthorityEntry.create(
+          local_authority: @country_code_auth,
+          label: 'Country Name',
+          uri: 'CODE')
+    end
+
+    after do
+      @country_code.delete
+    end
+
+    describe "find all country codes" do
+      subject { MetadataService.find_all_country_codes.select { |country_code| country_code[0] == 'Country Name' }.count }
+      it { is_expected.to eq 1 }
+    end
+  end
+
+  describe "find_all_copyright_status" do
+    subject { MetadataService.find_all_copyright_status.count }
+    it { is_expected.to be > 0 }
+  end
+
   describe "find_all_resource_type" do
     subject { MetadataService.find_all_resource_types.count }
     it { is_expected.to be > 0 }

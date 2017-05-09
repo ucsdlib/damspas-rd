@@ -39,18 +39,18 @@ class GeneralSchema < ActiveTriples::Schema
   property :subtitle, predicate: ::RDF::URI.new("http://www.loc.gov/mods/rdf/v1#subTitle")
   property :work_featured, predicate: ::UcsdTerms.workFeatured
   property :venue, predicate: ::UcsdTerms.venue
-  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
+  # property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
 
   # Literal with CVs: string (controlled ISO ALPHA-2 Code)
   property :copyright_jurisdiction, predicate: ::RDF::Vocab::PREMIS.hasCopyrightJurisdiction
 
   # xsd:anyURI with CVs
-  property :rightsOverride, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverride")
+  property :rights_override, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverride"), multiple: false
   property :copyright_status, predicate: ::RDF::Vocab::PREMIS.hasCopyrightStatus
   property :license, predicate: ::RDF::Vocab::DC.rights
 
   # xsd:dateTime
-  property :rightsOverrideExpiration, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverrideExpiration")
+  # property :rightsOverrideExpiration, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverrideExpiration")
 
   # predicates that need discussions?
   #? property :location, predicate: ::RDF::Vocab::DC.spatial	dpla:Place -- deleted

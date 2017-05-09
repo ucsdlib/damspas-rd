@@ -2,7 +2,6 @@ FactoryGirl.define do
 
   factory :object_resource, aliases: [:obj], class: ObjectResource do
     title ["Test title"]
-    rights_statement ["http://creativecommons.org/licenses/by/3.0/us/"]
     visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     transient do
@@ -58,6 +57,37 @@ FactoryGirl.define do
         object_resource.save
         file.update_index
       end
+    end
+
+    factory :with_embargo_date do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+      transient do
+        embargo_date { Date.tomorrow.to_s }
+        current_state { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+        future_state { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      end
+      factory :embargoed_object_resource do
+        after(:build) { |work, evaluator| work.apply_embargo(evaluator.embargo_date, evaluator.current_state, evaluator.future_state) }
+      end
+      factory :embargoed_object_resource_with_files do
+        after(:build) { |work, evaluator| work.apply_embargo(evaluator.embargo_date, evaluator.current_state, evaluator.future_state) }
+        after(:create) { |work, evaluator| 2.times { work.ordered_members << FactoryGirl.create(:file_set, user: evaluator.user) } }
+      end
+    end
+
+    factory :suppress_discovery_object_resource_with_files do
+      visibility VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY
+      before(:create) { |obj, evaluator| 2.times {obj.ordered_members << FactoryGirl.create(:suppress_discovery_file_set, user: evaluator.user) } }
+    end
+
+    factory :metadata_only_object_resource_with_files do
+      visibility VisibilityService::VISIBILITY_TEXT_VALUE_METADATA_ONLY
+      before(:create) { |obj, evaluator| 2.times {obj.ordered_members << FactoryGirl.create(:metadata_only_file_set, user: evaluator.user) } }
+    end
+
+    factory :culturally_sensitive_object_resource_with_files do
+      visibility VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE
+      before(:create) { |obj, evaluator| 2.times {obj.ordered_members << FactoryGirl.create(:culturally_sensitive_file_set, user: evaluator.user) } }
     end
   end
 end

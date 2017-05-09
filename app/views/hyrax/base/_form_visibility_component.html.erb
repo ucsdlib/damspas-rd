@@ -43,7 +43,27 @@
             <%= t('hyrax.visibility.private.note_html') %>
           </label>
         </li>
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY %>
+            <%= visibility_badge(VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY) %>
+            <%= t("hyrax.visibility.#{VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY}.note_html") %>
+          </label>
+        </li>
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, VisibilityService::VISIBILITY_TEXT_VALUE_METADATA_ONLY %>
+            <%= visibility_badge(VisibilityService::VISIBILITY_TEXT_VALUE_METADATA_ONLY) %>
+            <%= t("hyrax.visibility.#{VisibilityService::VISIBILITY_TEXT_VALUE_METADATA_ONLY}.note_html") %>
+          </label>
+        </li>
+        <li class="radio">
+          <label>
+            <%= f.radio_button :visibility, VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE %>
+            <%= visibility_badge(VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE) %>
+            <%= t("hyrax.visibility.#{VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE}.note_html") %>
+          </label>
+        </li>
       </ul>
     </fieldset>
 <% end %>
-

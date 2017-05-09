@@ -12,6 +12,10 @@ feature 'ObjectResource' do
   let!(:test_collection) { FactoryGirl.create(:collection, title: ["Collection Title"], user: admin_user) }
   let!(:test_object) {FactoryGirl.create(:object_resource, title: ["Object Title"], member_of_collections: [test_collection], user: admin_user)}
 
+  let!(:embargoed_object_resource) { FactoryGirl.create(:with_embargo_date, title: ["Embargoed Object Title"], user: admin_user) }
+  let!(:suppress_discovery_object_resource) { FactoryGirl.create(:suppress_discovery_object_resource_with_files, title: ["Suppress-discovery Object Title"], user: admin_user) }
+  let!(:metadata_only_object_resource) { FactoryGirl.create(:metadata_only_object_resource_with_files, title: ["Metadata-only Object Title"], user: admin_user) }
+  let!(:culturally_sensitive_object_resource) { FactoryGirl.create(:culturally_sensitive_object_resource_with_files, title: ["Culturally-sensitive Object Title"], user: admin_user) }
 
   context 'a logged in user in admin role' do
     let(:user) { create(:admin) }
@@ -24,10 +28,20 @@ feature 'ObjectResource' do
           local_authority: language_authority_name,
           label: 'Language',
           uri: language_uri)
+
+      country_code_authority_name = Qa::LocalAuthority.find_or_create_by(name: 'country_codes')
+      @authority_country_code = Qa::LocalAuthorityEntry.create(
+          local_authority: country_code_authority_name,
+          label: 'Country Name',
+          uri: 'CODE')
+
+      @agent = UcsdAgent.create(label: 'Test Agent Name', agent_type: 'Person')
     end
 
     after do
       @authority_lang.delete
+      @authority_country_code.delete
+      @agent.delete
     end
 
     scenario 'should be able to create and edit private object'do
@@ -99,6 +113,69 @@ feature 'ObjectResource' do
       end
     end
 
+    scenario 'should create object with copyright status' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Copyright status'
+      select 'copyrighted', from: "object_resource_copyright_status"
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Copyright status'
+      expect(page).to have_selector 'li.copyright_status', text: 'http://id.loc.gov/vocabulary/preservation/copyrightStatus/cpr'
+    end
+
+    scenario 'should create object with copyright jurisdiction' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Copyright jurisdiction'
+      select 'Country Name', from: "object_resource_copyright_jurisdiction"
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Copyright jurisdiction'
+      expect(page).to have_selector 'li.copyright_jurisdiction', text: 'CODE'
+    end
+
+    scenario 'should create object with rights holder' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Rights holder'
+      select 'Test Agent Name', from: "object_resource_rights_holder"
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Rights holder'
+      expect(page).to have_selector 'li.rights_holder', text: 'Test Agent Name'
+    end
+
+    scenario 'should create embargo object' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Embargoed'
+      choose 'object_resource_visibility_embargo'
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Embargoed'
+      expect(page).to have_selector 'span.label-warning', text: 'Embargo'
+    end
+
+    scenario 'should create metadata-only object' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Metadata-only'
+      choose 'object_resource_visibility_metadata_only'
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Metadata-only'
+      expect(page).to have_selector 'span.label-danger', text: 'Metadata Only'
+    end
+
+    scenario 'should create culturally-sensitive object' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Culturally-sensitive'
+      choose 'object_resource_visibility_culturally_sensitive'
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Culturally-sensitive'
+      expect(page).to have_selector 'span.label-warning', text: 'Culturally Sensitive'
+    end
+
+    scenario 'should create suppress-discovery object' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Suppress-discovery'
+      choose 'object_resource_visibility_suppress_discovery'
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Suppress-discovery'
+      expect(page).to have_selector 'span.label-info', text: 'Suppress Discovery'
+    end
+
     scenario 'should see the Collection in breadcrumb after logged in' do
       visit "#{hyrax_object_resource_path test_object.id}"
       within(:xpath, '//ul[@class="breadcrumb"]/li[2]') do
@@ -166,6 +243,45 @@ feature 'ObjectResource' do
       click_button 'Save'
       expect(page).to have_content 'Private Object Title - Editor Edited'
     end
+
+    scenario 'should be able to read and edit any embargoed objects' do
+      visit "#{hyrax_object_resource_path embargoed_object_resource.id}"
+      expect(page).to have_content 'Embargoed Object Title'
+      find(:xpath, "(//a[text()='Edit'])[1]").click
+      fill_in 'Title', with: 'Embargoed Object Title - Editor Edited'
+      click_button 'Save'
+      expect(page).to have_content 'Embargoed Object Title - Editor Edited'
+    end
+
+    scenario 'should be able to create metadata-only object and change its visibility' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Metadata-only'
+      choose 'object_resource_visibility_metadata_only'
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Metadata-only'
+      expect(page).to have_selector 'span.label-danger', text: 'Metadata Only'
+      find(:xpath, "(//a[text()='Edit'])[1]").click
+      fill_in 'Title', with: 'Metadata-only Object Title - Changed to Culturally-sensitive'
+      choose 'object_resource_visibility_culturally_sensitive'
+      click_button 'Save'
+      expect(page).to have_content 'Metadata-only Object Title - Changed to Culturally-sensitive'
+      expect(page).to have_selector 'span.label-warning', text: 'Culturally Sensitive'
+    end
+
+    scenario 'should be able to create suppress discovery object and change its visibility' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - Suppress-discovery'
+      choose 'object_resource_visibility_suppress_discovery'
+      click_button 'Save'
+      expect(page).to have_selector 'h1', text: 'Test ObjectResource - Suppress-discovery'
+      expect(page).to have_selector 'span.label-info', text: 'Suppress Discovery'
+      find(:xpath, "(//a[text()='Edit'])[1]").click
+      fill_in 'Title', with: 'Suppress-discovery Test ObjectResource - Changed to Private'
+      choose 'object_resource_visibility_restricted'
+      click_button 'Save'
+      expect(page).to have_content 'Suppress-discovery Test ObjectResource - Changed to Private'
+      expect(page).to have_selector 'span.label-danger', text: 'Private'
+    end
   end
 
   context 'a logged in user in curator role' do
@@ -195,6 +311,39 @@ feature 'ObjectResource' do
       visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).to have_content 'Private Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
+    end
+
+    scenario 'should be able to read any embargoed objects but no editing allowed' do
+      visit "#{hyrax_object_resource_path embargoed_object_resource.id}"
+      expect(page).to have_content 'Embargoed Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+    end
+
+    scenario 'should be able to read metadata-only objects and files but no editing allowed' do
+      visit "#{hyrax_object_resource_path metadata_only_object_resource.id}"
+      expect(page).to have_content 'Metadata-only Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path metadata_only_object_resource.file_sets.first.id}"
+      expect(page).to have_selector 'h2', text: "File Details"
+      expect(page).to have_selector 'span.label-danger', text: 'Metadata Only'
+    end
+
+    scenario 'should be able to read culturally-sensitive objects but no editing allowed' do
+      visit "#{hyrax_object_resource_path culturally_sensitive_object_resource.id}"
+      expect(page).to have_content 'Culturally-sensitive Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path culturally_sensitive_object_resource.file_sets.first.id}"
+      expect(page).to have_selector 'h2', text: "File Details"
+      expect(page).to have_selector 'span.label-warning', text: 'Culturally Sensitive'
+    end
+
+    scenario 'should be able to read suppress-discovery Objects but no editing allowed' do
+      visit "#{hyrax_object_resource_path suppress_discovery_object_resource.id}"
+      expect(page).to have_content 'Suppress-discovery Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path suppress_discovery_object_resource.file_sets.first.id}"
+      expect(page).to have_selector 'h2', text: "File Details"
+      expect(page).to have_selector 'span.label-info', text: 'Suppress Discovery'
     end
   end
 
@@ -226,6 +375,33 @@ feature 'ObjectResource' do
       expect(page).not_to have_content 'Private Object Title'
       expect(page).to have_content 'Unauthorized'
     end
+
+    scenario 'should not be able to read any embargoed objects' do
+      visit "#{hyrax_object_resource_path embargoed_object_resource.id}"
+      expect(page).not_to have_content 'Embargoed Object Title'
+      expect(page).to have_content 'Unauthorized'
+    end
+
+    scenario 'should be able to read metadata-only objects but no access to files' do
+      visit "#{hyrax_object_resource_path metadata_only_object_resource.id}"
+      expect(page).to have_content 'Metadata-only Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path metadata_only_object_resource.file_sets.first.id}"
+      expect(page).to have_content 'not authorized'
+    end
+
+    scenario 'should be able to read culturally-sensitive objects and files' do
+      visit "#{hyrax_object_resource_path culturally_sensitive_object_resource.id}"
+      expect(page).to have_content 'Culturally-sensitive Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path culturally_sensitive_object_resource.file_sets.first.id}"
+      expect(page).to have_selector 'h2', text: "File Details"
+    end
+
+    scenario 'should be able to read suppress discovery object file' do
+      visit "#{hyrax_file_set_path suppress_discovery_object_resource.file_sets.first.id}"
+      expect(page).to have_selector 'h2', text: "File Details"
+    end
   end
 
   context 'an anonymous user' do
@@ -248,6 +424,33 @@ feature 'ObjectResource' do
     scenario 'should not be able to read any private objects' do
       visit "#{hyrax_object_resource_path private_object_resource.id}"
       expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+    end
+
+    scenario 'should not be able to read any embargoed objects' do
+      visit "#{hyrax_object_resource_path embargoed_object_resource.id}"
+      expect(page).not_to have_content 'Embargoed Object Title'
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+    end
+
+    scenario 'should be able to read metadata-only objects but no access to files' do
+      visit "#{hyrax_object_resource_path metadata_only_object_resource.id}"
+      expect(page).to have_content 'Metadata-only Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path metadata_only_object_resource.file_sets.first.id}"
+      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+    end
+
+    scenario 'should be able to read culturally-sensitive objects and files' do
+      visit "#{hyrax_object_resource_path culturally_sensitive_object_resource.id}"
+      expect(page).to have_content 'Culturally-sensitive Object Title'
+      expect(page).not_to have_xpath "//a[text()='Edit']"
+      visit "#{hyrax_file_set_path culturally_sensitive_object_resource.file_sets.first.id}"
+      expect(page).to have_content "File Details"
+    end
+
+    scenario 'should be able to read suppress-discovery object file' do
+      visit "#{hyrax_file_set_path suppress_discovery_object_resource.file_sets.first.id}"
+      expect(page).to have_selector 'h2', text: "File Details"
     end
 
     scenario 'should see the Collection in breadcrumb in public view' do

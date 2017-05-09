@@ -21,4 +21,19 @@
   <%= render "records/edit_fields/language", f: f, key: 'language' %>
 
   <%= f.input :description, as: :multi_value, input_html: { rows: '6', type: 'textarea'} %>
+
+  <%= f.input :copyright_status,
+    collection: MetadataService.find_all_copyright_status,
+    include_blank: true,
+    input_html: { class: 'form-control' } %>
+
+  <%= f.input :copyright_jurisdiction,
+    collection: MetadataService.find_all_country_codes,
+    include_blank: true,
+    input_html: { class: 'form-control' } %>
+
+  <%= f.input :rights_holder, as: :multi_value_select,
+    collection: AuthoritiesService.find_all_agents,
+    include_blank: true,
+    input_html: { class: 'form-control' } %>
 </fieldset>

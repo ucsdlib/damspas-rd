@@ -28,6 +28,18 @@ class SolrDocument
 
   use_extension( Hydra::ContentNegotiation )
 
+  def visibility
+    if rights_override?
+      @visibility ||= VisibilityService.visibility_value(self[Solrizer.solr_name('rights_override')].first)
+    else
+      super
+    end
+  end
+
+  def rights_override?
+    !self[Solrizer.solr_name('rights_override')].nil? && !self[Solrizer.solr_name('rights_override')].first.blank?
+  end
+
   def creator
     return [] if self[Solrizer.solr_name('creator')].nil?
     self[Solrizer.solr_name('creator')]

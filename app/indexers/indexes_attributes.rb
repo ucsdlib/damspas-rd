@@ -9,7 +9,7 @@ module IndexesAttributes extend ActiveSupport::Concern
 
   SORTABLE_DATE = Solrizer.solr_name('date', :sortable)
 
-  AUTHORITIES_TERMS = [:creator, :contributor, :publisher, :topic, :spatial]
+  AUTHORITIES_TERMS = [:creator, :contributor, :rights_holder, :publisher, :topic, :spatial]
   def generate_solr_document
     super.tap do |solr_doc|
 

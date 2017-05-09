@@ -67,13 +67,21 @@ module Import
 
 
         # FIXME: license, it's changed in upstream in the master branch with Hyrax 1.0
-        license = attrs.delete :license
-
+        license = attrs.delete(:license).first if attrs.key? :license
+        visibility = VisibilityService.visibility_value(attrs.delete(:rights_override).first) if attrs.key? :rights_override
+        visibility_during_embargo = VisibilityService.visibility_value(attrs.delete(:visibility_during_embargo).first) if attrs.key? :visibility_during_embargo
+        embargo_release_date = attrs.delete(:embargo_release_date).first if attrs.key? :embargo_release_date
 
         # source file
         process_source_file attrs
 
         attrs = attrs.merge @form_attributes
+
+        # override license, visibility, embargo_release_date etc. if it is provided in the source metadata
+        attrs[:license] = license if !license.blank?
+        attrs[:visibility] = visibility if !visibility.blank?
+        attrs[:visibility_during_embargo] = visibility_during_embargo if !visibility_during_embargo.blank?
+        attrs[:embargo_release_date] = embargo_release_date if !embargo_release_date.blank?
 
         if level.gsub('-', '').upcase == 'OBJECT' && !components.empty?
           # ingest object
