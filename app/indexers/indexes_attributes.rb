@@ -1,4 +1,6 @@
 module IndexesAttributes extend ActiveSupport::Concern
+  STORED_BOOL = Solrizer::Descriptor.new(:boolean, :stored, :indexed)
+
   # date: TimeSpan
   DATE = Solrizer.solr_name('date', :stored_searchable)
   CREATED_DATE = Solrizer.solr_name('created_date', :stored_searchable)
@@ -48,6 +50,9 @@ module IndexesAttributes extend ActiveSupport::Concern
         facet_searchable solr_doc, 'related_resource', res.display_label
         solr_doc[Solrizer.solr_name("related_resource_json", :stored_searchable)] = res.to_json
       end
+
+      # visibility: suppressed
+      solr_doc[Solrizer.solr_name('suppress_discovery', STORED_BOOL)] = true if object.rights_override && VisibilityService.visibility_value(object.rights_override) == VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY
     end
   end
 

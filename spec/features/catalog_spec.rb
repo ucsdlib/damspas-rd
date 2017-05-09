@@ -8,6 +8,8 @@ feature 'a user with role' do
   let!(:campus_only_object_resource) { FactoryGirl.create(:campus_only_object_resource, title: ["Campus Only Object Title"], user: admin_user) }
   let!(:private_object_resource) { FactoryGirl.create(:private_object_resource, title: ["Private Object Title"], user: admin_user) }
 
+  let!(:suppress_discovery_object_resource) { FactoryGirl.create(:suppress_discovery_object_resource_with_files, title: ["Suppress-discovery Object Title"], user: admin_user) }
+
   let!(:public_collection) { FactoryGirl.create(:collection, title: ["Public Collection Title"], :user => admin_user) }
   let!(:campus_only_collection) { FactoryGirl.create(:campus_only_collection, title: ["Campus Only Collection Title"], user: admin_user) }
   let!(:private_collection) { FactoryGirl.create(:private_collection, title: ["Private Collection Title"], user: admin_user) }
@@ -29,6 +31,11 @@ feature 'a user with role' do
       expect(page).to have_link("Private Collection Title")
       
     end
+
+    scenario 'should not be able to find suppress discovery objects' do
+      visit "/catalog?q="
+      expect(page).not_to have_link("Suppress-discovery Object Title")
+    end
   end
 
   context 'editor' do
@@ -47,6 +54,11 @@ feature 'a user with role' do
       expect(page).to have_link("Campus Only Collection Title")
       expect(page).to have_link("Private Collection Title")
       
+    end
+
+    scenario 'should not be able to find suppress discovery objects' do
+      visit "/catalog?q="
+      expect(page).not_to have_link("Suppress-discovery Object Title")
     end
   end
 
@@ -67,6 +79,11 @@ feature 'a user with role' do
       expect(page).to have_link("Private Collection Title")
       
     end
+
+    scenario 'should not be able to find suppress discovery objects' do
+      visit "/catalog?q="
+      expect(page).not_to have_link("Suppress-discovery Object Title")
+    end
   end
 
   context 'campus' do
@@ -84,6 +101,11 @@ feature 'a user with role' do
       expect(page).to have_link("Public Collection Title")
       expect(page).to have_link("Campus Only Collection Title")
       expect(page).not_to have_link("Private Collection Title")
+    end
+
+    scenario 'should not be able to find suppress discovery objects' do
+      visit "/catalog?q="
+      expect(page).not_to have_link("Suppress-discovery Object Title")
     end
   end
 
@@ -103,6 +125,11 @@ feature 'a user with role' do
       expect(page).not_to have_link("Campus Only Collection Title")
       expect(page).not_to have_link("Private Collection Title")
     end
+
+    scenario 'should not be able to find suppress discovery objects' do
+      visit "/catalog?q="
+      expect(page).not_to have_link("Suppress-discovery Object Title")
+    end
   end
 
   context 'anonymous' do
@@ -115,6 +142,11 @@ feature 'a user with role' do
       expect(page).to have_link("Public Collection Title")
       expect(page).not_to have_link("Campus Only Collection Title")
       expect(page).not_to have_link("Private Collection Title")
+    end
+
+    scenario 'should not be able to find suppress discovery objects' do
+      visit "/catalog?q="
+      expect(page).not_to have_link("Suppress-discovery Object Title")
     end
   end
 end
