@@ -13,7 +13,7 @@ module Hyrax
       return default_file unless file_reference
 
       icon = icon_path(params[asset_param_key], true) if file_reference == 'thumbnail'
-      return icon if !icon.nil?
+      return icon if icon
 
       file_path = Hyrax::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
       File.exist?(file_path) ? file_path : nil

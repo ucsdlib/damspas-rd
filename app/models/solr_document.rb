@@ -30,19 +30,18 @@ class SolrDocument
 
   def visibility
     if rights_override?
-      @visibility ||= VisibilityService.visibility_value(self[Solrizer.solr_name('rights_override')].first)
+      @visibility ||= VisibilityService.visibility_value(fetch(Solrizer.solr_name('rights_override'), []).first)
     else
       super
     end
   end
 
   def rights_override?
-    !self[Solrizer.solr_name('rights_override')].nil? && !self[Solrizer.solr_name('rights_override')].first.blank?
+    fetch(Solrizer.solr_name('rights_override'), []).present?
   end
 
   def creator
-    return [] if self[Solrizer.solr_name('creator')].nil?
-    self[Solrizer.solr_name('creator')]
+    fetch(Solrizer.solr_name('creator'), [])
   end
 
   # override itemtype for schema.org
