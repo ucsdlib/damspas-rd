@@ -83,5 +83,5 @@ bin/import-authorities
 ```
 
 ### Create an admin set to start ingest
-```Go to http://localhost:3000/admin/admin_sets/new?locale=en```
+```rake hyrax:default_admin_set:create```
 
