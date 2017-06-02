@@ -33,5 +33,14 @@ Style/Next:
 Metrics/AbcSize:
   Max: 50
 
+Metrics/LineLength:
+  Max: 120
 
+Metrics/MethodLength:
+  Max: 14
 
+Style/SymbolArray:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
