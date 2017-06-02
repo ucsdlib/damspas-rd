@@ -31,6 +31,7 @@ module MetadataService
     end
 
     private
+
       def find_authority_list(model)
         cols = []
           Qa::Authorities::Local.subauthority_for(model).all.each do |rec|

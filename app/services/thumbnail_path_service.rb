@@ -6,12 +6,14 @@ class ThumbnailPathService < Hyrax::ThumbnailPathService
     def call(object)
       return default_image unless object.thumbnail_id
       # static thumbnails for visibility metadata only and culturally sensitive objects
-      if !object.rights_override.blank?
-        thumbnail_path = icon_path(VisibilityService.visibility_value(object.rights_override))
-        return thumbnail_path if thumbnail_path
-      end
+      visibility_value = VisibilityService.visibility_value(object.rights_override) if object.rights_override.present?
+      return icon_path(visibility_value) if get_icon(visibility_value).present?
 
-      thumb = fetch_thumbnail(object)
+      thumbnail_file fetch_thumbnail(object)
+    end
+
+    # code block extracted from Hyrax::ThumbnailPathService.call(object) to avoid style violation Cyclomaticcomplexity
+    def thumbnail_file(thumb)
       return unless thumb
       return call(thumb) unless thumb.is_a?(::FileSet)
       if thumb.audio?
@@ -30,15 +32,15 @@ class ThumbnailPathService < Hyrax::ThumbnailPathService
 
     def icon_file_path(visibility)
       icon = get_icon visibility
-      return Rails.root.join("app", "assets", "images", icon).to_s if icon
+      return Rails.root.join('app', 'assets', 'images', icon).to_s if icon
     end
 
     def get_icon(visibility)
       case visibility
       when VisibilityService::VISIBILITY_TEXT_VALUE_METADATA_ONLY
-        return 'dc_not_available.jpg'
+        'dc_not_available.jpg'
       when VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE
-        return 'thumb-restricted.png'
+        'thumb-restricted.png'
       end
     end
   end

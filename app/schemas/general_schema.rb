@@ -45,12 +45,9 @@ class GeneralSchema < ActiveTriples::Schema
   property :copyright_jurisdiction, predicate: ::RDF::Vocab::PREMIS.hasCopyrightJurisdiction
 
   # xsd:anyURI with CVs
-  property :rights_override, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverride"), multiple: false
+  property :rights_override, predicate: VisibilityService::PREDICATE_RIGHTS_OVERRIDE, multiple: false
   property :copyright_status, predicate: ::RDF::Vocab::PREMIS.hasCopyrightStatus
   property :license, predicate: ::RDF::Vocab::DC.rights
-
-  # xsd:dateTime
-  # property :rightsOverrideExpiration, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverrideExpiration")
 
   # predicates that need discussions?
   #? property :location, predicate: ::RDF::Vocab::DC.spatial	dpla:Place -- deleted

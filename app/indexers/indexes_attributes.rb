@@ -1,4 +1,7 @@
-module IndexesAttributes extend ActiveSupport::Concern
+# frozen_string_literal: true
+
+module IndexesAttributes
+  extend ActiveSupport::Concern
   STORED_BOOL = Solrizer::Descriptor.new(:boolean, :stored, :indexed)
 
   # date: TimeSpan
@@ -11,7 +14,8 @@ module IndexesAttributes extend ActiveSupport::Concern
 
   SORTABLE_DATE = Solrizer.solr_name('date', :sortable)
 
-  AUTHORITIES_TERMS = [:creator, :contributor, :rights_holder, :publisher, :topic, :spatial]
+  AUTHORITIES_TERMS = [:creator, :contributor, :rights_holder, :publisher, :topic, :spatial].freeze
+
   def generate_solr_document
     super.tap do |solr_doc|
 
@@ -52,7 +56,10 @@ module IndexesAttributes extend ActiveSupport::Concern
       end
 
       # visibility: suppressed
-      solr_doc[Solrizer.solr_name('suppress_discovery', STORED_BOOL)] = true if object.rights_override && VisibilityService.visibility_value(object.rights_override) == VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY
+      visibility_value = VisibilityService.visibility_value(object.rights_override) if object.rights_override
+      if visibility_value == VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY
+        solr_doc[Solrizer.solr_name('suppress_discovery', STORED_BOOL)] = true
+      end
     end
   end
 

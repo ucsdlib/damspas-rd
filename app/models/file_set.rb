@@ -2,18 +2,19 @@
 class FileSet < ActiveFedora::Base
   include ::Hyrax::FileSetBehavior
 
-  property :rights_override, predicate: ::RDF::URI.new("http://pcdm.org/2015/06/03/rights#rightsOverride"), multiple: false do |index|
+  property :rights_override, predicate: VisibilityService::PREDICATE_RIGHTS_OVERRIDE, multiple: false do |index|
     index.as :stored_searchable
   end
 
   def visibility
-    return VisibilityService.visibility_value(self.rights_override) if !self.rights_override.blank?
+    return VisibilityService.visibility_value(rights_override) if rights_override.present?
     super
   end
 
   def visibility=(value)
     case value
-    when VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY, VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE
+    when VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY,
+           VisibilityService::VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE
       self.rights_override = VisibilityService.rights_override_value(value)
       value = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     when VisibilityService::VISIBILITY_TEXT_VALUE_METADATA_ONLY

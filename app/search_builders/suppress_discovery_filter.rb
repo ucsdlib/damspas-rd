@@ -1,4 +1,6 @@
 # Injects a search builder filter to hide documents marked as suppress_discovery
+# frozen_string_literal: true
+
 module SuppressDiscoveryFilter
   extend ActiveSupport::Concern
 
