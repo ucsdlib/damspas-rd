@@ -44,6 +44,8 @@ gem 'sitemap_generator', '~> 5.3.1'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'rubocop', '~> 0.47.0'
+  gem 'rubocop-rspec', '~> 1.10.0'
 end
 
 group :development do
