@@ -1,0 +1,11 @@
+terms:
+  - id: http://id.loc.gov/vocabulary/preservation/copyrightStatus/cpr
+    term: "copyrighted"
+    active: true
+  - id: http://id.loc.gov/vocabulary/preservation/copyrightStatus/pub
+    term: "public domain"
+    active: true
+  - id: http://id.loc.gov/vocabulary/preservation/copyrightStatus/unk
+    term: "unknown"
+    active: true
+

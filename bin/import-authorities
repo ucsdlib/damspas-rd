@@ -11,14 +11,50 @@ File.open(File.join(Rails.root, "imports", "iso639-2.tsv"), "r") do |f|
     fields = Hash[headers.zip(line.split("\t"))]
 
     begin
+      model_name = 'languages'
       lang = Qa::LocalAuthority.find_or_create_by(name: 'languages')
-      Qa::LocalAuthorityEntry.create(
-        local_authority: lang,
-        label: fields["Label (English)"],
-        uri: fields["URI"])
+      records = Qa::Authorities::Local.subauthority_for(model_name).all.select {|record| record["label"] == fields["Label (English)"]}
+      if records.empty?
+        Qa::LocalAuthorityEntry.create(
+          local_authority: lang,
+          label: fields["Label (English)"],
+          uri: fields["URI"])
+       else
+         puts "Record exists: {label (English): #{fields["Label (English)"]}, URI: #{fields["URI"]}}"
+       end
     rescue Exception => e
         # Log the error
-        puts "Error create: #{lang.inspect} {label: #{fields["Label (English)"]}, uri: #{fields["URI"]}}:"
+        puts "Error create: #{lang.inspect} {label: #{fields["Label (English)"]}, uri: #{fields["URI"]}}"
+        puts  e.to_s
+        e.backtrace.each do |line|
+          puts line
+        end
+    end
+  end
+end
+
+# import country-code-iso-3166 alpha 2 country codes for copyright jurisdiction CV
+puts 'Start importing country code CVs ...'
+File.open(File.join(Rails.root, "imports", "country-code-iso-3166-all.csv"), "r") do |f|
+  headers = f.gets.strip.split(",")
+  f.each do |line|
+    fields = Hash[headers.zip(line.split(","))]
+
+    begin
+      model_name = 'country_codes'
+      country = Qa::LocalAuthority.find_or_create_by(name: model_name)
+      records = Qa::Authorities::Local.subauthority_for(model_name).all.select {|record| record["label"] == fields["name"]}
+      if records.empty?
+        Qa::LocalAuthorityEntry.create(
+          local_authority: country,
+          label: fields["name"],
+          uri: fields["alpha-2"])
+       else
+         puts "Record exists: {name: #{fields["name"]}, alpha-2: #{fields["alpha-2"]}}:"
+       end
+    rescue Exception => e
+        # Log the error
+        puts "Error create: #{country.inspect} {name: #{fields["name"]}, alpha-2: #{fields["alpha-2"]}}:"
         puts  e.to_s
         e.backtrace.each do |line|
           puts line

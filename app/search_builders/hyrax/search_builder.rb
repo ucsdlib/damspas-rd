@@ -5,6 +5,7 @@ class Hyrax::SearchBuilder < Blacklight::SearchBuilder
   include Hydra::AccessControlsEnforcement
   include Hyrax::SearchFilters
   include ::RolesBaseGatedSearchBuilder
+  include ::SuppressDiscoveryFilter
 
   self.default_processor_chain += [:add_advanced_parse_q_to_solr, :add_advanced_search_to_solr]
 

@@ -20,7 +20,18 @@ module MetadataService
       find_authority_list('languages')
     end
 
-   private
+    # Returns all CopyrightStatus
+    def find_all_copyright_status
+      find_authority_list('copyright_status')
+    end
+
+    # Returns all CountryCodes
+    def find_all_country_codes
+      find_authority_list('country_codes')
+    end
+
+    private
+
       def find_authority_list(model)
         cols = []
           Qa::Authorities::Local.subauthority_for(model).all.each do |rec|
