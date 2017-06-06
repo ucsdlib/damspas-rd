@@ -7,7 +7,7 @@ machine:
     version: 6.1.0
   ruby:
     version:
-      2.4.0        
+      2.4.1
   environment:
     CIRCLE_ENV: test
     RAILS_ENV: test
@@ -28,12 +28,12 @@ dependencies:
     - bundle exec rake hydra:test_server:
         background: true
     - sudo chmod 755 bin/test_server_wait
-    - bin/test_server_wait  
-                                 
+    - bin/test_server_wait
+
 database:
   override:
     - bundle exec rake db:migrate
-        
+
 test:
-  override:         
+  override:
     - bundle exec rake spec
