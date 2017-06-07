@@ -15,16 +15,20 @@ module Hyrax
 
     # Display the form the the user.
     def new
-      curation_concern.created_date_attributes = [{label: 'LABEL'}]
+      curation_concern.created_date_attributes = [{ label: 'LABEL' }]
       # trick to trigger the form for nested attributes
-      curation_concern.related_resource_attributes = [{name: 'LABEL'}]
+      curation_concern.related_resource_attributes = [{ name: 'LABEL' }]
       super
     end
 
     def edit
-      curation_concern.created_date_attributes = [{label: 'LABEL'}] if curation_concern.created_date.nil? || curation_concern.created_date.empty?
+      if curation_concern.created_date.blank?
+        curation_concern.created_date_attributes = [{ label: 'LABEL' }]
+      end
       # trick to trigger the form for nested attributes
-      curation_concern.related_resource_attributes = [{name: 'LABEL'}] if curation_concern.related_resource.nil? || curation_concern.related_resource.empty?
+      if curation_concern.related_resource.blank?
+        curation_concern.related_resource_attributes = [{ name: 'LABEL' }]
+      end
       super
     end
 
@@ -52,14 +56,12 @@ module Hyrax
     end
 
     def add_breadcrumb_relation
-      if action_name == 'edit' || action_name == 'show'
-        @document = ::SolrDocument.find(params[:id])
-        if !@document[:member_of_collections_ssim].blank?
-          collection_name = @document[:member_of_collections_ssim].first
-          collection_id = @document[:member_of_collection_ids_ssim].first
-          add_breadcrumb collection_name, hyrax.collection_path(collection_id)
-        end
-      end
+      return unless action_name == 'edit' || action_name == 'show'
+      @document = ::SolrDocument.find(params[:id])
+      return if @document[:member_of_collections_ssim].blank?
+      collection_name = @document[:member_of_collections_ssim].first
+      collection_id = @document[:member_of_collection_ids_ssim].first
+      add_breadcrumb collection_name, hyrax.collection_path(collection_id)
     end
 
     def build_breadcrumbs
@@ -69,8 +71,8 @@ module Hyrax
         add_breadcrumb t(:'hyrax.controls.home'), root_path
         add_breadcrumb t(:'hyrax.dashboard.breadcrumbs.admin'), hyrax.dashboard_path
       end
-        add_breadcrumb_relation
-        add_breadcrumb_for_action
+      add_breadcrumb_relation
+      add_breadcrumb_for_action
     end
   end
 end

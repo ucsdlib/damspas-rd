@@ -5,7 +5,8 @@ class UcsdAgentForm
 
   self.required_fields = [:label, :agent_type]
 
-  self.terms = [:agent_type, :label, :alternate_label, :orcid, :exact_match, :close_match, :related_match, :different_from]
+  self.terms = [:agent_type, :label, :alternate_label, :orcid,
+                :exact_match, :close_match, :related_match, :different_from]
 
   def title
     model.label

@@ -1,6 +1,5 @@
 module AuthoritiesService
   class << self
-
     # Returns all ucsd:Agent
     def find_all_agents
       cols = []
@@ -8,17 +7,17 @@ module AuthoritiesService
       records.each do |rec|
         cols << [rec.label, RDF::URI(ActiveFedora::Base.id_to_uri(rec.id))]
       end
-      cols 
+      cols
     end
 
-    def find_agents (label, alt_label='')
+    def find_agents(label, alt_label = '')
       recs = []
       q = "has_model_ssim:UcsdAgent AND label_tesim:\"#{label}\""
       records = ActiveFedora::Base.where(q)
       records.each do |rec|
-        recs << rec if is_authority_matched rec, label, alt_label
+        recs << rec if authority_matched rec, label, alt_label
       end
-      recs 
+      recs
     end
 
     # Returns all skos:Concept
@@ -28,7 +27,7 @@ module AuthoritiesService
       records.each do |rec|
         cols << [rec.label, RDF::URI(ActiveFedora::Base.id_to_uri(rec.id))]
       end
-      cols 
+      cols
     end
 
     # Returns all edm:Place
@@ -38,14 +37,15 @@ module AuthoritiesService
       records.each do |rec|
         cols << [rec.label, RDF::URI(ActiveFedora::Base.id_to_uri(rec.id))]
       end
-      cols 
+      cols
     end
 
     # find or create authority record
-    def find_or_create (model, label, alt_label='', agent_type=nil)
+    def find_or_create(model, label, alt_label = '', agent_type = nil)
       mod = Object.const_get(model)
-      records = ActiveFedora::Base.where("has_model_ssim:#{model} AND label_tesim:\"#{label}\"").collect { |rec| rec  if is_authority_matched rec, label, alt_label }
-      return records.first if records.count > 0
+      records = ActiveFedora::Base.where("has_model_ssim:#{model} AND label_tesim:\"#{label}\"")
+                                  .collect { |rec| rec if authority_matched rec, label, alt_label }
+      return records.first if records.count.positive?
       return mod.create(label: label, alternate_label: alt_label) if agent_type.blank? && model != 'UcsdAgent'
       # agent_type required, default to Person
       agent_type ||= 'Person'
@@ -53,7 +53,7 @@ module AuthoritiesService
     end
 
     # logic exact matching for label and alternate_label
-    def is_authority_matched(auth, label, alt_label)
+    def authority_matched(auth, label, alt_label)
       auth.label == label && (alt_label.blank? || alt_label == auth.alternate_label)
     end
   end

@@ -1,8 +1,7 @@
 module MetadataService
   class << self
     def local_attribution_list
-      local_attributions = []
-      find_authority_list('local_attributions').map { |e| e.first }
+      find_authority_list('local_attributions').map(&:first)
     end
 
     # Returns all ResourceTypes
@@ -34,7 +33,7 @@ module MetadataService
 
       def find_authority_list(model)
         cols = []
-          Qa::Authorities::Local.subauthority_for(model).all.each do |rec|
+        Qa::Authorities::Local.subauthority_for(model).all.each do |rec|
           cols << [rec['label'], rec['id']]
         end
         cols

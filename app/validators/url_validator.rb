@@ -6,15 +6,21 @@ class UrlValidator < ActiveModel::EachValidator
   def url_valid?(value, options)
     result = true
     if value.is_a? ActiveTriples::Relation
-      value.each { |url| result=false if url.is_a?(String) && (options[:allow_blank].nil? || !(options[:allow_blank] && url.to_s.length==0)) && !is_url?(url) }
+      value.each do |url|
+        result = false if (options[:allow_blank].nil? || !(options[:allow_blank] && url.to_s.empty?)) && !url?(url)
+      end
     else
-      result = is_url? value
+      result = url? value
     end
     result
   end
 
-  def is_url?(url)
-    url = URI.parse(url) rescue false
-    url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
+  def url?(url)
+    url = begin
+            URI.parse(url)
+          rescue
+            false
+          end
+    url.is_a?(URI::HTTP) || url.is_a?(URI::HTTPS)
   end
 end

@@ -3,19 +3,21 @@ module LocalAuthorityHashConverter
 
   # Convert local authority hash
   def hash_to_uri(arg)
-    if (arg.is_a? ActiveTriples::Relation) || (arg.is_a? Array) && !arg.empty?
-      values = Marshal.load(Marshal.dump(arg))
-      arg.clear
-      values.map { |x|
-        if Authority.is_authority? x
-          arg << x.uri.to_s
-        elsif (x.is_a? ActiveTriples::Resource) && !(x.is_a?(TimeSpan) || x.is_a?(RelatedResource))
-          arg << x.id
-        else
-          arg << x
-        end
-      }
+    return arg unless (arg.is_a? ActiveTriples::Relation) || (arg.is_a? Array) && !arg.empty?
+    values = [].push(*arg)
+    arg.clear
+    convert_values values, arg
+  end
+
+  def convert_values(values, arg)
+    values.map do |x|
+      arg << if Authority.authority? x
+               x.uri.to_s
+             elsif (x.is_a? ActiveTriples::Resource) && !(x.is_a?(TimeSpan) || x.is_a?(RelatedResource))
+               x.id
+             else
+               x
+             end
     end
-    arg
   end
 end

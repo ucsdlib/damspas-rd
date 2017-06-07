@@ -10,7 +10,8 @@ module Hyrax
       if can? :read, :admin_dashboard
         @presenter = Hyrax::Admin::DashboardPresenter.new
         # use the local customize AdminSetSearchBuilder to fix the errors caused by the advance search builders
-        @admin_set_rows = Hyrax::AdminSetService.new(self, ::AdminSetSearchBuilder).search_results_with_work_count(:read)
+        @admin_set_rows = Hyrax::AdminSetService.new(self, ::AdminSetSearchBuilder)
+                                                .search_results_with_work_count(:read)
         render 'show_admin'
       else
         @presenter = Dashboard::UserPresenter.new(current_user, view_context, params[:since])

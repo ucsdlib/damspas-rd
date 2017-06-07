@@ -1,4 +1,4 @@
-<% if Authority.is_authority?(@record) %>
+<% if Authority.authority?(@record) %>
   <%= render partial: 'records/record_form' %>
 <% else %>
   <h2>Please choose an Authority type: </h2>

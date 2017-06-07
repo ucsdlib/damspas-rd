@@ -31,22 +31,20 @@ class User < ApplicationRecord
 
   def self.anonymous(ip)
     role = role_from_ip(ip)
-    u = User.where(:email => role + '@anonymous').first || User.create(:email => role + '@anonymous')
+    u = User.find_by(email: role + '@anonymous') || User.create(email: role + '@anonymous')
     u.roles.clear << Role.find_or_create_by(name: role)
     u
   end
 
-  def self.role_from_ip( ip )
+  def self.role_from_ip(ip)
     return Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED.to_s if campus_ip(ip)
     "public"
   end
 
   def self.campus_ip(ip)
     Rails.configuration.campus_ip_blocks.each do |block|
-      if ip.start_with? block
-        return true
-      end
+      return true if ip.start_with? block
     end
-    return false
+    false
   end
 end

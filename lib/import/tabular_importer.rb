@@ -3,15 +3,15 @@ module Import
     OBJECT = 1
     COMPONENT = 2
     SUBCOMPONENT = 3
-    MULTI_VALUE_DELIMITER = '|'
-    NESTED_ATTRIBUTE_SEPARATOR = '@'
-    NESTED_ATTRIBUTE_BEGIN_CHAR = '{'
-    NESTED_ATTRIBUTE_END_CHAR = '}'
-    KEY_VALUE_PAIR_DELIMITER = ';'
-    KEY_VALUE_DELIMITER = '='
+    MULTI_VALUE_DELIMITER = '|'.freeze
+    NESTED_ATTRIBUTE_SEPARATOR = '@'.freeze
+    NESTED_ATTRIBUTE_BEGIN_CHAR = '{'.freeze
+    NESTED_ATTRIBUTE_END_CHAR = '}'.freeze
+    KEY_VALUE_PAIR_DELIMITER = ';'.freeze
+    KEY_VALUE_DELIMITER = '='.freeze
 
-    OBJECT_UNIQUE_ID = 'object unique id'
-    LEVEL = 'level'
+    OBJECT_UNIQUE_ID = 'object unique id'.freeze
+    LEVEL = 'level'.freeze
 
     attr_reader :user
     attr_reader :tabular_parser
@@ -37,10 +37,10 @@ module Import
       @template = ImportTemplate.from_file(template_file)
       @log = log
 
-      @data = Array.new
-      @invaild_headers = Array.new
-      @invaild_control_values = Hash.new
-      @invaild_key_values = Hash.new
+      @data = []
+      @invaild_headers = []
+      @invaild_control_values = {}
+      @invaild_key_values = {}
       @report = StringIO.new
     end
 
@@ -49,7 +49,6 @@ module Import
       @status = validate
       return self unless @status
 
-      parent_object = nil
       components = []
       model = model_to_create(form_attributes)
 
@@ -57,14 +56,13 @@ module Import
         attrs = model_attrs(attrs).with_indifferent_access
 
         # object unique id
-        object_unique_id = attrs.delete :object_unique_id
+        attrs.delete :object_unique_id
         # level for building complex object: Object, Component, Sub-component
         level = attrs['level']
 
         # FIXME: file use properties
-        file_1_use = attrs.delete :file_1_use
-        file_2_use = attrs.delete :file_2_use
-
+        attrs.delete :file_1_use
+        attrs.delete :file_2_use
 
         # FIXME: license, it's changed in upstream in the master branch with Hyrax 1.0
         license = attrs.delete(:license).first if attrs.key? :license
@@ -87,7 +85,7 @@ module Import
         attrs[:visibility_during_embargo] = visibility_during_embargo if visibility_during_embargo.present?
         attrs[:embargo_release_date] = embargo_release_date if embargo_release_date.present?
 
-        if level.gsub('-', '').upcase == 'OBJECT' && !components.empty?
+        if level.delete('-').casecmp('OBJECT').zero? && !components.empty?
           # ingest object
           child_log = Hyrax::Operation.create!(user: @user,
                                                operation_type: "Create Work",
@@ -99,12 +97,12 @@ module Import
         end
       end
 
-      if components.count > 0
-          # ingest object
-          child_log = Hyrax::Operation.create!(user: @user,
-                                               operation_type: "Create Work",
-                                               parent: @log)
-          IngestWorkJob.perform_later(@user, model.to_s, components, child_log)
+      if components.count.positive?
+        # ingest object
+        child_log = Hyrax::Operation.create!(user: @user,
+                                             operation_type: "Create Work",
+                                             parent: @log)
+        IngestWorkJob.perform_later(@user, model.to_s, components, child_log)
       end
 
       @status = true
@@ -118,11 +116,10 @@ module Import
         @data << attrs
         attrs.each do |key, val|
           val.each do |value|
-
             # check for invalid control values
             if @template.control_values.key?(key)
               control_values = @template.control_values[key]
-              if !control_values.include? value
+              unless control_values.include? value
 
                 @invaild_control_values[attrs[OBJECT_UNIQUE_ID]] ||= []
                 @invaild_control_values[attrs[OBJECT_UNIQUE_ID]] << key
@@ -130,7 +127,7 @@ module Import
             end
 
             # validate key/value pairs
-            next unless /@\s*{/.match(value)
+            next unless /@\s*{/.match?(value)
 
             valid_keys = @template.key_values["Allowed key"]
             is_kv_valid = true
@@ -145,30 +142,29 @@ module Import
               # validate data format
               case k
               when /uri:?/
-                is_kv_valid = false if !looks_like_uri?(v)
+                is_kv_valid = false unless looks_like_uri?(v)
               when /begin:?|end:?/
                 begin
-                  DateTime.parse(v)
+                  DateTime.strptime(v, '%Y-%m-%d')
                 rescue ArgumentError
                   is_kv_valid = false
                 end
               when /relatedType:?/
                 control_values = @template.control_values['RelatedResource Type']
-                is_kv_valid = false if !control_values.include?(v)
+                is_kv_valid = false unless control_values.include?(v)
               end
             end
 
-            next unless !is_kv_valid
+            next if is_kv_valid
             @invaild_key_values[attrs[OBJECT_UNIQUE_ID]] ||= []
             @invaild_key_values[attrs[OBJECT_UNIQUE_ID]] << key
-
           end
         end
       end
 
       # check for invalid headers
       @invaild_headers = @tabular_parser.headers - @template.headers
-      @invaild_headers.size == 0 && @invaild_control_values.size == 0 && @invaild_key_values.size == 0
+      @invaild_headers.empty? && @invaild_control_values.empty? && @invaild_key_values.empty?
     end
 
     def looks_like_uri?(str)
@@ -176,13 +172,13 @@ module Import
     end
 
     private
+
       # model raw attributes from import template
       # @parameter [Hash] attrs
       # @return: [Hash]
       def model_attrs(attrs = {})
         {}.tap do |process|
           attrs.dup.keys.each do |key|
-
             attr_key = name_to_symbol(key.to_s)
             val = attrs.delete key
             case key
@@ -203,13 +199,15 @@ module Import
                 ori_attrs["start"] = ori_attrs.delete("begin") if ori_attrs.key? "begin"
                 ori_attrs["finish"] = ori_attrs.delete("end") if ori_attrs.key? "end"
               end
-              process["#{attr_key.to_s}_attributes"] = nested_attrs
+              process["#{attr_key}_attributes"] = nested_attrs
             when 'related resource'
               # convert related resource: RelatedResource
               nested_attrs = convert_nested_attribute val, 'name'
               # rename key: type to related_type
-              nested_attrs.each { |ori_attrs| ori_attrs["related_type"] = ori_attrs.delete("relatedType") if ori_attrs.key? "relatedType" }
-              process["#{attr_key.to_s}_attributes"] = nested_attrs
+              nested_attrs.each do |ori_attrs|
+                ori_attrs["related_type"] = ori_attrs.delete("relatedType") if ori_attrs.key? "relatedType"
+              end
+              process["#{attr_key}_attributes"] = nested_attrs
             when 'subject:spatial'
               # convert Place
               process[attr_key] = authority_hash key, val, 'Place'
@@ -228,21 +226,27 @@ module Import
       # @parameter [str]: encoded string value
       # @param [String] val_key: the prefer key for the nested value
       # @return: key/value [Hash]
-      def extract_key_values(str, val_key='label')
+      def extract_key_values(str, val_key = 'label')
         values = str.split(NESTED_ATTRIBUTE_SEPARATOR)
         kv_str = values[-1].strip
-        return {val_key.to_sym => str} unless kv_str.starts_with?(NESTED_ATTRIBUTE_BEGIN_CHAR) && kv_str.ends_with?(NESTED_ATTRIBUTE_END_CHAR)
+        unless kv_str.starts_with?(NESTED_ATTRIBUTE_BEGIN_CHAR) && kv_str.ends_with?(NESTED_ATTRIBUTE_END_CHAR)
+          return { val_key.to_sym => str }
+        end
+        convert_to_hash(val_key, values, kv_str)
+      end
+
+      def convert_to_hash(val_key, values, kv_str)
         {}.tap do |kv_hash|
           # add label to the hash
-          kv_hash[val_key.to_sym] = values[0] if kv_hash.count == 0
-          kv_str[1, kv_str.size-2].split(KEY_VALUE_PAIR_DELIMITER).each do |kv|
+          kv_hash[val_key.to_sym] = values[0] if kv_hash.count.zero?
+          kv_str[1, kv_str.size - 2].split(KEY_VALUE_PAIR_DELIMITER).each do |kv|
             pair = kv.split(KEY_VALUE_DELIMITER)
-            case pair.size
-              when 1
-                kv_hash[pair[0].strip] = nil
-              else
-                kv_hash[pair[0].strip] = pair[-1].strip
-              end
+            kv_hash[pair[0].strip] = case pair.size
+                                     when 1
+                                       nil
+                                     else
+                                       pair[-1].strip
+                                     end
           end
         end
       end
@@ -268,14 +272,17 @@ module Import
       end
 
       def process_source_file(attrs)
-
         # file path: when appearing ignore uploaded files
         file_path = attrs.delete(:file_path).first if attrs.key? :file_path
         if file_path.nil?
           matched_uploaded_files = []
           matched_remote_files = []
-          map_files attrs, :file_1_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files if attrs.include?(:file_1_name)
-          map_files attrs, :file_2_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files if attrs.include?(:file_2_name)
+          if attrs.include?(:file_1_name)
+            map_files attrs, :file_1_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files
+          end
+          if attrs.include?(:file_2_name)
+            map_files attrs, :file_2_name, uploaded_files, remote_files, matched_uploaded_files, matched_remote_files
+          end
 
           attrs[:uploaded_files] = matched_uploaded_files
           attrs[:remote_files] = matched_remote_files
@@ -283,8 +290,14 @@ module Import
           attrs[:remote_files] = []
           file_1_name = attrs.delete(:file_1_name).first if attrs.key? :file_1_name
           file_2_name = attrs.delete(:file_2_name).first if attrs.key? :file_2_name
-          attrs[:remote_files] << { :url => "file://#{file_path}/#{file_1_name}", :file_name => "#{file_1_name}"}.with_indifferent_access if !file_1_name.nil?
-          attrs[:remote_files] << { :url => "file://#{file_path}/#{file_2_name}", :file_name => "#{file_2_name}"}.with_indifferent_access if !file_2_name.nil?
+          if file_1_name.present?
+            file_url = "file://#{file_path}/#{file_1_name}"
+            attrs[:remote_files] << { url: file_url, file_name: file_1_name.to_s }.with_indifferent_access
+          end
+          if file_2_name.present?
+            file_url = "file://#{file_path}/#{file_2_name}"
+            attrs[:remote_files] << { url: file_url, file_name: file_2_name.to_s }.with_indifferent_access
+          end
         end
       end
 
@@ -319,8 +332,8 @@ module Import
         when /^(date:)/
           "#{name.split(':')[-1]}_date"
         else
-          name = name.split(':')[-1] if !name.index(':').nil?
-          name.gsub(' ', '_').to_sym
+          name = name.split(':')[-1] unless name.index(':').nil?
+          name.tr(' ', '_').to_sym
         end
       end
 

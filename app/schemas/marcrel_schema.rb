@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 class MarcrelSchema < ActiveTriples::Schema
   property :analyst, predicate: ::RDF::Vocab::MARCRelators.anl, class_name: Agent
   property :artist, predicate: ::RDF::Vocab::MARCRelators.art, class_name: Agent
