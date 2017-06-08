@@ -58,6 +58,12 @@
       </li>
     <% end %>
 
-    
+    <li class="dropdown">
+        <%= link_to hyrax.help_path, role: 'button', data: { toggle: 'dropdown' }, aria: { haspopup: true, expanded: false } do %>
+          <span class="fa fa-cube"></span> Help <span class="caret"></span>
+        <% end %>
+      <%= render 'shared/add_help' %>
+    </li>
+          
   </ul>
 <% end %>

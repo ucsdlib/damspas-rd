@@ -38,6 +38,10 @@ en:
         menu: "Collections"
         new: "New Collection"
         my: "My Collections"
+    controls:
+      faq: "FAQ"
+      search-tips: "Search Tips"
+      takedown: "Take Down Policy"  
     dashboard:
       heading_actions:
         create_work:            "Create Object"
