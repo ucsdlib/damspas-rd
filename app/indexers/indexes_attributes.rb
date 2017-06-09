@@ -99,7 +99,7 @@ module IndexesAttributes
     end
 
     def created_date
-      return unless object.created_date.present?
+      return if object.created_date.blank?
       object.created_date.first.display_label
     end
 

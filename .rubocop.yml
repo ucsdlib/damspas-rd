@@ -1,7 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.4
   DisplayCopNames: true
   Include:
     - '**/Rakefile'
@@ -15,6 +15,7 @@ AllCops:
     - 'doc/**/*'
     - 'spec/**/*'
     - 'test/**/*'
+    - 'playbooks/**/*'
 
 Bundler/DuplicatedGem:
   Enabled: false
@@ -98,3 +99,5 @@ RSpec/NestedGroups:
 RSpec/LeadingSubject:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  Enabled: false

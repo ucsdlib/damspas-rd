@@ -1,5 +1,64 @@
 require: rubocop-rspec
 
+Bundler/OrderedGems:
+  Exclude:
+    - 'Gemfile'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'lib/import/tabular_importer.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'app/renderers/member_attribute_renderer.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'app/models/concerns/nested_attributes.rb'
+    - 'lib/import/tabular_importer.rb'
+
+Metrics/LineLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+
+Metrics/ParameterLists:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'lib/import/tabular_importer.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'app/renderers/member_attribute_renderer.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'app/renderers/member_attribute_renderer.rb'
+
+Style/OptionalArguments:
+  Exclude:
+    - 'app/models/concerns/stored_inline.rb'
+
+Rails/OutputSafety:
+  Exclude:
+    - 'app/renderers/member_attribute_renderer.rb'
+
 RSpec/NamedSubject:
   Enabled: false
 

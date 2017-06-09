@@ -7,7 +7,7 @@ class LabelExistsValidator < ActiveModel::Validator
 
   def exists?(record, label, alt_label = nil)
     records = record.class.where(label: label)
-    records = records.where(alternate_label: alt_label) unless alt_label.blank?
+    records = records.where(alternate_label: alt_label) if alt_label.present?
     records.where(id: record.id).count != records.count
   end
 end

@@ -48,7 +48,7 @@ module Import
           if headers
             attributes(headers, row).each do |k, v|
               values[k] ||= []
-              values[k].push(*v) unless v.blank?
+              values[k].push(*v) if v.present?
             end
           else
             headers = parse_headers row

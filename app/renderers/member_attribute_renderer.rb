@@ -3,7 +3,7 @@ class MemberAttributeRenderer < ::Hyrax::Renderers::AttributeRenderer
     markup = ''
     results = []
 
-    return markup if !values.present? && !options[:include_empty]
+    return markup if values.blank? && !options[:include_empty]
 
     component(values, options[:type], 0, results)
     results.each do |result|
