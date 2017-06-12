@@ -16,7 +16,8 @@ FactoryGirl.define do
     end
 
     factory :campus do
-      roles { [Role.where(name: Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED.to_s).first_or_create] }
+      campus_role = Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
+      roles { [Role.where(name: campus_role).first_or_create] }
     end
 
     factory :anonymous do
@@ -31,6 +32,7 @@ end
 
 class MockFile
   attr_accessor :to_s, :id
+
   def initialize(id, string)
     self.id = id
     self.to_s = string

@@ -19,7 +19,11 @@ describe Import::ExcelXLParser do
 
       expect(first_record["type of resource"]).to eq ["mixed material", "still image"]
 
-      expect(first_record.keys).to match_array ["object unique id", "level", "title", "subject:topic", "agent:creator", "agent:contributor", "subject:spatial", "date:created", "note:note", "identifier:doi", "language", "type of resource", "copyright jurisdiction", "copyright status", "rights holder", "license", "related resource"]
+      expect(first_record.keys).to match_array ["object unique id", "level", "title", "subject:topic", "agent:creator",
+                                                "agent:contributor", "subject:spatial", "date:created", "note:note",
+                                                "identifier:doi", "language", "type of resource",
+                                                "copyright jurisdiction", "copyright status", "rights holder",
+                                                "license", "related resource"]
     end
   end
 end

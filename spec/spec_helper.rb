@@ -12,7 +12,6 @@ SimpleCov.start('rails') do
 end
 SimpleCov.command_name 'spec'
 
-
 require File.expand_path("../../config/environment", __FILE__)
 
 require 'factory_girl'
@@ -46,7 +45,6 @@ RSpec.configure do |config|
   config.fixture_path = File.expand_path("../fixtures", __FILE__)
 
   config.use_transactional_fixtures = false
-
 
   config.before :suite do
     DatabaseCleaner.clean_with(:truncation)
@@ -114,5 +112,5 @@ RSpec.configure do |config|
 
   config.example_status_persistence_file_path = 'spec/examples.txt'
 
-#  config.profile_examples = 10
+  #  config.profile_examples = 10
 end

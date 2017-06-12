@@ -37,7 +37,7 @@ feature 'Create a Place' do
       find('.btn-new').click
       fill_in 'place_label', with: 'Test dup Place Record'
       click_button 'Save'
-      expect(page).to have_content ("'Test dup Place Record' already exists!")
+      expect(page).to have_content "'Test dup Place Record' already exists!"
     end
 
     scenario 'should be able to edit Place record' do

@@ -6,7 +6,7 @@ describe BatchImportController do
   let(:metadata) { {} }
   let(:uploaded_files) { [upload1.id.to_s] }
   let(:selected_files) { [] }
-  let(:expected_params) { {'visibility' => 'open'} }
+  let(:expected_params) { { 'visibility' => 'open' } }
 
   before do
     sign_in user
@@ -21,7 +21,9 @@ describe BatchImportController do
   end
 
   context "Excel XL metadata source" do
-    let(:source_metadata) { Rack::Test::UploadedFile.new(File.open(fixture_path + '/imports/excel_xl_import_test.xlsx')) }
+    let(:file) { File.open(fixture_path + '/imports/excel_xl_import_test.xlsx') }
+    let(:source_metadata) { Rack::Test::UploadedFile.new(file) }
+
     describe "#create" do
       context "enquing a update job" do
         it "is successful" do
@@ -29,8 +31,9 @@ describe BatchImportController do
             source_metadata: source_metadata,
             uploaded_files: [upload1.id.to_s],
             selected_files: {},
-            batch_import_item: {visibility: 'open'}
+            batch_import_item: { visibility: 'open' }
           }
+
           post :create, params: parameters
           expect(response).to redirect_to "#{Hyrax::Engine.routes.url_helpers.dashboard_works_path}?locale=en"
           expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
@@ -47,9 +50,11 @@ describe BatchImportController do
                               selected_files: {},
                               batch_import_item: { visibility: 'open' } }
       end
+
       let(:expected_params) do
-        ActionController::Parameters.new(visibility: 'open', "remote_files"=>[], "uploaded_files"=>["1"]).permit!
+        ActionController::Parameters.new(visibility: 'open', "remote_files" => [], "uploaded_files" => ["1"]).permit!
       end
+
       it "excludes uploaded_files" do
         expect(subject).to eq expected_params
       end
@@ -58,6 +63,7 @@ describe BatchImportController do
 
   context "CSV metadata source" do
     let(:source_metadata) { Rack::Test::UploadedFile.new(File.open(fixture_path + '/imports/csv_import_test.csv')) }
+
     describe "#create" do
       context "enquing a update job" do
         it "is successful" do
@@ -65,8 +71,9 @@ describe BatchImportController do
             source_metadata: source_metadata,
             uploaded_files: [upload1.id.to_s],
             selected_files: {},
-            batch_import_item: {visibility: 'open'}
+            batch_import_item: { visibility: 'open' }
           }
+
           post :create, params: parameters
           expect(response).to redirect_to "#{Hyrax::Engine.routes.url_helpers.dashboard_works_path}?locale=en"
           expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
@@ -84,8 +91,9 @@ describe BatchImportController do
                               batch_import_item: { visibility: 'open' } }
       end
       let(:expected_params) do
-        ActionController::Parameters.new(visibility: 'open', "remote_files"=>[], "uploaded_files"=>["1"]).permit!
+        ActionController::Parameters.new(visibility: 'open', "remote_files" => [], "uploaded_files" => ["1"]).permit!
       end
+
       it "excludes uploaded_files" do
         expect(subject).to eq expected_params
       end

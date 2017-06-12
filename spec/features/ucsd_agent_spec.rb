@@ -4,6 +4,7 @@ include Warden::Test::Helpers
 feature 'Create a UcsdAgent' do
   context 'a logged in user' do
     let(:user) { create(:admin) }
+    let(:subject) { UcsdAgent.create(label: 'Test Linked Agent', agent_type: 'Person') }
 
     before do
       create(:permission_template_access,
@@ -14,7 +15,6 @@ feature 'Create a UcsdAgent' do
       sign_in user
     end
 
-    let(:subject) { UcsdAgent.create(label: 'Test Linked Agent', agent_type: 'Person') }
     scenario 'should be able to access the agent form and create agent' do
       visit root_path
       expect(page).to have_link 'New Agent'

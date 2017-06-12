@@ -2,22 +2,27 @@ require 'rails_helper'
 include Warden::Test::Helpers
 
 feature 'Create a Collection' do
-
   let!(:admin_user) { FactoryGirl.create(:admin) }
-  let!(:public_collection) { FactoryGirl.create(:collection, title: ["Public Collection Title"], :user => admin_user) }
-  let!(:campus_only_collection) { FactoryGirl.create(:campus_only_collection, title: ["Campus Only Collection Title"], user: admin_user) }
-  let!(:private_collection) { FactoryGirl.create(:private_collection, title: ["Private Collection Title"], user: admin_user) }
+  let!(:public_collection) do
+    FactoryGirl.create(:collection, title: ["Public Collection Title"], user: admin_user)
+  end
+  let!(:campus_only_collection) do
+    FactoryGirl.create(:campus_only_collection, title: ["Campus Only Collection Title"], user: admin_user)
+  end
+  let!(:private_collection) do
+    FactoryGirl.create(:private_collection, title: ["Private Collection Title"], user: admin_user)
+  end
 
   context 'a logged in user with admin role' do
     let(:user) { create(:admin) }
+
     before do
       sign_in user
       language_uri = 'http://id.loc.gov/vocabulary/iso639-2/any'
       language_authority_name = Qa::LocalAuthority.find_or_create_by(name: 'languages')
-      @authority_lang = Qa::LocalAuthorityEntry.create(
-          local_authority: language_authority_name,
-          label: 'Language',
-          uri: language_uri)
+      @authority_lang = Qa::LocalAuthorityEntry.create(local_authority: language_authority_name,
+                                                       label: 'Language',
+                                                       uri: language_uri)
       visit '/dashboard'
       click_link 'New Collection'
     end
@@ -105,9 +110,13 @@ feature 'Create a Collection' do
 
   context 'collection with related resources' do
     let(:user) { create(:admin) }
+
     before do
       sign_in user
-      @col_nested = Collection.create(title: ["Test Collection - Related resource"], related_resource_attributes: [{related_type: ['relation'], name: ['Name'], url: ['http://test.com/related']}])
+      @col_nested = Collection.create(title: ["Test Collection - Related resource"],
+                                      related_resource_attributes: [{ related_type: ['relation'],
+                                                                      name: ['Name'],
+                                                                      url: ['http://test.com/related'] }])
     end
 
     after do
@@ -130,7 +139,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'can update' do
-      visit "#{hyrax.collection_path @col_nested.id}"
+      visit hyrax.collection_path @col_nested.id
       expect(page).to have_content 'Test Collection - Related resource'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Test Collection - Related resource updated'
@@ -143,6 +152,7 @@ feature 'Create a Collection' do
 
   context 'a logged in user with editor role' do
     let(:user) { create(:editor) }
+
     before do
       sign_in user
     end
@@ -162,7 +172,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read and edit any public collections' do
-      visit "#{hyrax.collection_path public_collection.id}"
+      visit hyrax.collection_path public_collection.id
       expect(page).to have_content 'Public Collection Title'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Public Collection Title - Editor Edited'
@@ -171,7 +181,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read and edit any any campus only collections' do
-      visit "#{hyrax.collection_path campus_only_collection.id}"
+      visit hyrax.collection_path campus_only_collection.id
       expect(page).to have_content 'Campus Only Collection Title'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Campus Only Collection Title - Editor Edited'
@@ -180,7 +190,7 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read and edit any private collections' do
-      visit "#{hyrax.collection_path private_collection.id}"
+      visit hyrax.collection_path private_collection.id
       expect(page).to have_content 'Private Collection Title'
       find(:xpath, "//a[text()='Edit']").click
       fill_in 'collection_title', with: 'Private Collection Title - Editor Edited'
@@ -191,6 +201,7 @@ feature 'Create a Collection' do
 
   context 'a logged in user with curator role' do
     let(:user) { create(:curator) }
+
     before do
       sign_in user
     end
@@ -201,19 +212,19 @@ feature 'Create a Collection' do
     end
 
     scenario 'is allowed to read any public collections but no editing allowed' do
-      visit "#{hyrax.collection_path public_collection.id}"
+      visit hyrax.collection_path public_collection.id
       expect(page).to have_content 'Public Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'is allowed to read and edit any any campus only collections but no editing allowed' do
-      visit "#{hyrax.collection_path campus_only_collection.id}"
+      visit hyrax.collection_path campus_only_collection.id
       expect(page).to have_content 'Campus Only Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'is allowed to read and edit any private collections but no editing allowed' do
-      visit "#{hyrax.collection_path private_collection.id}"
+      visit hyrax.collection_path private_collection.id
       expect(page).to have_content 'Private Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
@@ -221,53 +232,54 @@ feature 'Create a Collection' do
 
   context 'an campus user' do
     let(:user) { create(:campus) }
+
     before do
       sign_in user
     end
 
-    scenario 'should not be able to create new collection'do
+    scenario 'should not be able to create new collection' do
       visit hyrax.new_collection_path
       expect(page).to have_content 'You are not authorized to access this page.'
     end
 
     scenario 'should be able to read any public collections but no editing allowed' do
-      visit "#{hyrax.collection_path public_collection.id}"
+      visit hyrax.collection_path public_collection.id
       expect(page).to have_content 'Public Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only collections but no editing allowed' do
-      visit "#{hyrax.collection_path campus_only_collection.id}"
+      visit hyrax.collection_path campus_only_collection.id
       expect(page).to have_content 'Campus Only Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should not be able to read any private collections' do
-      visit "#{hyrax.collection_path private_collection.id}"
+      visit hyrax.collection_path private_collection.id
       expect(page).not_to have_content 'Private Collection Title'
       expect(page).to have_content 'You are not authorized to access this page'
     end
   end
 
   context 'an anonymous user' do
-    scenario 'should not be able to create new collections'do
+    scenario 'should not be able to create new collections' do
       visit hyrax.new_collection_path
       expect(page).to have_current_path new_user_session_path
     end
 
     scenario 'should be able to read any public collections but no editing allowed' do
-      visit "#{hyrax.collection_path public_collection.id}"
+      visit hyrax.collection_path public_collection.id
       expect(page).to have_content 'Public Collection Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
     end
 
     scenario 'should be able to read any campus only collections' do
-      visit "#{hyrax.collection_path campus_only_collection.id}"
+      visit hyrax.collection_path campus_only_collection.id
       expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
 
     scenario 'should not be able to read any private collections' do
-      visit "#{hyrax.collection_path private_collection.id}"
+      visit hyrax.collection_path private_collection.id
       expect(page).to have_current_path "#{new_user_session_path}?locale=en"
     end
   end

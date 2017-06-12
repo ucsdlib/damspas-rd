@@ -9,9 +9,11 @@ RSpec.describe Hyrax::DownloadsController do
       FactoryGirl.create(:file_with_work, user: user, content: File.open(fixture_path + '/files/image.jpg'))
     end
     let(:default_image) { ActionController::Base.helpers.image_path 'default.png' }
+    let(:world_image) { fixture_path + '/files/world.png' }
 
     context "when user doesn't have access" do
       let(:another_user) { FactoryGirl.create(:user) }
+
       before { sign_in another_user }
 
       it 'redirects to the default image' do
@@ -42,11 +44,13 @@ RSpec.describe Hyrax::DownloadsController do
 
       context "with an alternative file" do
         context "that is persisted" do
-          let(:file) { File.open(fixture_path + '/files/world.png', 'rb') }
+          let(:file) { File.open(world_image, 'rb') }
           let(:content) { file.read }
 
           before do
-            allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(fixture_path + '/files/world.png')
+            allow(Hyrax::DerivativePath)
+              .to receive(:derivative_path_for_reference)
+              .and_return(world_image)
           end
 
           it 'sends requested file content' do
@@ -66,7 +70,11 @@ RSpec.describe Hyrax::DownloadsController do
 
     context 'metadata-only and culturally-sensitive object resources' do
       let(:admin_user) { FactoryGirl.create(:admin) }
-      let!(:metadata_only_object_resource) { FactoryGirl.create(:metadata_only_object_resource_with_files, title: ["Metadata-only Object Title"], user: admin_user) }
+      let!(:metadata_only_object_resource) do
+        FactoryGirl.create(:metadata_only_object_resource_with_files,
+                           title: ["Metadata-only Object Title"],
+                           user: admin_user)
+      end
 
       context 'anonymous user' do
         let(:dc_not_available_icon) { ActionController::Base.helpers.image_path 'dc_not_available.jpg' }
@@ -78,11 +86,12 @@ RSpec.describe Hyrax::DownloadsController do
       end
 
       context "a authorized use" do
+        let(:content) { File.open(world_image, 'rb').read }
+
         before do
           sign_in admin_user
-          allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(fixture_path + '/files/world.png')
+          allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(world_image)
         end
-        let(:content) { File.open(fixture_path + '/files/world.png', 'rb').read }
 
         it 'sends requested file content' do
           get :show, params: { id: metadata_only_object_resource.file_sets.first, file: 'thumbnail' }
@@ -93,7 +102,11 @@ RSpec.describe Hyrax::DownloadsController do
 
     context 'culturally-sensitive object resources' do
       let(:admin_user) { FactoryGirl.create(:admin) }
-      let!(:culturally_sensitive_object_resource) { FactoryGirl.create(:culturally_sensitive_object_resource_with_files, title: ["Culturally-sensitive Object Title"], user: admin_user) }
+      let!(:culturally_sensitive_object_resource) do
+        FactoryGirl.create(:culturally_sensitive_object_resource_with_files,
+                           title: ["Culturally-sensitive Object Title"],
+                           user: admin_user)
+      end
 
       context 'anonymous user' do
         let(:content) { File.open(Rails.root.join("app", "assets", "images", 'thumb-restricted.png'), 'rb').read }
@@ -106,11 +119,13 @@ RSpec.describe Hyrax::DownloadsController do
       end
 
       context "a authorized use" do
+        let(:image) { fixture_path + '/files/image.jpg' }
+        let(:content) { File.open(image, 'rb').read }
+
         before do
           sign_in admin_user
-          allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(fixture_path + '/files/image.jpg')
+          allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(image)
         end
-        let(:content) { File.open(fixture_path + '/files/image.jpg', 'rb').read }
 
         it 'sends requested file content' do
           get :show, params: { id: culturally_sensitive_object_resource.file_sets.first, file: 'thumbnail' }
@@ -124,7 +139,9 @@ RSpec.describe Hyrax::DownloadsController do
     before do
       allow(controller).to receive(:default_file).and_return 'world.png'
     end
+
     subject { controller.send(:derivative_download_options) }
+
     it { is_expected.to eq(disposition: 'inline', type: 'image/png') }
   end
 end

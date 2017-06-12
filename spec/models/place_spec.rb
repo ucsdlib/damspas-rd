@@ -10,7 +10,8 @@ describe Place do
   end
 
   describe '#alternateLabel' do
-    let(:subject) { described_class.new(label: 'Test Place', alternate_label:'Alternate label') }
+    let(:subject) { described_class.new(label: 'Test Place', alternate_label: 'Alternate label') }
+
     it 'has a label' do
       expect(subject.label).to eq 'Test Place'
       expect(subject.alternate_label).to eq 'Alternate label'
@@ -19,7 +20,8 @@ describe Place do
 
   describe '#note' do
     let(:subject) { described_class.new(label: 'Test Place', note: ['Note']) }
-    it 'should has note' do
+
+    it 'hases note' do
       expect(subject.label).to eq 'Test Place'
       expect(subject.note).to eq ['Note']
     end
@@ -27,7 +29,8 @@ describe Place do
 
   describe '#point' do
     let(:subject) { described_class.new(label: 'Test Place', point: '1.0000 2.0000') }
-    it 'should has point' do
+
+    it 'hases point' do
       expect(subject.label).to eq 'Test Place'
       expect(subject.point).to eq '1.0000 2.0000'
     end

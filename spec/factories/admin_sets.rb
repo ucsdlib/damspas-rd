@@ -9,8 +9,11 @@ FactoryGirl.define do
     # This way, we can go ahead
     after(:create) do |admin_set, evaluator|
       if evaluator.with_permission_template
-        attributes = { admin_set_id: admin_set.id }
-        attributes = evaluator.with_permission_template.merge(attributes) if evaluator.with_permission_template.respond_to?(:merge)
+        attributes = if evaluator.with_permission_template.respond_to?(:merge)
+                       evaluator.with_permission_template.merge(attributes)
+                     else
+                       { admin_set_id: admin_set.id }
+                     end
         # There is a unique constraint on permission_templates.admin_set_id; I don't want to
         # create a permission template if one already exists for this admin_set
         create(:permission_template, attributes) unless Hyrax::PermissionTemplate.find_by(admin_set_id: admin_set.id)

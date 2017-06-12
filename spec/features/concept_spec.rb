@@ -4,6 +4,7 @@ include Warden::Test::Helpers
 feature 'Create a Concept' do
   context 'a logged in user' do
     let(:user) { create(:admin) }
+    let(:subject) { Concept.create(label: 'Test Linked Concept') }
 
     before do
       create(:permission_template_access,
@@ -14,7 +15,6 @@ feature 'Create a Concept' do
       sign_in user
     end
 
-    let(:subject) { Concept.create(label: 'Test Linked Concept') }
     scenario 'should be able to access the Concept form and create Concept' do
       visit root_path
       expect(page).to have_link 'New Subject'

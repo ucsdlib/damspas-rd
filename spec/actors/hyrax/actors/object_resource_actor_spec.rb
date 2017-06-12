@@ -25,10 +25,11 @@ describe Hyrax::Actors::ObjectResourceActor do
     context 'create nested attributes' do
       let(:attributes) do
         { title: ['Test Object'], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-          related_resource_attributes: {"0" => {related_type:['relation'], name: ['Related resource name'], url: ['http://test.com/any/url']}},
+          related_resource_attributes: { "0" => { related_type: ['relation'], name: ['Related resource name'],
+                                                  url: ['http://test.com/any/url'] } },
           identifier: ' ', license: ['http://creativecommons.org/licenses/by/3.0/us/'] }
       end
-      let(:env) {Hyrax::Actors::Environment.new(curation_concern, Ability.new(user), attributes)}
+      let(:env) { Hyrax::Actors::Environment.new(curation_concern, Ability.new(user), attributes) }
 
       it 'creates nested related resource' do
         subject.update(env)
@@ -37,6 +38,7 @@ describe Hyrax::Actors::ObjectResourceActor do
         expect(curation_concern.related_resource.first.name).to eq ['Related resource name']
         expect(curation_concern.related_resource.first.url).to eq ['http://test.com/any/url']
       end
+
       it 'removes empty property' do
         expect(curation_concern.identifier).to be nil
       end
@@ -45,10 +47,11 @@ describe Hyrax::Actors::ObjectResourceActor do
     context 'update nested attributes' do
       let(:attributes) do
         { title: ['Test Object Updated'], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-          related_resource_attributes: {"0" => {related_type:['relation'], name: ['Related resource name updated'], url: ['http://test.com/any/url']}},
+          related_resource_attributes: { "0" => { related_type: ['relation'], name: ['Related resource name updated'],
+                                                  url: ['http://test.com/any/url'] } },
           identifier: ' ', license: ['http://creativecommons.org/licenses/by/3.0/us/'] }
       end
-      let(:env) {Hyrax::Actors::Environment.new(curation_concern, Ability.new(user), attributes)}
+      let(:env) { Hyrax::Actors::Environment.new(curation_concern, Ability.new(user), attributes) }
 
       it 'updates the nested related resource' do
         subject.update(env)

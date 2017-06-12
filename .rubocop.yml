@@ -13,8 +13,6 @@ AllCops:
     - 'app/assets/**/*'
     - 'config/**/*'
     - 'doc/**/*'
-    - 'spec/**/*'
-    - 'test/**/*'
     - 'playbooks/**/*'
 
 Bundler/DuplicatedGem:

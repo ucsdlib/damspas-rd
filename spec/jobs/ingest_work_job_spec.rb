@@ -14,7 +14,11 @@ describe IngestWorkJob do
 
   describe "#perform" do
     let(:model) { 'ObjectResource' }
-    let(:components) { [{title: ['Test Object One'], level: 'Object'}, {title: ['Test Component One'], level: 'Component'}, {title: ['Test Sub-component One'], level: 'Sub-component'}] }
+    let(:components) do
+      [{ title: ['Test Object One'], level: 'Object' },
+       { title: ['Test Component One'], level: 'Component' },
+       { title: ['Test Sub-component One'], level: 'Sub-component' }]
+    end
     let(:errors) { double(full_messages: "It's broke!") }
     let(:work) { double(errors: errors) }
     let(:actor) { double(curation_concern: work) }
@@ -28,15 +32,15 @@ describe IngestWorkJob do
 
     it "ingest complex object metadata" do
       expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
-          expect(env.attributes).to include(title: ['Test Object One'])
-        end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
-          expect(env.attributes).to include(title: ['Test Component One'])
-        end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
-          expect(env.attributes).to include(title: ['Test Sub-component One'])
-        end.and_return(true)
+      expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
+        expect(env.attributes).to include(title: ['Test Object One'])
+      end.and_return(true)
+      expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
+        expect(env.attributes).to include(title: ['Test Component One'])
+      end.and_return(true)
+      expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
+        expect(env.attributes).to include(title: ['Test Sub-component One'])
+      end.and_return(true)
       expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
       subject
       expect(log.status).to eq 'pending'
