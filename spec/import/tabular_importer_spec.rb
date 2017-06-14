@@ -17,26 +17,26 @@ describe Import::TabularImporter do
 
   describe "#perform" do
     let(:source_metadata) {}
-    let(:template) { File.join(Rails.root, 'imports', 'object_import_template.xlsx') }
+    let(:template) { Rails.root.join('imports', 'object_import_template.xlsx') }
     let(:file1) { File.open(fixture_path + '/files/file_1.jpg') }
     let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
     let(:file2) { File.open(fixture_path + '/files/file_2.jpg') }
     let(:upload2) { Hyrax::UploadedFile.create(user: user, file: file2) }
     let(:metadata) { {} }
-    let(:uploaded_files) { {upload1.file.filename => upload1.id.to_s, upload2.file.filename => upload2.id.to_s} }
+    let(:uploaded_files) { { upload1.file.filename => upload1.id.to_s, upload2.file.filename => upload2.id.to_s } }
     let(:remote_files) { {} }
     let(:errors) { double(full_messages: "It's broke!") }
     let(:work) { double(errors: errors) }
     let(:actor) { double(curation_concern: work) }
 
     subject do
-       described_class.new(user,
-                                    source_metadata,
-                                    uploaded_files,
-                                    remote_files,
-                                    metadata,
-                                    template,
-                                    log).import
+      described_class.new(user,
+                          source_metadata,
+                          uploaded_files,
+                          remote_files,
+                          metadata,
+                          template,
+                          log).import
     end
 
     context 'with Excel XL source metadata' do
@@ -44,13 +44,13 @@ describe Import::TabularImporter do
 
       it "ingest object with components and files" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Object One'])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])
         end.and_return(true)
         expect(subject.status).to eq true
@@ -66,6 +66,7 @@ describe Import::TabularImporter do
         let(:metadata) do
           { "permissions_attributes" => [{ "type" => "group", "name" => "public", "access" => "read" }] }
         end
+
         it "sets the groups" do
           subject
           work = ObjectResource.last
@@ -77,6 +78,7 @@ describe Import::TabularImporter do
         let(:metadata) do
           { "visibility" => "open" }
         end
+
         it "sets public read access" do
           subject
           work = ObjectResource.last
@@ -100,13 +102,13 @@ describe Import::TabularImporter do
 
       it "ingest object with components and files" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Object One'])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])
         end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
@@ -115,4 +117,3 @@ describe Import::TabularImporter do
     end
   end
 end
-

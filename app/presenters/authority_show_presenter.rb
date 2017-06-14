@@ -1,11 +1,11 @@
 class AuthorityShowPresenter < Hyrax::CollectionPresenter
   # Terms is the list of fields to displayed
   def self.terms
-    [:agent_type, :label, :alternate_label, :orcid, :exact_match, 
-       :close_match, :related_match, :different_from, :note, :point]
-    end
+    [:agent_type, :label, :alternate_label, :orcid, :exact_match,
+     :close_match, :related_match, :different_from, :note, :point]
+  end
 
-  self.terms.each do |term|
+  terms.each do |term|
     delegate term, to: :solr_document
   end
 

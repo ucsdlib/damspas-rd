@@ -9,7 +9,7 @@ class RecordsController < ApplicationController
 
   def show
     resource = ActiveFedora::Base.find(params[:id])
-    if (resource.nil?)
+    if resource.nil?
       flash[:error] = "Resource doesn't exist: #{params[:id]}"
       redirect_to "/"
     else
@@ -22,7 +22,7 @@ class RecordsController < ApplicationController
   end
 
   def build_form
-    resource.attributes.each do |key, value|
+    resource.attributes.each do |_key, value|
       hash_to_uri value
     end
     form_class.new(resource)

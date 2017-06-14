@@ -5,7 +5,7 @@ class RelatedResource < ActiveTriples::Resource
 
   configure type: ::UcsdTerms.RelatedResource
 
-  property :related_type, predicate: ::UcsdTerms::relatedType
+  property :related_type, predicate: ::UcsdTerms.relatedType
   property :name, predicate: ::RDF::Vocab::SKOS.prefLabel
   property :url, predicate: ::RDF::Vocab::SCHEMA.url
 

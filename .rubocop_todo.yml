@@ -1,0 +1,89 @@
+require: rubocop-rspec
+
+Bundler/OrderedGems:
+  Exclude:
+    - 'Gemfile'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'lib/import/tabular_importer.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'app/renderers/member_attribute_renderer.rb'
+    - 'spec/support/factory_helpers.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'app/models/concerns/nested_attributes.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'spec/spec_helper.rb'
+    - 'spec/**/*'
+
+Metrics/LineLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'spec/factories/permission_templates.rb'
+
+Metrics/ParameterLists:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'lib/import/tabular_importer.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'spec/support/features/stub_view_helpers.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'app/renderers/member_attribute_renderer.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/jobs/batch_import_job.rb'
+    - 'app/jobs/ingest_work_job.rb'
+    - 'lib/import/tabular_importer.rb'
+    - 'app/renderers/member_attribute_renderer.rb'
+
+Style/OptionalArguments:
+  Exclude:
+    - 'app/models/concerns/stored_inline.rb'
+
+Rails/OutputSafety:
+  Exclude:
+    - 'app/renderers/member_attribute_renderer.rb'
+
+RSpec/InstanceVariable:
+  Exclude:
+    - 'spec/hyrax/**/*'
+    - 'spec/models/**/*'
+    - 'spec/controllers/**/*'
+    - 'spec/features/**/*'
+    - 'spec/services/**/*'
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 9
+  Exclude:
+    - 'spec/features/**/*'
+    - 'spec/views/**/*'
+    - 'spec/models/**/*'
+    - 'spec/jobs/**/*'
+    - 'spec/import/**/*'
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+

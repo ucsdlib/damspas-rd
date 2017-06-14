@@ -1,7 +1,7 @@
 # Concept is a class of skos:Concept
 # See:  http://www.w3.org/2004/02/skos/core#
 class Concept < Authority
-   extend ActiveTriples::Configurable
+  extend ActiveTriples::Configurable
 
   configure type: ::RDF::Vocab::SKOS.Concept
 
@@ -14,13 +14,12 @@ class Concept < Authority
   validates :related_match, url: true, allow_blank: true
 
   def to_solr(solr_doc = {})
-    super.tap do |solr_doc|
-      index_authorities solr_doc, :close_match, close_match
-      index_authorities solr_doc, :related_match, related_match
+    super.tap do |doc|
+      index_authorities doc, :close_match, close_match
+      index_authorities doc, :related_match, related_match
       note.each do |val|
-        solr_doc[Solrizer.solr_name('note', :stored_searchable)] = val
+        doc[Solrizer.solr_name('note', :stored_searchable)] = val
       end
     end
   end
 end
-

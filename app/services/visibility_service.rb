@@ -1,11 +1,9 @@
 # Class to convert customized visibility values
-# frozen_string_literal: true
-
 class VisibilityService
   PREDICATE_RIGHTS_OVERRIDE = ::RDF::URI.new('http://pcdm.org/2015/06/03/rights#rightsOverride')
-  VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY = 'suppress_discovery'
-  VISIBILITY_TEXT_VALUE_METADATA_ONLY = 'metadata_only'
-  VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE = 'culturally_sensitive'
+  VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY = 'suppress_discovery'.freeze
+  VISIBILITY_TEXT_VALUE_METADATA_ONLY = 'metadata_only'.freeze
+  VISIBILITY_TEXT_VALUE_CULTURALLY_SENSITIVE = 'culturally_sensitive'.freeze
 
   # convert the visibility term to visibility text value
   # @param [String] term

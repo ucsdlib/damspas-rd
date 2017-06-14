@@ -3,7 +3,10 @@ require 'rails_helper'
 describe TimeSpan do
   describe 'create nested TimeSpan' do
     before do
-      @owner = ObjectResource.new(title:["Test Object Title"], created_date_attributes: [{start: ['2017-03-28'], finish: ['2017-03-28'], label: ['Mar 28, 2017']}])
+      @owner = ObjectResource.new(title: ["Test Object Title"],
+                                  created_date_attributes: [{ start: ['2017-03-28'],
+                                                              finish: ['2017-03-28'],
+                                                              label: ['Mar 28, 2017'] }])
     end
 
     subject { @owner.created_date.first }
@@ -48,12 +51,16 @@ describe TimeSpan do
         end
 
         describe 'has different begin date and end date' do
-          let(:test_owner) { ObjectResource.create(created_date_attributes: [{start: ['2017-03-28'], finish: ['2017-04-28']}])}
+          let(:test_owner) do
+            ObjectResource.create(created_date_attributes: [{ start: ['2017-03-28'], finish: ['2017-04-28'] }])
+          end
+
           it { expect(test_owner.created_date.first.display_label).to eq '2017-03-28 to 2017-04-28' }
         end
 
         describe 'has begin date only' do
-          let(:test_owner) { ObjectResource.create(created_date_attributes: [{start: ['2017-03-28']}])}
+          let(:test_owner) { ObjectResource.create(created_date_attributes: [{ start: ['2017-03-28'] }]) }
+
           it { expect(test_owner.created_date.first.display_label).to eq '2017-03-28' }
         end
       end

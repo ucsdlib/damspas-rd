@@ -26,4 +26,3 @@ class FileSet < ActiveFedora::Base
     super
   end
 end
-

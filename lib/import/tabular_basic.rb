@@ -1,13 +1,14 @@
 module Import
   module TabularBasic
-    private 
+    private
+
       # valid header fields
       def parse_headers(row)
         [].tap do |headers|
           i = 0
-          while i < row.size() do
+          while i < row.size
             headers << field_value(row[i])
-            i = i + 1
+            i += 1
           end
         end
       end

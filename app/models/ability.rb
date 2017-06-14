@@ -6,7 +6,9 @@ class Ability
   # override user_groups method to use default institutional visibility for campus group access
   def user_groups
     user_grps = super
-    user_grps.delete(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED.to_s) if current_user.anonymous?
+    if current_user.anonymous?
+      user_grps.delete(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED.to_s)
+    end
     user_grps
   end
 
@@ -41,11 +43,9 @@ class Ability
     can [:download], FileSet
   end
 
-  def campus_permissions
-  end
+  def campus_permissions; end
 
-  def anonymous_permissions
-  end
+  def anonymous_permissions; end
 
   # Define any customized permissions here.
   def custom_permissions
@@ -57,6 +57,7 @@ class Ability
   end
 
   private
+
     def curation_concerns
       Hyrax.config.curation_concerns
     end

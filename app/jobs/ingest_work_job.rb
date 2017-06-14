@@ -1,5 +1,4 @@
 class IngestWorkJob < CreateWorkJob
-
   # This copies metadata from the passed in attribute to all of the works that
   # are members of the given upload set
   # @param [User] user
@@ -13,9 +12,9 @@ class IngestWorkJob < CreateWorkJob
     log.performing!
 
     components.each do |attributes|
-      levels << Import::TabularImporter.const_get(attributes.delete(:level).gsub('-', '').upcase)
+      levels << Import::TabularImporter.const_get(attributes.delete(:level).delete('-').upcase)
 
-      attributes.each do |key, value|
+      attributes.each do |_key, value|
         if value.is_a? Array
           value.map! { |v| to_hash(v) }
         else
@@ -31,7 +30,7 @@ class IngestWorkJob < CreateWorkJob
     end
 
     if components.count <= 1
-      return log.fail!('No records ingested!') if components.count == 0
+      return log.fail!('No records ingested!') if components.count.zero?
       return log.success! if status.first
       log.fail!(works.first.errors.full_messages.join(' '))
     else
@@ -39,7 +38,7 @@ class IngestWorkJob < CreateWorkJob
       parent = works.first
       previous_level = levels.first
       levels.each_with_index do |level, index|
-        next unless index > 0
+        next unless index.positive?
         if level < previous_level
 
           # changing from sub-component to component, save the component with sub-components members
@@ -59,23 +58,24 @@ class IngestWorkJob < CreateWorkJob
 
         previous_level = level
         parent.ordered_members << works[index]
-
       end
 
       # set default thumbnail for the complex object
-      set_thumbnail works
+      assign_thumbnail works
 
       # save the object with the component member relationship
       begin
         parent.save
         works.first.save if parent != works.first
-      rescue Exception => e
+      rescue StandardError => e
         parent.errors.add(:base, :add_child_relationship_failed, message: e.to_s)
         status[0] = false
       end
 
       # report the ingest status
-      return log.fail!(works.select {|work| work.errors.full_messages.join(' ') if work.errors.count > 0}) if status.select { |s| s == false }.count > 0
+      if status.select { |s| s == false }.count.positive?
+        return log.fail!(works.select { |work| work.errors.full_messages.join(' ') if work.errors.count.positive? })
+      end
       log.success!
     end
   end
@@ -83,18 +83,16 @@ class IngestWorkJob < CreateWorkJob
   private
 
     def to_hash(val)
-      begin
-        val.start_with?(ActiveFedora.fedora.host) ? ActiveFedora::Base.find(ActiveFedora::Base.uri_to_id(val)).uri : val
-      rescue
-        val
-      end
+      val.start_with?(ActiveFedora.fedora.host) ? ActiveFedora::Base.find(ActiveFedora::Base.uri_to_id(val)).uri : val
+    rescue
+      val
     end
 
     # set complex object thumbnail if not set yet.
     # @params [ObjectResource] works
-    def set_thumbnail(works)
+    def assign_thumbnail(works)
       return unless works.count > 1 && works.first.thumbnail.nil?
-      work = works.detect { |work| !work.thumbnail.nil? }
+      work = works.detect { |w| !w.thumbnail.nil? }
       works.first.thumbnail = work.thumbnail if work
     end
 end

@@ -1,4 +1,4 @@
-class IngestLocalFileJob < ActiveJob::Base
+class IngestLocalFileJob < ApplicationJob
   queue_as Hyrax.config.ingest_queue_name
 
   # @param [FileSet] file_set
@@ -9,7 +9,7 @@ class IngestLocalFileJob < ActiveJob::Base
     actor = Hyrax::Actors::FileSetActor.new(file_set, user)
 
     if actor.create_content(File.open(path))
-      #FileUtils.rm(path)
+      # FileUtils.rm(path)
       Hyrax.config.callback.run(:after_import_local_file_success, file_set, user, path)
     else
       Hyrax.config.callback.run(:after_import_local_file_failure, file_set, user, path)

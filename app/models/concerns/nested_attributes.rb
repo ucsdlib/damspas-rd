@@ -5,11 +5,11 @@ module NestedAttributes
   extend ActiveSupport::Concern
 
   included do
-    id_blank = proc { |attributes| attributes[:id].blank? }
-
     # edm:Agent
-    accepts_nested_attributes_for :creator, reject_if: proc { |attributes| attributes[:id].blank? }, allow_destroy: true
-    accepts_nested_attributes_for :contributor, reject_if: proc { |attributes| attributes[:id].blank? }, allow_destroy: true
+    accepts_nested_attributes_for :creator,
+                                  reject_if: proc { |attributes| attributes[:id].blank? }, allow_destroy: true
+    accepts_nested_attributes_for :contributor,
+                                  reject_if: proc { |attributes| attributes[:id].blank? }, allow_destroy: true
 
     # skos:Concept
     accepts_nested_attributes_for :topic, reject_if: proc { |attributes| attributes[:id].blank? }, allow_destroy: true

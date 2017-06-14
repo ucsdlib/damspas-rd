@@ -1,4 +1,4 @@
-describe 'BatchImportJob' do
+describe BatchImportJob do
   let(:user) { create(:user) }
   let(:log) { create(:batch_create_operation, user: user) }
 
@@ -15,7 +15,7 @@ describe 'BatchImportJob' do
 
   describe "#perform" do
     let(:source_metadata) {}
-    let(:template) { File.join(Rails.root, 'imports', 'object_import_template.xlsx') }
+    let(:template) { Rails.root.join('imports', 'object_import_template.xlsx').to_s }
     let(:file1) { File.open(fixture_path + '/files/file_1.jpg') }
     let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
     let(:metadata) { {} }
@@ -26,7 +26,7 @@ describe 'BatchImportJob' do
     let(:actor) { double(curation_concern: work) }
 
     subject do
-      BatchImportJob.perform_later(user,
+      described_class.perform_later(user,
                                     source_metadata,
                                     uploaded_files,
                                     selected_files,
@@ -37,15 +37,16 @@ describe 'BatchImportJob' do
 
     context "Excel XL metadata source" do
       let(:source_metadata) { File.join(fixture_path, 'imports', '/excel_xl_import_test.xlsx') }
+
       it "updates work metadata" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Object One'])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Sub-component One'])
         end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
@@ -58,6 +59,7 @@ describe 'BatchImportJob' do
         let(:metadata) do
           { "permissions_attributes" => [{ "type" => "group", "name" => "public", "access" => "read" }] }
         end
+
         it "sets the groups" do
           subject
           work = ObjectResource.last
@@ -69,6 +71,7 @@ describe 'BatchImportJob' do
         let(:metadata) do
           { "visibility" => "open" }
         end
+
         it "sets public read access" do
           subject
           work = ObjectResource.last
@@ -92,13 +95,13 @@ describe 'BatchImportJob' do
 
       it "updates work metadata" do
         expect(Hyrax::CurationConcern).to receive(:actor).exactly(3).times.and_return(actor)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Object One'])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
         end.and_return(true)
-        expect(actor).to receive(:create).with( Hyrax::Actors::Environment) do |env|
+        expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
           expect(env.attributes).to include(title: ['Test Sub-component One'])
         end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)

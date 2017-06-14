@@ -3,7 +3,7 @@ include Warden::Test::Helpers
 
 feature 'Create a complex Object' do
   context 'a logged in user' do
-    let(:user) { FactoryGirl.create(:user) }    
+    let(:user) { FactoryGirl.create(:user) }
     let(:parent) { FactoryGirl.create(:object_resource, user: user, title: ["Parent Object"]) }
     let(:child1)  { FactoryGirl.create(:object_resource_with_one_file, user: user, title: ["Child 1"]) }
     let(:child2)  { FactoryGirl.create(:object_resource_with_file_and_object, user: user, title: ["Child 2"]) }
@@ -15,7 +15,7 @@ feature 'Create a complex Object' do
       login_as user
       child1.ordered_members << grandChild1
       child1.ordered_members << grandChild2
-      child1.save!      
+      child1.save!
       parent.ordered_members << child1
       parent.ordered_members << child2
       parent.ordered_members << child3
@@ -28,9 +28,9 @@ feature 'Create a complex Object' do
       expect(page).to have_content 'Parent Object'
       expect(page).to have_content 'Child 1'
       expect(page).to have_content 'Child 2'
-      expect(page).to have_content 'Child 3 Object - no attached file'      
+      expect(page).to have_content 'Child 3 Object - no attached file'
       expect(page).to have_content 'Grand Child 1'
       expect(page).to have_content 'Grand Child 2'
-    end 
+    end
   end
 end

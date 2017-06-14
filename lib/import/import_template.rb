@@ -19,6 +19,7 @@ module Import
     end
 
     private
+
       # field value
       def field_value(cell)
         val = cell.value if cell
@@ -47,7 +48,7 @@ module Import
           if headers
             attributes(headers, row).each do |k, v|
               values[k] ||= []
-              values[k].push *v if !v.blank?
+              values[k].push(*v) if v.present?
             end
           else
             headers = parse_headers row

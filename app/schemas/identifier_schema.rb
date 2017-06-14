@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 class IdentifierSchema < ActiveTriples::Schema
   property :identifier, predicate: ::RDF::Vocab::DC.identifier, multiple: false
   property :accession, predicate: ::UcsdTerms.accessionId, multiple: false

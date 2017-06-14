@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   before_action :require_auth, only: [:new, :create, :show, :edit, :update, :destroy]
-  before_action :set_page, only: [:edit, :update, :destroy ]
+  before_action :set_page, only: [:edit, :update, :destroy]
 
   # ------------------------
   # public methods (no auth)
@@ -37,12 +37,10 @@ class PagesController < ApplicationController
   end
 
   # GET /pages/1
-  def show
-  end
+  def show; end
 
   # GET /pages/1/edit
-  def edit
-  end
+  def edit; end
 
   # PATCH/PUT /pages/1
   def update
@@ -60,6 +58,7 @@ class PagesController < ApplicationController
   end
 
   private
+
     def require_auth
       authenticate_user!
     end

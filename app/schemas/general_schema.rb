@@ -1,6 +1,5 @@
-# rubocop:disable Metrics/ClassLength
+# rubocop:disable Metrics/LineLength
 class GeneralSchema < ActiveTriples::Schema
-
   property :description, predicate: ::RDF::Vocab::DC11.description
   property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation
   property :table_of_contents, predicate: ::RDF::Vocab::DC.tableOfContents
@@ -50,9 +49,9 @@ class GeneralSchema < ActiveTriples::Schema
   property :license, predicate: ::RDF::Vocab::DC.rights
 
   # predicates that need discussions?
-  #? property :location, predicate: ::RDF::Vocab::DC.spatial	dpla:Place -- deleted
-  #? property :isReplacedBy		dpla:isReplacedBy                          -- Won't use
-  #? property :replaces		dpla:replaces                                  -- Won't use
+  # ? property :location, predicate: ::RDF::Vocab::DC.spatial	dpla:Place -- deleted
+  # ? property :isReplacedBy		dpla:isReplacedBy                          -- Won't use
+  # ? property :replaces		dpla:replaces                                  -- Won't use
   # property :genre, predicate: ::RDF::Vocab::EDM.hasType, class_name: Concept -- deleted
 
   # Fields to auto display. Ignore those for custom display logic and those admin data like (workflow note), title, description, :created_date, :date_created (default), etc.

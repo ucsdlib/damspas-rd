@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SolrDocument
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
@@ -24,9 +25,9 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
 
-  # Do content negotiation for AF models. 
+  # Do content negotiation for AF models.
 
-  use_extension( Hydra::ContentNegotiation )
+  use_extension(Hydra::ContentNegotiation)
 
   def visibility
     if rights_override?
@@ -46,6 +47,6 @@ class SolrDocument
 
   # override itemtype for schema.org
   def itemtype
-    Hyrax::ResourceTypesService.microdata_type(resource_type.first) if !resource_type.nil? && !resource_type.empty?
+    Hyrax::ResourceTypesService.microdata_type(resource_type.first) if resource_type.present?
   end
 end

@@ -4,7 +4,6 @@ module CommonMetadata
   extend ActiveSupport::Concern
 
   included do
-
     # GeneralSchema
     apply_schema GeneralSchema, ActiveFedora::SchemaIndexingStrategy.new(
       ActiveFedora::Indexers::GlobalIndexer.new([:stored_searchable, :symbol])
@@ -18,6 +17,5 @@ module CommonMetadata
     (LocalAuthoritySchema.properties + MarcrelSchema.properties).each do |prop|
       property prop.name, prop.to_h
     end
-
   end
 end

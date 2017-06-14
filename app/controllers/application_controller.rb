@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
       anon = User.anonymous(request.remote_ip)
       if anon.campus?
         @current_user = anon
-        logger.warn "#{self.class.name}: wrapping request in anonymous user session (#{current_user})  from ip #{request.remote_ip} to_s: #{anon.to_s}"
+        logger.warn "#{self.class.name}: anonymous session (#{current_user}) from ip #{request.remote_ip}: #{anon}"
       end
     end
     yield
@@ -23,10 +23,8 @@ class ApplicationController < ActionController::Base
   include Hyrax::ThemedLayoutController
   with_themed_layout '1_column'
 
-
   protect_from_forgery with: :exception
   # disabling CSRF protection for the sign_in action to walk around error InvalidAuthenticityToken
   # in Devise::SessionsController#create
-  skip_before_filter :verify_authenticity_token, if: -> { controller_name == 'sessions' && action_name == 'create' }
+  skip_before_action :verify_authenticity_token, if: -> { controller_name == 'sessions' && action_name == 'create' }
 end
-

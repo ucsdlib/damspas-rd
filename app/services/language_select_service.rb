@@ -6,11 +6,11 @@ class LanguageSelectService < Hyrax::QaSelectService
 
   def get_uri(label)
     auth = authority.all.select { |e| e[:label] == label }
-    auth.first[:id] if !auth.empty?
+    auth.first[:id] unless auth.empty?
   end
 
   def get_label(id)
     auth = authority.find(id)
-    auth.nil? ? id : auth[:label] 
+    auth.nil? ? id : auth[:label]
   end
 end

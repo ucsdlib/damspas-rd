@@ -21,12 +21,11 @@ class BatchImportJob < ApplicationJob
   private
 
     def create(user, data_file, uploaded_files, selected_files, attributes, template_file, log)
-
       uploaded_files_map = {}
       remote_files_map = {}
 
       uploaded_files.each do |id|
-        f = Hyrax::UploadedFile.find(id).file if !id.blank?
+        f = Hyrax::UploadedFile.find(id).file if id.present?
         uploaded_files_map[File.basename(f.current_path)] = id
       end
 
@@ -34,15 +33,9 @@ class BatchImportJob < ApplicationJob
         remote_files_map[f[:file_name]] = f
       end
 
-      #model = model_to_create(attributes) #::ObjectResource #
+      # model = model_to_create(attributes) #::ObjectResource #
 
-      Import::TabularImporter.new(user,
-                                    data_file,
-                                    uploaded_files_map,
-                                    remote_files_map,
-                                    attributes,
-                                    template_file,
-                                    log
-                                    ).import
+      Import::TabularImporter.new(user, data_file, uploaded_files_map,
+                                  remote_files_map, attributes, template_file, log).import
     end
 end

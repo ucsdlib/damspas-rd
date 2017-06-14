@@ -2,7 +2,7 @@ module SchemaPresenterBehavior
   extend ActiveSupport::Concern
 
   included do
-    self.all_properties.each do |prop|
+    all_properties.each do |prop|
       term = prop.name.to_sym
       delegate term, to: :solr_document
     end
@@ -10,7 +10,8 @@ module SchemaPresenterBehavior
 
   module ClassMethods
     def all_properties
-      GeneralSchema.properties + IdentifierSchema.properties + LocalAuthoritySchema.properties + MarcrelSchema.properties
+      GeneralSchema.properties + IdentifierSchema.properties +
+        LocalAuthoritySchema.properties + MarcrelSchema.properties
     end
 
     def terms
@@ -19,7 +20,7 @@ module SchemaPresenterBehavior
        :based_near, :related_url].tap do |terms|
         all_properties.each do |prop|
           term = prop.name.to_sym
-          terms << term if !terms.include? term
+          terms << term unless terms.include? term
         end
       end
     end

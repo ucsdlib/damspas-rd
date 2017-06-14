@@ -22,7 +22,7 @@ module Import
     # yield the attributes from one row of the file
     def each(&_block)
       @data.each do |row|
-        continue unless !row.nil?
+        continue if row.nil?
         if @headers
           yield attributes(headers, row)
         else
@@ -32,6 +32,7 @@ module Import
     end
 
     private
+
       # attributes for a record
       def attributes(headers, row)
         {}.tap do |attrs|
@@ -50,29 +51,33 @@ module Import
         attrs[key] ||= []
         values.each do |val|
           vals = parse_value(val)
-          attrs[key].push *vals
+          attrs[key].push(*vals)
         end
       end
 
       def parse_value(val)
-        return Array(val) unless !val.to_s.index('|').nil?
+        return Array(val) if val.to_s.index('|').nil?
         [].tap do |vals|
-          s = []
-          val.each_char do |char|
-            if char == '|'
-              if s[-1] == '\\'
-                s[-1] = '|'
-              else
-                vals << s.join.strip
-                s = []
-              end
-            else
-              s << char
-            end
-          end
-
-          vals << s.join.strip if !s.empty?
+          parse_escaped_values vals, val
         end
+      end
+
+      def parse_escaped_values(vals, val)
+        s = []
+        val.each_char do |char|
+          if char == '|'
+            if s[-1] == '\\'
+              s[-1] = '|'
+            else
+              vals << s.join.strip
+              s = []
+            end
+          else
+            s << char
+          end
+        end
+
+        vals << s.join.strip unless s.empty?
       end
   end
 end
