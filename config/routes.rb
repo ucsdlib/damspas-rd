@@ -32,8 +32,6 @@ Rails.application.routes.draw do
 
   resources :batch_import, only: [:new, :create], controller: 'batch_import'
 
-  resources :pages
-  get '/p/:id', to: 'pages#view', :as => 'view_page'
 
   get 'dams_authorities/:authority/:id', to: 'dams_authorities#show', as: 'authority', :constraints => { authority: /(ucsd_agent|concept|place)/ }
   resources :records
@@ -46,5 +44,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'faq' => 'hyrax/pages#show', id: 'faq_page'
+  get 'takedown' => 'hyrax/pages#show', id: 'takedown_page'
+  get 'search-tips' => 'hyrax/pages#show', id: 'search-tips_page'
+    
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
