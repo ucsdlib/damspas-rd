@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   resources :welcome, only: 'index'
   root 'hyrax/homepage#index'
   curation_concerns_basic_routes
-  curation_concerns_embargo_management
   concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
@@ -44,9 +43,9 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'faq' => 'hyrax/pages#show', id: 'faq_page'
-  get 'takedown' => 'hyrax/pages#show', id: 'takedown_page'
-  get 'search-tips' => 'hyrax/pages#show', id: 'search-tips_page'
+  get 'faq' => 'hyrax/pages#show', key: 'faq_page'
+  get 'takedown' => 'hyrax/pages#show', key: 'takedown_page'
+  get 'search-tips' => 'hyrax/pages#show', key: 'search-tips_page'
     
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

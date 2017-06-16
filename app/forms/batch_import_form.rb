@@ -2,6 +2,8 @@ class BatchImportForm < Hyrax::Forms::WorkForm
   self.model_class = BatchImportItem
   include SchemaEditFormBehavior
 
+  attr_accessor :payload_concern # a Class name: what is form creating a batch of?
+
   self.required_fields = [:license]
 
   # The WorkForm delegates `#depositor` to `:model`, but `:model` in the

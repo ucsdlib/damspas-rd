@@ -10,8 +10,18 @@ module BatchImportControllerBehavior
 
   def create
     authenticate_user!
-    create_update_job
-    flash[:notice] = t('hyrax.works.new.after_create_html', application_name: view_context.application_name)
+    unless Flipflop.batch_upload?
+      respond_to do |wants|
+        wants.json do
+          return render_json_response(response_type: :forbidden,
+                                      message: view_context.t('hyrax.batch_uploads.disabled'))
+        end
+        wants.html do
+          return redirect_to hyrax.my_works_path, alert: view_context.t('hyrax.batch_uploads.disabled')
+        end
+      end
+    end
+    handle_payload_concern!
     redirect_after_update
   end
 
@@ -24,7 +34,25 @@ module BatchImportControllerBehavior
 
   protected
 
+    def build_form
+      super
+      @form.payload_concern = params[:payload_concern] || Hyrax.primary_work_type.model_name.name
+    end
+
+    def handle_payload_concern!
+      unsafe_pc = params.fetch(:batch_import_item, {})[:payload_concern]
+      # Calling constantize on user params is disfavored (per brakeman),
+      # so we sanitize by matching it against an authorized model.
+      safe_pc = Hyrax::SelectTypeListPresenter
+                .new(current_user).authorized_models.map(&:to_s).find { |x| x == unsafe_pc }
+      raise CanCan::AccessDenied, "Cannot create an object of class '#{unsafe_pc}'" unless safe_pc
+      # authorize! :create, safe_pc
+      create_update_job(safe_pc)
+    end
+
     def redirect_after_update
+      flash[:notice] = view_context.t('hyrax.works.create.after_create_html',
+                                      application_name: view_context.application_name)
       if uploading_on_behalf_of?
         redirect_to hyrax.dashboard_shares_path
       else
@@ -32,15 +60,15 @@ module BatchImportControllerBehavior
       end
     end
 
-    def create_update_job
+    def create_update_job(klass)
       log = Hyrax::BatchCreateOperation.create!(user: current_user, operation_type: "Batch Imports")
 
       uploaded_files = params.fetch(:uploaded_files, [])
       selected_files = params.fetch(:selected_files, {}).values
-      create_job uploaded_files, selected_files, log
+      create_job klass, uploaded_files, selected_files, log
     end
 
-    def create_job(uploaded_files, selected_files, log)
+    def create_job(klass, uploaded_files, selected_files, log)
       browse_everything_urls = uploaded_files & selected_files.map { |f| f[:url] }
 
       # we need the hash of files with url and file_name
@@ -55,7 +83,7 @@ module BatchImportControllerBehavior
       BatchImportJob.perform_later(current_user, source_file,
                                    uploaded_files - browse_everything_urls,
                                    browse_everything_files,
-                                   form_attributes.to_h,
+                                   form_attributes.to_h.merge!(model: klass),
                                    import_template,
                                    log)
     end

@@ -4,6 +4,7 @@ module Hyrax
     include Hyrax::BreadcrumbsForCollections
 
     include LocalAuthorityHashConverter
+    include LocalAuthorityValueConverter
 
     # The search builder to find the collection
     self.single_item_search_builder_class = ::SingleCollectionSearchBuilder
@@ -32,6 +33,9 @@ module Hyrax
 
     def collection_params
       attrs = super
+
+      # convert authority value to hash
+      authority_hash attrs
 
       # permit the nested attributes and clear the existing attributes derived from nested resources.
       attrs.keys.each do |key|

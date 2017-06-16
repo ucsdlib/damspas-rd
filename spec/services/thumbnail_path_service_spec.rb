@@ -8,7 +8,11 @@ RSpec.describe ThumbnailPathService do
   context "with a FileSet" do
     let(:object) { build(:file_set, id: '999') }
 
-    before { allow(object).to receive(:original_file).and_return(original_file) }
+    before do
+      allow(object).to receive(:original_file).and_return(original_file)
+      # https://github.com/projecthydra/active_fedora/issues/1251
+      allow(object).to receive(:persisted?).and_return(true)
+    end
 
     context "that has a thumbnail" do
       let(:original_file) { mock_file_factory(mime_type: 'image/jpeg') }
@@ -34,7 +38,11 @@ RSpec.describe ThumbnailPathService do
   context "with metadata only visibility FileSet" do
     let(:object) { build(:file_set, id: '999', rights_override: 'metadata-only') }
 
-    it "is dc_not_available icon" do
+    before do
+      allow(object).to receive(:persisted?).and_return(true)
+    end
+
+    it "shows dc_not_available icon" do
       expect(subject).to match %r{/assets/dc_not_available-.+.jpg}
     end
   end
@@ -42,7 +50,10 @@ RSpec.describe ThumbnailPathService do
   context "with culturally sensitive visibility FileSet" do
     let(:object) { build(:file_set, id: '999', rights_override: 'culturally-sensitive') }
 
-    it "is thumb-restricted icon" do
+    before do
+      allow(object).to receive(:persisted?).and_return(true)
+    end
+    it "shows thumb-restricted icon" do
       expect(subject).to match %r{/assets/thumb-restricted-.+.png}
     end
   end

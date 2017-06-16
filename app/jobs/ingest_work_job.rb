@@ -14,14 +14,6 @@ class IngestWorkJob < CreateWorkJob
     components.each do |attributes|
       levels << Import::TabularImporter.const_get(attributes.delete(:level).delete('-').upcase)
 
-      attributes.each do |_key, value|
-        if value.is_a? Array
-          value.map! { |v| to_hash(v) }
-        else
-          to_hash(value)
-        end
-      end
-
       work = model.constantize.new
       works << work
       current_ability = Ability.new(user)
@@ -81,12 +73,6 @@ class IngestWorkJob < CreateWorkJob
   end
 
   private
-
-    def to_hash(val)
-      val.start_with?(ActiveFedora.fedora.host) ? ActiveFedora::Base.find(ActiveFedora::Base.uri_to_id(val)).uri : val
-    rescue
-      val
-    end
 
     # set complex object thumbnail if not set yet.
     # @params [ObjectResource] works

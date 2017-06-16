@@ -6,7 +6,15 @@ describe BatchImportController do
   let(:metadata) { {} }
   let(:uploaded_files) { [upload1.id.to_s] }
   let(:selected_files) { [] }
-  let(:expected_params) { { 'visibility' => 'open' } }
+  let(:expected_params) { { 'visibility' => 'open', :model => 'ObjectResource' } }
+  let(:parameters) do
+    {
+      source_metadata: source_metadata,
+      uploaded_files: [upload1.id.to_s],
+      selected_files: {},
+      batch_import_item: { visibility: 'open', payload_concern: 'ObjectResource' }
+    }
+  end
 
   before do
     sign_in user
@@ -25,15 +33,26 @@ describe BatchImportController do
     let(:source_metadata) { Rack::Test::UploadedFile.new(file) }
 
     describe "#create" do
-      context "enquing a update job" do
-        it "is successful" do
-          parameters = {
-            source_metadata: source_metadata,
-            uploaded_files: [upload1.id.to_s],
-            selected_files: {},
-            batch_import_item: { visibility: 'open' }
-          }
+      context 'when feature is disabled' do
+        before do
+          allow(Flipflop).to receive(:batch_upload?).and_return(false)
+        end
+        it 'redirects with an error message' do
+          post :create, params: parameters.merge(format: :html)
+          expect(response).to redirect_to Hyrax::Engine.routes.url_helpers.my_works_path(locale: 'en')
+          expect(flash[:alert]).to include('Feature disabled by administrator')
+        end
+        context 'when json is requested' do
+          it 'returns an HTTP 403' do
+            post :create, params: parameters.merge(format: :json)
+            expect(response).to have_http_status(403)
+            expect(response.body).to include('Feature disabled by administrator')
+          end
+        end
+      end
 
+      context "enqueue an update job" do
+        it "is successful" do
           post :create, params: parameters
           expect(response).to redirect_to "#{Hyrax::Engine.routes.url_helpers.dashboard_works_path}?locale=en"
           expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
@@ -45,10 +64,7 @@ describe BatchImportController do
       subject { controller.send(:attributes_for_actor) }
 
       before do
-        controller.params = { source_metadata: source_metadata,
-                              uploaded_files: [upload1.id.to_s],
-                              selected_files: {},
-                              batch_import_item: { visibility: 'open' } }
+        controller.params = parameters
       end
 
       let(:expected_params) do
@@ -65,15 +81,8 @@ describe BatchImportController do
     let(:source_metadata) { Rack::Test::UploadedFile.new(File.open(fixture_path + '/imports/csv_import_test.csv')) }
 
     describe "#create" do
-      context "enquing a update job" do
+      context "enqueue an update job" do
         it "is successful" do
-          parameters = {
-            source_metadata: source_metadata,
-            uploaded_files: [upload1.id.to_s],
-            selected_files: {},
-            batch_import_item: { visibility: 'open' }
-          }
-
           post :create, params: parameters
           expect(response).to redirect_to "#{Hyrax::Engine.routes.url_helpers.dashboard_works_path}?locale=en"
           expect(flash[:notice]).to include("Your files are being processed by Hyrax in the background.")
@@ -85,10 +94,7 @@ describe BatchImportController do
       subject { controller.send(:attributes_for_actor) }
 
       before do
-        controller.params = { source_metadata: source_metadata,
-                              uploaded_files: [upload1.id.to_s],
-                              selected_files: {},
-                              batch_import_item: { visibility: 'open' } }
+        controller.params = parameters
       end
       let(:expected_params) do
         ActionController::Parameters.new(visibility: 'open', "remote_files" => [], "uploaded_files" => ["1"]).permit!

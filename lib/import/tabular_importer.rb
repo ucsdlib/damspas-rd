@@ -255,7 +255,7 @@ module Import
       # @param [Hash] attributes
       # @return: [String] the model to create
       def model_to_create(attributes)
-        Hyrax.config.model_to_create.call(attributes)
+        attributes.delete(:model) || attributes.delete('model')
       end
 
       # convert authority attributes

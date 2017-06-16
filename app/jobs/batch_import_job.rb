@@ -1,4 +1,4 @@
-class BatchImportJob < ApplicationJob
+class BatchImportJob < Hyrax::ApplicationJob
   queue_as :ingest
 
   before_enqueue do |job|

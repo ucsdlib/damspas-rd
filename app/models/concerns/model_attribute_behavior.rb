@@ -10,9 +10,6 @@ module ModelAttributeBehavior
         # language label conversion
         convert_languages attrs
 
-        # convert authorities to hash
-        authority_hash attrs
-
       # Invalid language input will be caught by validation
       rescue ArgumentError => err
         Rails.logger.debug "Invalid language input (#{attrs['language'].inspect}): #{err}"
@@ -35,16 +32,6 @@ module ModelAttributeBehavior
         LanguageSelectService.new.get_uri(v) || (raise ArgumentError, 'Invalid language error')
       end
       attrs['language'] = language_converted
-    end
-
-    def authority_hash(attrs)
-      attrs.dup.each do |key, value|
-        if value.is_a? Array
-          attrs[key].map! { |v| to_hash(v) }
-        else
-          attrs[key] = to_hash(value)
-        end
-      end
     end
 
     def permitted_time_span_params
@@ -102,12 +89,6 @@ module ModelAttributeBehavior
     # Return the hash of attributes that are multivalued and not uploaded files
     def multivalued_form_attributes(attributes)
       attributes.select { |_, v| v.respond_to?(:select) && !v.respond_to?(:read) }
-    end
-
-    def to_hash(val)
-      val.start_with?(ActiveFedora.fedora.host) ? ActiveFedora::Base.find(ActiveFedora::Base.uri_to_id(val)).uri : val
-    rescue
-      val
     end
   end
 end
