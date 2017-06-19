@@ -22,48 +22,68 @@ feature 'Pages' do
       expect(page).to have_content 'Thank you for your message!'
     end
 
-    scenario 'should be able to see FAQ page' do
+    scenario 'should be able to edit and see FAQ page' do
+      visit '/dashboard'
+      find(:xpath, "//a[@href='/pages/edit?locale=en']").click
+      click_link 'FAQ Page'
+      fill_in 'content_block_faq', with: 'Frequently Asked Questions (FAQ)'
+      find(:xpath, "(//input[@type='submit'])[3]").click
+      expect(page).to have_content 'Frequently Asked Questions (FAQ)'
+
       visit root_path
       click_link 'FAQ'
-      click_button 'Edit'
-      fill_in 'text_area_faq_page', with: 'Frequently Asked Questions (FAQ)'
-      click_button 'Save'
       expect(page).to have_content 'Frequently Asked Questions (FAQ)'
     end
 
-    scenario 'should be able to see Help page' do
+    scenario 'should be able to edit and see Help page' do
+      visit '/dashboard'
+      find(:xpath, "//a[@href='/pages/edit?locale=en']").click
+      click_link 'Help Page'
+      fill_in 'content_block_help', with: 'Help Test'
+      find(:xpath, "(//input[@type='submit'])[2]").click
+      expect(page).to have_content 'Help Test'
+
       visit root_path
       click_link 'Help'
-      click_button 'Edit'
-      fill_in 'text_area_help_page', with: 'Help Test'
-      click_button 'Save'
-      expect(page).to have_content 'Help'
+      expect(page).to have_content 'Help Test'
     end
 
-    scenario 'should be able to see About page' do
+    scenario 'should be able to edit and see About page' do
+      visit '/dashboard'
+      find(:xpath, "//a[@href='/pages/edit?locale=en']").click
+      click_link 'About Page'
+      fill_in 'content_block_about', with: 'About Digital Collections'
+      find(:xpath, "(//input[@type='submit'])[1]").click
+      expect(page).to have_content 'About Digital Collections'
+
       visit root_path
       click_link 'About'
-      click_button 'Edit'
-      fill_in 'text_area_about_page', with: 'About Digital Collections'
-      click_button 'Save'
       expect(page).to have_content 'About Digital Collections'
     end
 
-    scenario 'should be able to see Search Tips page' do
+    scenario 'should be able to edit and see Search Tips page' do
+      visit '/dashboard'
+      find(:xpath, "//a[@href='/pages/edit?locale=en']").click
+      click_link 'Search Tips Page'
+      fill_in 'content_block_search_tips', with: 'Search Tips'
+      find(:xpath, "(//input[@type='submit'])[5]").click
+      expect(page).to have_content 'Search Tips'
+
       visit root_path
       click_link 'Search Tips'
-      click_button 'Edit'
-      fill_in 'text_area_search-tips_page', with: 'Search Tips'
-      click_button 'Save'
       expect(page).to have_content 'Search Tips'
     end
 
-    scenario 'should be able to see Take Down Policy page' do
+    scenario 'should be able to edit and see Take Down Policy page' do
+      visit '/dashboard'
+      find(:xpath, "//a[@href='/pages/edit?locale=en']").click
+      click_link 'Take Down Page'
+      fill_in 'content_block_takedown', with: 'Notice and Takedown Policy'
+      find(:xpath, "(//input[@type='submit'])[4]").click
+      expect(page).to have_content 'Notice and Takedown Policy'
+
       visit root_path
       click_link 'Take Down Policy'
-      click_button 'Edit'
-      fill_in 'text_area_takedown_page', with: 'Notice and Takedown Policy'
-      click_button 'Save'
       expect(page).to have_content 'Notice and Takedown Policy'
     end
   end

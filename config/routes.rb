@@ -43,9 +43,9 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'faq' => 'hyrax/pages#show', key: 'faq_page'
-  get 'takedown' => 'hyrax/pages#show', key: 'takedown_page'
-  get 'search-tips' => 'hyrax/pages#show', key: 'search-tips_page'
+  get 'faq' => 'hyrax/pages#show', key: 'faq'
+  get 'takedown' => 'hyrax/pages#show', key: 'takedown'
+  get 'search-tips' => 'hyrax/pages#show', key: 'search_tips'
     
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
