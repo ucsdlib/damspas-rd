@@ -44,7 +44,7 @@ class GeneralSchema < ActiveTriples::Schema
   property :copyright_jurisdiction, predicate: ::RDF::Vocab::PREMIS.hasCopyrightJurisdiction
 
   # xsd:anyURI with CVs
-  property :rights_override, predicate: VisibilityService::PREDICATE_RIGHTS_OVERRIDE, multiple: false
+  # property :rights_override, predicate: VisibilityService::PREDICATE_RIGHTS_OVERRIDE, multiple: false
   property :copyright_status, predicate: ::RDF::Vocab::PREMIS.hasCopyrightStatus
   property :license, predicate: ::RDF::Vocab::DC.rights
 

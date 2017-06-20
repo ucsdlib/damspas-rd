@@ -18,7 +18,7 @@ describe BatchImportJob do
     let(:template) { Rails.root.join('imports', 'object_import_template.xlsx').to_s }
     let(:file1) { File.open(fixture_path + '/files/file_1.jpg') }
     let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
-    let(:metadata) { {} }
+    let(:metadata) { { model: 'ObjectResource' } }
     let(:uploaded_files) { [upload1.id.to_s] }
     let(:selected_files) { [] }
     let(:errors) { double(full_messages: "It's broke!") }
@@ -57,7 +57,10 @@ describe BatchImportJob do
 
       context "when permissions_attributes are passed" do
         let(:metadata) do
-          { "permissions_attributes" => [{ "type" => "group", "name" => "public", "access" => "read" }] }
+          {
+            "model" => "ObjectResource",
+            "permissions_attributes" => [{ "type" => "group", "name" => "public", "access" => "read" }]
+          }
         end
 
         it "sets the groups" do
@@ -69,7 +72,7 @@ describe BatchImportJob do
 
       context "when visibility is passed" do
         let(:metadata) do
-          { "visibility" => "open" }
+          { "visibility" => "open", "model" => "ObjectResource" }
         end
 
         it "sets public read access" do

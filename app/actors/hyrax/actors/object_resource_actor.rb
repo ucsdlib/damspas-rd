@@ -3,10 +3,15 @@
 module Hyrax
   module Actors
     class ObjectResourceActor < Hyrax::Actors::BaseActor
+      include LocalAuthorityValueConverter
+
       protected
 
         # override to clear the existing nested attribute that will be replaced.
         def apply_save_data_to_curation_concern(env)
+          # convert value to authority hash
+          authority_hash env.attributes
+
           # remove existing attributes that are carried from nested attributes
           env.attributes.dup.each do |k, v|
             attributes = env.curation_concern.attributes

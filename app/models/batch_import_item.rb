@@ -6,6 +6,8 @@ class BatchImportItem < ActiveFedora::Base
 
   include ::CommonMetadata
 
+  attr_accessor :payload_concern # a Class name: what is form creating a batch of?
+
   # This mocks out the behavior of Hydra::PCDM::PcdmBehavior
   def in_collection_ids
     []

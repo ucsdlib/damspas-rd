@@ -3,6 +3,7 @@ class Collection < ActiveFedora::Base
   include ::Hyrax::CollectionBehavior
   include ActiveModel::Validations
   # You can replace these metadata if they're not suitable
+  include ::RightsOverrideBehavior
   include CommonMetadata
 
   include NestedAttributes

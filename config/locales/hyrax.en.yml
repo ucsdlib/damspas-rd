@@ -86,6 +86,11 @@ en:
         class: "label-warning"
         text: "Culturally Sensitive"
         note_html: Files available after click through to indicate that materials may be of a sensitive nature.
+    pages:
+      tabs:
+        faq_page: FAQ Page
+        takedown_page: Take Down Page
+        search_tips_page: Search Tips Page
   simple_form:
     labels:
       defaults:

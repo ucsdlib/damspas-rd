@@ -22,8 +22,11 @@ Hyrax.config do |config|
   # How many notifications should be displayed on the dashboard
   # config.max_notifications_for_dashboard = 5
 
-  # How frequently should a file be audited.
-  # config.max_days_between_audits = 7
+  # How often clients should poll for notifications
+   config.notifications_update_poll_interval = 60.seconds
+
+  # How frequently should a file be fixity checked
+  # config.max_days_between_fixity_checks = 7
 
   # Enable displaying usage statistics in the UI
   # Defaults to FALSE
@@ -43,10 +46,10 @@ Hyrax.config do |config|
   # Where to store tempfiles, leave blank for the system temp directory (e.g. /tmp)
   # config.temp_file_base = '/home/developer1'
 
-  # Specify the form of hostpath to be used in Endnote exports
+  # Hostpath to be used in Endnote exports
   # config.persistent_hostpath = 'http://localhost/files/'
 
-  # If you have ffmpeg installed and want to transcode audio and video uncomment this line
+  # If you have ffmpeg installed and want to transcode audio and video set to true
   config.enable_ffmpeg = true
 
   # Hyrax uses NOIDs for files and collections instead of Fedora UUIDs
@@ -71,6 +74,10 @@ Hyrax.config do |config|
   # Path to the file derivatives creation tool
   # config.libreoffice_path = "soffice"
 
+  # Option to enable/disable full text extraction from PDFs
+  # Default is true, set to false to disable full text extraction
+  # config.extract_full_text = true
+
   # How many seconds back from the current time that we should show by default of the user's activity on the user's dashboard
   # config.activity_to_show_default_seconds_since_now = 24*60*60
 
@@ -78,12 +85,12 @@ Hyrax.config do |config|
   # of Zotero-managed research items.
   # config.arkivo_api = false
 
-  # Location autocomplete uses geonames to search for named regions.
-  # Specify the user for connecting to geonames:
+  # Location autocomplete uses geonames to search for named regions
+  # Username for connecting to geonames
   # config.geonames_username = ''
 
   # Should the acceptance of the licence agreement be active (checkbox), or
-  # implied when the save button is pressed? Set to true for active.
+  # implied when the save button is pressed? Set to true for active
   # The default is true.
   # config.active_deposit_agreement_acceptance = true
 
@@ -93,19 +100,19 @@ Hyrax.config do |config|
   config.work_requires_files = false
 
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
-  # config.always_display_share_button = true
+  # config.display_share_button_when_not_logged_in = true
 
   # The user who runs batch jobs. Update this if you aren't using emails
   # config.batch_user_key = 'batchuser@example.com'
 
-  # The user who runs audit jobs. Update this if you aren't using emails
+  # The user who runs fixity check jobs. Update this if you aren't using emails
   # config.audit_user_key = 'audituser@example.com'
   #
-  # The banner image. Should be 5000px wide by 1000px tall.
+  # The banner image. Should be 5000px wide by 1000px tall
   # config.banner_image = 'https://cloud.githubusercontent.com/assets/92044/18370978/88ecac20-75f6-11e6-8399-6536640ef695.jpg'
 
-  # Temporary path to hold uploads before they are ingested into FCrepo.
-  # This must be a lambda that returns a Pathname
+  # Temporary paths to hold uploads before they are ingested into FCrepo
+  # These must be lambdas that return a Pathname. Can be configured separately
   #  config.upload_path = ->() { Rails.root + 'tmp' + 'uploads' }
   #  config.cache_path = ->() { Rails.root + 'tmp' + 'uploads' + 'cache' }
 
@@ -132,15 +139,14 @@ Hyrax.config do |config|
   #   @see Hyrax::LicenseService for implementation details
   # config.license_service_class = Hyrax::LicenseService
 
-  # Labels for permission levels
-  # config.permission_levels = { "Choose Access" => "none", "View/Download" => "read", "Edit" => "edit" }
+  # Labels for display of permission levels
+  # config.permission_levels = { "View/Download" => "read", "Edit access" => "edit" }
+
+  # Labels for permission level options used in dropdown menus
+  # config.permission_options = { "Choose Access" => "none", "View/Download" => "read", "Edit" => "edit" }
 
   # Labels for owner permission levels
   # config.owner_permission_levels = { "Edit Access" => "edit" }
-
-  # Returns a lambda that takes a hash of attributes and returns a string of the model
-  # name. This is called by the batch upload process
-  # config.model_to_create = ->(_attributes) { Hyrax.primary_work_type.model_name.name }
 
   # Path to the ffmpeg tool
   # config.ffmpeg_path = 'ffmpeg'
@@ -170,11 +176,8 @@ Hyrax.config do |config|
   # Path to the Fedora import export tool jar file
   # config.import_export_jar_file_path = "tmp/fcrepo-import-export.jar"
   #
-  # Location where descriptive rdf should be exported
-  # config.descriptions_directory = "tmp/descriptions"
-  #
-  # Location where binaries are exported
-  # config.binaries_directory = "tmp/binaries"
+  # Location where BagIt files should be exported
+  # config.bagit_dir = "tmp/descriptions"
 
   # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
   begin

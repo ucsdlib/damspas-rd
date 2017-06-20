@@ -15,6 +15,7 @@ class Ability
   # Abilities that should only be granted to admin users
   def admin_permissions
     return unless admin?
+    can [:read, :update], :ContentBlock
     can [:manage], :all
   end
 
