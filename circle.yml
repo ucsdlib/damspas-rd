@@ -33,7 +33,3 @@ dependencies:
 database:
   override:
     - bundle exec rake db:migrate
-
-test:
-  override:
-    - bundle exec rake spec
