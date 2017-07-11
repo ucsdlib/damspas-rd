@@ -1,0 +1,8 @@
+[sshd]
+enabled = true
+port = ssh
+#action = firewallcmd-ipset
+logpath = %(sshd_log)s
+maxretry = 3
+bantime = 604800
+findtime = 86400

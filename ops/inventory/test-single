@@ -1,0 +1,8 @@
+[fedora]
+tilby image="chrismeyers/centos7" redis_travis_ci=yes
+
+[stack:children]
+fedora
+
+[all:children]
+fedora

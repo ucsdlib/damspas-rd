@@ -1,0 +1,8 @@
+---
+- name: copy resque init script
+  template: src=sidekiq.j2 dest=/usr/lib/systemd/system/sidekiq mode=0755
+  become: yes
+
+- name: start resque
+  service: name=sidekiq state=started enabled=yes
+  become: yes

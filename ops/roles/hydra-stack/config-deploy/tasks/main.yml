@@ -1,0 +1,23 @@
+---
+# ROLE: hydra-stack
+# roles/hydra-stack/config-deploy/tasks/main.yml
+#
+# creates shared config files for deploy
+#
+- name: make shared root config directory
+  become: yes
+  file:
+    path: "{{ shared_root }}/config"
+    recurse: true
+    state: directory
+    mode: 0755
+
+- name: create shared fedora and solr configs
+  become: yes
+  template: src={{ item }}.j2 dest={{ shared_root }}/config/{{ item }} backup=yes
+  with_items:
+    - fedora.yml
+    - solr.yml
+    - blacklight.yml
+# the solr.yml template requires a solr_port variable, which is set in the install tasks
+# for solr 4 it is 8080, for solr 5 it is 8983

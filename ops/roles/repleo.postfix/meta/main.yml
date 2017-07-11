@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: Jeroen Arnoldus
+  description: Ansible role for installing postfix SMTP with spamassassin 
+  company: Repleo, Amstelveen, Holland
+  license: GPLv3
+  min_ansible_version: 2.0
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - postfix
+    - smtp
+    - SSL/TLS
+    - STARTLS
+    - Spamassassin
+    - MTA
+    - mail
+    - server
+dependencies: []

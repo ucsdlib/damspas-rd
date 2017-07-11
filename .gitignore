@@ -34,3 +34,7 @@ playbooks/*.retry
 playbooks/ansible.cfg
 playbooks/hosts
 playbooks/roles
+
+*.retry
+ops/inventory/group_vars/*
+!ops/inventory/group_vars/sample_*

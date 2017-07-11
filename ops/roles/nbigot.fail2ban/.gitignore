@@ -1,0 +1,15 @@
+# OS generated files #
+######################
+
+# IDE files #
+#################
+
+# Vagrant files #
+.virtualbox/
+.vagrant/
+vagrant_ansible_inventory_*
+ansible.cfg
+
+# Other files #
+###############
+!empty

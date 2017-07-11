@@ -1,0 +1,17 @@
+---
+# ROLE: system_setup
+# roles/system_setup/tasks/main.yml
+
+# these two tasks ensure that the capistrano_user will 
+# always belong to a group with the same name
+- name: create install group
+  group: name={{ capistrano_user }} state=present
+
+- name: create install user
+  user: name={{ capistrano_user }} groups={{ capistrano_group }} shell=/bin/bash createhome=yes state=present
+
+- name: chown /opt
+  file: owner={{ capistrano_user }} group={{ capistrano_group }} state=directory path=/opt
+
+- name: create install directory
+  file: owner={{ capistrano_user }} group={{ capistrano_group }} state=directory path={{ install_path }}

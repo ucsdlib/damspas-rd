@@ -1,0 +1,11 @@
+---
+haproxy_socket: /var/lib/haproxy/stats
+haproxy_chroot: /var/lib/haproxy
+haproxy_user: haproxy
+haproxy_group: haproxy
+
+haproxy_frontends: []
+haproxy_backends: []
+
+# Extra global vars (see README for example usage).
+haproxy_global_vars: []

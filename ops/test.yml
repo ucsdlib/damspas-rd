@@ -1,0 +1,30 @@
+---
+- name: Bring up docker containers
+  hosts: localhost
+  gather_facts: false
+  environment:
+    POSTGRES_PASSWORD: "{{ hydra_db_pass }}"
+  tasks:
+    - docker_service:
+        project_name: horton
+        project_src: .
+        scale:
+          fedora: 2
+          solr: 1
+          samvera: 1
+          sidekiq: 1
+          sidekiq_master: 1
+          ha_proxy_www: 1
+          ha_proxy_fedora: 1
+      register: output
+    - meta: refresh_inventory
+#    - debug: msg="group {{ groups['horton_fedora'] }}"
+
+- name: Fix sudoers
+  hosts: horton_fedora:horton_solr:horton_samvera
+  roles:
+    - sudoersfix
+
+- include: configure.yml
+
+#- include: cleanup.yml

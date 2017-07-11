@@ -1,0 +1,9 @@
+- hosts: all
+  vars:
+    - ansible_ssh_user: root
+  tasks:
+    - include: tasks/main.yml
+  handlers:
+    - include: handlers/main.yml
+  vars_files:
+    - 'defaults/main.yml'

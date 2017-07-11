@@ -1,0 +1,48 @@
+- name: Permissions and folders
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
+  tasks:
+    - name: make shared root config directory
+      become: yes
+      file:
+        path: "{{ ansistrano_deploy_to }}/releases"
+        recurse: true
+        state: directory
+        owner: "{{ capistrano_user }}"
+        mode: 0755
+
+- name: Permissions and folders
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
+  tasks:
+    - name: make shared root config directory
+      become: yes
+      file:
+        path: "{{ ansistrano_deploy_to }}/shared"
+        recurse: true
+        state: directory
+        owner: "{{ capistrano_user }}"
+        mode: 0755
+
+- name: Permissions and folders
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
+  tasks:
+    - name: make shared root config directory
+      become: yes
+      file:
+        path: "{{ ansistrano_deploy_to }}"
+        recurse: true
+        state: directory
+        owner: "{{ capistrano_user }}"
+        mode: 0755
+
+- name: Deploy Rails App
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
+  roles:
+    - { role: carlosbuenosvinos.ansistrano-deploy }
+
+
+- name: Restart Sidekiq
+  hosts: "horton_sidekiq:horton_sidekiq_master"
+  tasks:
+    - name: kick sidekiq
+      service: name=sidekiq state=restarted enabled=yes
+      become: yes

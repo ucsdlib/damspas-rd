@@ -1,0 +1,7 @@
+---
+- name: set up ssh keys from github
+  authorized_key: >
+    user="root"
+    key="https://github.com/{{ item }}.keys"
+  with_items: "{{ ssh_keys }}"
+...

@@ -1,0 +1,128 @@
+---
+
+- name: Ensure /etc/postfix directory is owned by root user
+  file: path=/etc/postfix owner=root
+  notify: postfix restart
+
+- name: Ensure /etc/postfix/tls directory exists
+  file: path=/etc/postfix/tls owner=root state=directory mode=0755
+  notify: postfix restart
+
+- name: Configure postfix pt. 1
+  template: src={{item}}.j2 dest=/etc/postfix/{{item}} owner=root group=root mode=0644
+  notify: postfix restart
+  with_items:
+  - main.cf
+  - master.cf
+
+- name: Configure postfix pt. 2
+  template: src=sasl_passwd.j2 dest=/etc/postfix/sasl_passwd owner=root group=root mode=0600
+  register: _postfix_sasl_passwd
+  notify: postfix restart
+
+- name: Configure postfix pt. 3
+  command: /usr/sbin/postmap /etc/postfix/sasl_passwd
+  when: _postfix_sasl_passwd.changed
+
+- name: Configure postfix pt. 4
+  template: src=generic.j2 dest=/etc/postfix/generic owner=root group=root mode=0644
+  register: _postfix_generic
+  notify: postfix restart
+
+- name: Configure postfix pt. 5
+  command: /usr/sbin/postmap /etc/postfix/generic
+  when: _postfix_generic is defined and _postfix_generic.changed
+
+- name: Configure postfix pt. 6 (Debian)
+  command: /usr/sbin/postaliases /etc/aliases creates=/etc/aliases.db
+  when: ansible_os_family == 'Debian'
+
+- name: Configure postfix pt. 6 (Redhat)
+  command: /usr/sbin/postalias /etc/aliases creates=/etc/aliases.db
+  when: ansible_os_family == 'RedHat'
+
+- name: Configure postfix local user relay
+  template: src=virtual.j2 dest=/etc/postfix/virtual-pcre owner=root group=root mode=0644
+  notify: postfix restart
+  when: postfix_local_user_relay_address != ""
+
+- name: Configure postfix sender canonical maps
+  template: src=sender_canonical_maps.j2 dest=/etc/postfix/sender_canonical_maps
+  when: postfix_rewrite_sender_address != ""
+  notify: postfix restart
+
+
+- name: Ensure /etc/postfix/sasl directory exists
+  file: path=/etc/postfix/sasl owner=root state=directory mode=0755
+  when: postfix_smtpd_auth_sasl_enable is defined
+
+- name: Configure postfix sasl authentication
+  template: src=sasl_smtpd.conf.j2 dest=/etc/postfix/sasl/smtpd.conf
+  when: postfix_smtpd_auth_sasl_enable is defined
+  notify: postfix restart
+
+- name: Add postfix user to sasl group
+  action: user name=postfix groups="sasl" append=yes
+  when: postfix_smtpd_auth_sasl_enable is defined
+
+- name: Configure saslauthd
+  template: src=saslauthd.j2 dest=/etc/default/saslauthd
+  when: postfix_smtpd_auth_sasl_enable is defined
+  notify: saslauthd restart
+
+
+- name: Check if lock file exists (Debian)
+  stat: path=/etc/spamassassin/initial_bayes_db_loaded
+  register: initialdb
+  when: ansible_os_family == 'Debian'
+
+- name: Check if lock file exists (RedHat)
+  stat: path=/etc/mail/spamassassin/initial_bayes_db_loaded
+  register: initialdb
+  when: ansible_os_family == 'RedHat'
+
+- name: Configure Database Spamassassin
+  copy: src=spamassassin.bayes dest=/tmp/spamassassin.bayes
+  when: not initialdb.stat.exists 
+
+- name: Restore rights spamassassin directory
+  file: path=/var/lib/spamassassin/.spamassassin state=directory recurse=yes owner=debian-spamd group=debian-spamd
+  when:
+    - not initialdb.stat.exists
+    - ansible_os_family == 'Debian'
+
+- name: Restore rights spamassassin directory
+  file: path=/var/lib/spamassassin/.spamassassin state=directory recurse=yes owner=root group=root
+  when:
+    - not initialdb.stat.exists
+    - ansible_os_family == 'RedHat'
+
+- name: Load initial spamassassin bayes database
+  command: sa-learn --dbpath /var/lib/spamassassin/.spamassassin/ --restore /tmp/spamassassin.bayes
+  when: not initialdb.stat.exists 
+
+- name: create lock file (Debian)
+  file: path=/etc/spamassassin/initial_bayes_db_loaded state=touch owner=root group=root mode=0555
+  when:
+    - not initialdb.stat.exists
+    - ansible_os_family == 'Debian'
+
+- name: create lock file (Redhat)
+  file: path=/etc/mail/spamassassin/initial_bayes_db_loaded state=touch owner=root group=root mode=0555
+  when:
+    - not initialdb.stat.exists
+    - ansible_os_family == 'RedHat'
+
+- name: remove spamassassin bayes database file
+  file: path=/tmp/spamassassin.bayes state=absent
+  notify: spamassassin restart
+
+- name: Configure Spamassassin (Debian)
+  replace: dest=/etc/spamassassin/local.cf regexp='\# rewrite_header Subject \*\*\*\*\*\SPAM\*\*\*\*\*' replace='rewrite_header Subject *****SPAM detected by smtp.repleo.nl*****'
+  notify: spamassassin restart
+  when: ansible_os_family == 'Debian'
+
+- name: Configure Spamassassin (Redhat)
+  replace: dest=/etc/mail/spamassassin/local.cf regexp='\# rewrite_header Subject \*\*\*\*\*\SPAM\*\*\*\*\*' replace='rewrite_header Subject *****SPAM detected by smtp.repleo.nl*****'
+  notify: spamassassin restart
+  when: ansible_os_family == 'RedHat'

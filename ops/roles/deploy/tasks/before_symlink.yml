@@ -1,0 +1,13 @@
+---
+- name: Install bundle
+  shell: bash -l -c "cd {{ ansistrano_release_path.stdout }} && bundle install --deployment --without=\"development test\""
+
+- name: Precompile assets
+  command: bash -l -c "cd {{ ansistrano_release_path.stdout }} && bundle exec rake assets:precompile"
+  environment:
+    RAILS_ENV: '{{ deploy_target }}'
+
+- name: Migrate
+  command: bash -l -c "cd {{ ansistrano_release_path.stdout }} && bundle exec rake db:migrate"
+  environment:
+    RAILS_ENV: '{{ deploy_target }}'

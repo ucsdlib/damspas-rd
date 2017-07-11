@@ -1,0 +1,32 @@
+---
+# ROLE: sufia_dependencies
+# roles/sufia_dependencies/config/tasks/main.yml
+#
+# creates sufia-related shared config files for capistrano 
+#
+- name: make shared root config directory
+  become: yes
+  file:
+    path: "{{ shared_root }}/releases"
+    recurse: true
+    state: directory
+    mode: 0755
+
+
+- name: make shared root config directory
+  become: yes
+  file:
+    path: "{{ shared_root }}/config"
+    recurse: true
+    state: directory
+    mode: 0755
+
+
+- name: create shared config files
+  become: yes
+  template: src={{ item }}.j2 dest={{ shared_root }}/config/{{ item }} backup=yes
+  with_items:
+      - database.yml
+      - redis.yml
+      - resque-pool.yml
+      - secrets.yml

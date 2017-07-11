@@ -1,0 +1,26 @@
+[postgres]
+beany image="postgres" 
+
+[fedora]
+tilby image="chrismeyers/centos7" redis_travis_ci=yes
+bowler image="chrismeyers/centos7" redis_travis_ci=yes
+derby image="chrismeyers/centos7" redis_travis_ci=yes
+
+[solr]
+straw image="chrismeyers/centos7" redis_travis_ci=yes
+ballcap image="chrismeyers/centos7" redis_travis_ci=yes
+
+[samvera]
+beret image="chrismeyers/centos7" redis_travis_ci=yes
+deerstalker image="chrismeyers/centos7" redis_travis_ci=yes
+
+[stack:children]
+fedora
+solr
+samvera
+
+[all:children]
+postgres
+fedora
+solr
+samvera

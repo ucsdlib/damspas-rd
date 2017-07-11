@@ -1,0 +1,20 @@
+---
+- name: Bring up docker containers for inventory iface
+  hosts: localhost
+  roles:
+    - role: provision_docker
+      provision_docker_privileged: true,
+      provision_docker_inventory_group: "{{ groups['robots'] }}"
+
+- name: Run tests for inventory iface
+  hosts: robots
+  vars:
+    file: '/tmp/my_host'
+  roles:
+    # Role under test
+    - role: test_add_file
+      test_add_file_path: "{{ file }}"
+
+  tasks:
+    - include: inc_verify_transformers.yml
+
