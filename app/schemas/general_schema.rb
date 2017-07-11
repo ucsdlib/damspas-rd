@@ -17,7 +17,7 @@ class GeneralSchema < ActiveTriples::Schema
   property :local_attribution, predicate: ::UcsdTerms.localAttribution
   property :location_of_originals, predicate: ::UcsdTerms.locationOfOriginals, multiple: false
   property :material_details, predicate: ::UcsdTerms.materialDetails
-  property :methodz, predicate: ::UcsdTerms.methods
+  property :methodology, predicate: ::UcsdTerms.methodology
   property :physical_description, predicate: ::UcsdTerms.physicalDescription
   property :publication, predicate: ::UcsdTerms.publication
   property :relationship_to_otherLoci, predicate: ::UcsdTerms.relationshipToOtherLoci

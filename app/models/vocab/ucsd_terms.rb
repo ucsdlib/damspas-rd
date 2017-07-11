@@ -15,7 +15,7 @@ class UcsdTerms < RDF::StrictVocabulary('http://library.ucsd.edu/ontology/dams5.
   term :localAttribution, label: "localAttribution".freeze, type: 'rdf:Property'.freeze
   term :locationOfOriginals, label: "locationOfOriginals".freeze, type: 'rdf:Property'.freeze
   term :materialDetails, label: "materialDetails".freeze, type: 'rdf:Property'.freeze
-  term :methods, label: "methods".freeze, type: 'rdf:Property'.freeze
+  term :methodology, label: "methods".freeze, type: 'rdf:Property'.freeze
   term :publication, label: "publication".freeze, type: 'rdf:Property'.freeze
   term :physicalDescription, label: "physicalDescription".freeze, type: 'rdf:Property'.freeze
   term :relationshipToOtherLoci, label: "relationshipToOtherLoci".freeze, type: 'rdf:Property'.freeze
