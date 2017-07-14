@@ -67,7 +67,7 @@ module ModelAttributeBehavior
       count = 0
       {}.tap do |process|
         nested_attrs.each do |_i, e|
-          (e.keys - ["id"]).each do |key|
+          (e.keys - ["id", "access"]).each do |key|
             e[key].each_with_index.map do |val, idx|
               process[(idx + count).to_s] ||= {}
               process[(idx + count).to_s][key] = Array(val)
