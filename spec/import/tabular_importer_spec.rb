@@ -22,8 +22,16 @@ describe Import::TabularImporter do
     let(:upload1) { Hyrax::UploadedFile.create(user: user, file: file1) }
     let(:file2) { File.open(fixture_path + '/files/file_2.jpg') }
     let(:upload2) { Hyrax::UploadedFile.create(user: user, file: file2) }
+    let(:file3) { File.open(fixture_path + '/files/image.jpg') }
+    let(:upload3) { Hyrax::UploadedFile.create(user: user, file: file3) }
     let(:metadata) { { model: 'ObjectResource' } }
-    let(:uploaded_files) { { upload1.file.filename => upload1.id.to_s, upload2.file.filename => upload2.id.to_s } }
+    let(:uploaded_files) do
+      {
+        upload1.file.filename => upload1.id.to_s,
+        upload2.file.filename => upload2.id.to_s,
+        upload3.file.filename => upload3.id.to_s
+      }
+    end
     let(:remote_files) { {} }
     let(:errors) { double(full_messages: "It's broke!") }
     let(:work) { double(errors: errors) }
@@ -51,7 +59,8 @@ describe Import::TabularImporter do
           expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
         end.and_return(true)
         expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
-          expect(env.attributes).to include(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])
+          expect(env.attributes).to include(title: ['Test Sub-component One'],
+                                            uploaded_files: [upload2.id.to_s, upload3.id.to_s])
         end.and_return(true)
         expect(subject.status).to eq true
       end
@@ -112,7 +121,8 @@ describe Import::TabularImporter do
           expect(env.attributes).to include(title: ['Test Component One'], uploaded_files: [upload1.id.to_s])
         end.and_return(true)
         expect(actor).to receive(:create).with(Hyrax::Actors::Environment) do |env|
-          expect(env.attributes).to include(title: ['Test Sub-component One'], uploaded_files: [upload2.id.to_s])
+          expect(env.attributes).to include(title: ['Test Sub-component One'],
+                                            uploaded_files: [upload2.id.to_s, upload3.id.to_s])
         end.and_return(true)
         expect(Hyrax.config.callback).to receive(:run).with(:after_batch_create_success, user)
         expect(subject.status).to eq true

@@ -3,6 +3,10 @@ class FileSet < ActiveFedora::Base
   include ::RightsOverrideBehavior
   include ::Hyrax::FileSetBehavior
 
+  include ExtendedContainedFiles
+
+  self.indexer = FileSetIndexer
+
   def visibility=(value)
     case value
     when VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY,

@@ -1,0 +1,35 @@
+<% files = @presenter.solr_document["files_json_tesim"] %>
+<% if files && files.count > 1 && can?(:create, ObjectResource) %>
+  <h4>Additional Files</h4>
+  <dl class="dl-horizontal file-show-term">
+    <table class="table table-striped additional-files">
+      <thead>
+        <tr>
+          <th><%= t('.file_use') %></th>
+          <th><%= t('.file_name') %></th>
+          <th><%= t('.file_size') %></th>
+          <th><%= t('.date_uploaded') %></th>
+          <th><%= t('.actions') %></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @presenter.solr_document["files_json_tesim"].each do |json_value|
+         file = JSON.parse(json_value).with_indifferent_access
+      %>
+       <% if file[:file_use] != ExtendedContainedFiles::ORIGINAL_FILE %>
+          <tr>
+            <td><%= "pcdm/use#:#{file[:file_use].camelize}" %></td>
+            <td><%= file[:file_name] %></td>
+            <td><%= file[:file_size] %></td>
+            <td><%= file[:date_uploaded].split('T').first if file[:date_uploaded] %></td>
+            <td>
+              <%= link_to 'Download', "#{hyrax.download_path(@presenter)}&file=#{file[:file_use]}",
+                title: "Download #{file[:file_name]}", target: "_blank" %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </dl>
+<% end %>

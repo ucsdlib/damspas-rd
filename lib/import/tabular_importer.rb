@@ -12,6 +12,7 @@ module Import
 
     OBJECT_UNIQUE_ID = 'object unique id'.freeze
     LEVEL = 'level'.freeze
+    DEFAULT_FILE_USE = ExtendedContainedFiles::ORIGINAL_FILE
 
     attr_reader :user
     attr_reader :tabular_parser
@@ -49,64 +50,29 @@ module Import
       @status = validate
       return self unless @status
 
-      components = []
       model = model_to_create(form_attributes)
-
+      components = []
       @data.each do |attrs|
-        attrs = model_attrs(attrs).with_indifferent_access
-
-        # object unique id
-        attrs.delete :object_unique_id
-        # level for building complex object: Object, Component, Sub-component
-        level = attrs['level']
-
-        # FIXME: file use properties
-        attrs.delete :file_1_use
-        attrs.delete :file_2_use
-
-        # FIXME: license, it's changed in upstream in the master branch with Hyrax 1.0
-        license = attrs.delete(:license).first if attrs.key? :license
-        if attrs.key? :rights_override
-          visibility = VisibilityService.visibility_value(attrs.delete(:rights_override).first)
-        end
-        if attrs.key? :visibility_during_embargo
-          visibility_during_embargo = VisibilityService.visibility_value(attrs.delete(:visibility_during_embargo).first)
-        end
-        embargo_release_date = attrs.delete(:embargo_release_date).first if attrs.key? :embargo_release_date
-
-        # source file
-        process_source_file attrs
-
-        attrs = attrs.merge @form_attributes
-
-        # override license, visibility, embargo_release_date etc. if it is provided in the source metadata
-        attrs[:license] = license if license.present?
-        attrs[:visibility] = visibility if visibility.present?
-        attrs[:visibility_during_embargo] = visibility_during_embargo if visibility_during_embargo.present?
-        attrs[:embargo_release_date] = embargo_release_date if embargo_release_date.present?
-
-        if level.delete('-').casecmp('OBJECT').zero? && !components.empty?
-          # ingest object
-          child_log = Hyrax::Operation.create!(user: @user,
-                                               operation_type: "Create Work",
-                                               parent: @log)
-          IngestWorkJob.perform_later(@user, model.to_s, components, child_log)
+        if attrs['level'].first.delete('-').casecmp('OBJECT').zero? && !components.empty?
+          ingest_object(@user, model.to_s, components, @log)
           components = []
-        else
-          components << attrs
         end
+        components << process_attributes(attrs)
       end
 
-      if components.count.positive?
-        # ingest object
-        child_log = Hyrax::Operation.create!(user: @user,
-                                             operation_type: "Create Work",
-                                             parent: @log)
-        IngestWorkJob.perform_later(@user, model.to_s, components, child_log)
-      end
+      # Ingest the last object in the batch
+      ingest_object(@user, model.to_s, components, @log) if components.count.positive?
 
       @status = true
       self
+    end
+
+    # Identify the level for building complex object: Object, Component, Sub-component to perform object ingest
+    def ingest_object(user, model, components, log)
+      child_log = Hyrax::Operation.create!(user: user,
+                                           operation_type: "Create Work",
+                                           parent: log)
+      IngestWorkJob.perform_later(user, model, components, child_log)
     end
 
     # validate the source metadata
@@ -364,6 +330,83 @@ module Import
       def get_match_value(key, val)
         index = @template.control_values[key].index(val)
         index.nil? ? val : @template.control_values["#{key} MATCH"][index]
+      end
+
+      def process_attributes(attrs)
+        attrs = model_attrs(attrs).with_indifferent_access
+
+        # object unique id
+        attrs.delete :object_unique_id
+
+        # file use properties
+        add_file_use(attrs, attrs.key?(:file_1_use) ? attrs.delete(:file_1_use) : []) if attrs.key? :file_1_name
+        add_file_use(attrs, attrs.delete(:file_2_use)) if attrs.key?(:file_2_use)
+
+        # source file
+        process_source_file attrs
+
+        attrs_dup = attrs.dup # copy for attributes comparing
+        attrs = attrs.merge @form_attributes
+
+        # Override attributes submitted from the form
+        property_override(attrs, attrs_dup, :license)
+        visibility_override(attrs, attrs_dup, :visibility)
+        visibility_override(attrs, attrs_dup, :visibility_during_embargo)
+        property_override(attrs, attrs_dup, :embargo_release_date)
+
+        attrs
+      end
+
+      # override the value of a property
+      # @param [Hash] attrs
+      # @param [Hash] attrs_dup: prefer values
+      # @param [String] attr_name
+      # @return
+      def property_override(attrs, attrs_dup, attr_name)
+        return unless attrs_dup.key? attr_name
+        value = attrs_dup.delete(attr_name)
+        attrs[attr_name] = value if value.present?
+      end
+
+      # override the value of a property
+      # @param [Hash] attrs
+      # @param [Hash] attrs_dup: prefer values
+      # @param [String] attr_name
+      # @return
+      def visibility_override(attrs, attrs_dup, attr_name)
+        return unless attrs_dup.key? attr_name
+        value = VisibilityService.visibility_value(attrs_dup.delete(attr_name).first)
+        attrs[attr_name] = value if value.present?
+      end
+
+      # add file use to object
+      # @param [Hash] attrs
+      # @param [String] file_use
+      # @return
+      def add_file_use(attrs, file_use)
+        if file_use.present?
+          file_use = convert_file_use(file_use.first)
+        elsif attrs[:file_1_name].present?
+          file_use = DEFAULT_FILE_USE
+        end
+
+        attrs[:file_use] ||= []
+        attrs[:file_use] << file_use
+      end
+
+      # convert the value of file use
+      # @param [String] value
+      # @return
+      def convert_file_use(value)
+        preservation_master_file = ExtendedContainedFiles::PRESERVATION_MASTER_FILE.camelize
+        transcript = ExtendedContainedFiles::TRANSCRIPT.camelize
+        original_file = ExtendedContainedFiles::ORIGINAL_FILE.camelize
+        case value
+        when preservation_master_file, transcript, original_file
+          value.underscore
+        else
+          value
+        end
       end
   end
 end

@@ -70,6 +70,9 @@ module Hyrax
         icon = icon_path(params[asset_param_key], true) if file_reference == 'thumbnail'
         return icon if icon
 
+        file_content = relation_content(file_reference)
+        return file_content if file_content
+
         file_path = Hyrax::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
         File.exist?(file_path) ? file_path : nil
       end
@@ -104,6 +107,19 @@ module Hyrax
           return ::ThumbnailPathService.icon_file_path(VisibilityService.visibility_value(file_set.rights_override))
         end
         ::ThumbnailPathService.icon_path(VisibilityService.visibility_value(file_set.rights_override))
+      end
+
+      # Retrieve the content for relation
+      # @param [string] relation
+      # return [binary]
+      def relation_content(relation)
+        case relation
+        when 'preservation_master_file'
+          preservation_master_file = asset.attached_files.base.preservation_master_file
+          return preservation_master_file if preservation_master_file
+        when 'transcript'
+          return asset.attached_files.base.transcript if asset.attached_files.base.transcript
+        end
       end
   end
 end
