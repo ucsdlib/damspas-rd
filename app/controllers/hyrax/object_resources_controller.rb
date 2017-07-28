@@ -17,7 +17,7 @@ module Hyrax
     def new
       curation_concern.created_date_attributes = [{ label: 'LABEL' }]
       # trick to trigger the form for nested attributes
-      curation_concern.related_resource_attributes = [{ name: 'LABEL' }]     
+      curation_concern.related_resource_attributes = [{ name: 'LABEL' }]
       super
     end
 
