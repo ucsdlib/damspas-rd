@@ -17,10 +17,7 @@ module Hyrax
     def new
       curation_concern.created_date_attributes = [{ label: 'LABEL' }]
       # trick to trigger the form for nested attributes
-      curation_concern.related_resource_attributes = [{ name: 'LABEL' }]
-      if params[:parent_id].present?
-        curation_concern.visibility = VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY
-      end      
+      curation_concern.related_resource_attributes = [{ name: 'LABEL' }]     
       super
     end
 
