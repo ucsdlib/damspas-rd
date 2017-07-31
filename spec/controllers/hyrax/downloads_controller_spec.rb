@@ -10,6 +10,10 @@ RSpec.describe Hyrax::DownloadsController do
     end
     let(:default_image) { ActionController::Base.helpers.image_path 'default.png' }
     let(:world_image) { fixture_path + '/files/world.png' }
+    let(:tiff_image) { fixture_path + '/files/file_3.tif' }
+    let(:tiff_file_set) do
+      FactoryGirl.create(:file_with_work, user: user, content: File.open(tiff_image))
+    end
 
     context "when user doesn't have access" do
       let(:another_user) { FactoryGirl.create(:user) }
@@ -64,6 +68,49 @@ RSpec.describe Hyrax::DownloadsController do
             expect(ActiveFedora::Base).not_to receive(:find).with(file_set.id)
             get :show, params: { id: file_set, file: 'thumbnail' }
           end
+        end
+      end
+    end
+
+    context "when the original_file is a tiff" do
+      context "public user that don't have access" do
+        it 'sends the lower resolution image' do
+          get :show, params: { id: tiff_file_set }
+          expect(response.body).not_to eq tiff_file_set.original_file.content
+        end
+      end
+
+      context "admin user that has access" do
+        let(:admin_user) { FactoryGirl.create(:admin) }
+
+        before { sign_in admin_user }
+
+        it 'sends the original file' do
+          get :show, params: { id: tiff_file_set }
+          expect(response.body).to eq tiff_file_set.original_file.content
+        end
+      end
+    end
+
+    context "when preservation_master_file" do
+      before do
+        Hydra::Works::AddFileToFileSet.call(tiff_file_set, File.open(world_image), :preservation_master_file)
+        tiff_file_set.save!
+      end
+
+      it "redirects to the default image" do
+        get :show, params: { id: tiff_file_set.to_param, file: :preservation_master_file }
+        expect(response).to redirect_to default_image
+      end
+
+      context "admin user that has access" do
+        let(:admin_user) { FactoryGirl.create(:admin) }
+
+        before { sign_in admin_user }
+
+        it "sends the preservation_master_file" do
+          get :show, params: { id: tiff_file_set, file: :preservation_master_file }
+          expect(response.body).to eq tiff_file_set.preservation_master_file.content
         end
       end
     end

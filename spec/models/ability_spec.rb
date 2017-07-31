@@ -30,6 +30,22 @@ describe Ability do
     FactoryGirl.build(:private_collection, user: admin_user)
   end
 
+  let(:jpeg_file_with_work) do
+    FactoryGirl.create(:file_with_work, user: admin_user, content: File.open(fixture_path + '/files/image.jpg'))
+  end
+
+  let(:tiff_file_with_work) do
+    FactoryGirl.create(:file_with_work, user: admin_user, content: File.open(fixture_path + '/files/file_3.tif'))
+  end
+
+  let(:preservation_master_file_with_work) do
+    FactoryGirl.create(:file_with_work, user: admin_user)
+  end
+
+  let(:preservation_master_file) do
+    File.open(fixture_path + '/files/file_3.tif')
+  end
+
   let(:admin_user) { FactoryGirl.create(:admin) }
   let(:editor) { FactoryGirl.create(:editor) }
   let(:curator) { FactoryGirl.create(:curator) }
@@ -50,6 +66,10 @@ describe Ability do
       allow(subject.cache).to receive(:get).with(obj.id)
                                            .and_return(Hydra::PermissionsSolrDocument.new(obj.to_solr, nil))
     end
+
+    Hydra::Works::AddFileToFileSet.call(preservation_master_file_with_work,
+                                        preservation_master_file, :preservation_master_file)
+    preservation_master_file_with_work.save!
   end
 
   describe 'as an admin' do
@@ -88,6 +108,10 @@ describe Ability do
 
       is_expected.to be_able_to(:create, Role.new)
       is_expected.to be_able_to(:destroy, Role)
+
+      is_expected.to be_able_to(:read, jpeg_file_with_work.original_file)
+      is_expected.to be_able_to(:read, tiff_file_with_work.original_file)
+      is_expected.to be_able_to(:read, preservation_master_file_with_work.preservation_master_file)
     end
   end
 
@@ -124,6 +148,10 @@ describe Ability do
 
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
+
+      is_expected.to be_able_to(:read, jpeg_file_with_work.original_file)
+      is_expected.to be_able_to(:read, tiff_file_with_work.original_file)
+      is_expected.to be_able_to(:read, preservation_master_file_with_work.preservation_master_file)
     end
   end
 
@@ -157,6 +185,10 @@ describe Ability do
 
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
+
+      is_expected.to be_able_to(:read, jpeg_file_with_work.original_file)
+      is_expected.to be_able_to(:read, tiff_file_with_work.original_file)
+      is_expected.to be_able_to(:read, preservation_master_file_with_work.preservation_master_file)
     end
   end
 
@@ -197,6 +229,10 @@ describe Ability do
 
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
+
+      is_expected.to be_able_to(:read, jpeg_file_with_work.original_file)
+      is_expected.not_to be_able_to(:read, tiff_file_with_work.original_file)
+      is_expected.not_to be_able_to(:read, preservation_master_file_with_work.preservation_master_file)
     end
   end
 
@@ -230,6 +266,10 @@ describe Ability do
 
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
+
+      is_expected.to be_able_to(:read, jpeg_file_with_work.original_file)
+      is_expected.not_to be_able_to(:read, tiff_file_with_work.original_file)
+      is_expected.not_to be_able_to(:read, preservation_master_file_with_work.preservation_master_file)
     end
   end
 
@@ -263,6 +303,10 @@ describe Ability do
 
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
+
+      is_expected.to be_able_to(:read, jpeg_file_with_work.original_file)
+      is_expected.not_to be_able_to(:read, tiff_file_with_work.original_file)
+      is_expected.not_to be_able_to(:read, preservation_master_file_with_work.preservation_master_file)
     end
   end
 end
