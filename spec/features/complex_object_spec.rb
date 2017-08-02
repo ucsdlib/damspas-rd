@@ -16,7 +16,7 @@ feature 'Complex Object' do
     scenario 'should not display components of a complex object' do
       visit "/catalog?search_field=all_fields&q=Suppressed"
       expect(page).to have_link("Parent Object")
-      expect(page).not_to have_link("Suppressed Component")      
+      expect(page).not_to have_link("Suppressed Component")
     end
   end
 end

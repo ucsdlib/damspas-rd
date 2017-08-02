@@ -3,7 +3,7 @@
 module SuppressComponentFilter
   extend ActiveSupport::Concern
   delegate :item, to: :scope
-  
+
   included do
     self.default_processor_chain += [:suppress_component]
   end
