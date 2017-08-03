@@ -13,7 +13,6 @@ class IngestWorkJob < CreateWorkJob
 
     components.each do |attributes|
       levels << Import::TabularImporter.const_get(attributes.delete(:level).delete('-').upcase)
-
       work = model.constantize.new
       works << work
       current_ability = Ability.new(user)

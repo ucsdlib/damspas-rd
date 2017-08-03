@@ -41,7 +41,12 @@ module Hyrax
       # Hydra::Ability#download_permissions can't be used in this case because it assumes
       # that files are in a LDP basic container, and thus, included in the asset's uri.
       def authorize_download!
-        authorize! :read, params[asset_param_key]
+        case params[:file]
+        when ExtendedContainedFiles::PRESERVATION_MASTER_FILE
+          authorize! :edit, params[asset_param_key]
+        else
+          authorize! :read, params[asset_param_key]
+        end
       rescue CanCan::AccessDenied
         icon = icon_path params[asset_param_key]
         if icon
@@ -65,10 +70,13 @@ module Hyrax
       # Returns the file from the repository or a path to a file on the local file system, if it exists.
       def load_file
         file_reference = params[:file]
-        return default_file unless file_reference
+        return authorized_file_download(default_file) unless file_reference
 
         icon = icon_path(params[asset_param_key], true) if file_reference == 'thumbnail'
         return icon if icon
+
+        file_content = relation_content(file_reference)
+        return authorized_file_download(file_content) if file_content
 
         file_path = Hyrax::DerivativePath.derivative_path_for_reference(params[asset_param_key], file_reference)
         File.exist?(file_path) ? file_path : nil
@@ -104,6 +112,29 @@ module Hyrax
           return ::ThumbnailPathService.icon_file_path(VisibilityService.visibility_value(file_set.rights_override))
         end
         ::ThumbnailPathService.icon_path(VisibilityService.visibility_value(file_set.rights_override))
+      end
+
+      # Retrieve the content for relation
+      # @param [string] relation
+      # return [binary]
+      def relation_content(relation)
+        case relation
+        when ExtendedContainedFiles::PRESERVATION_MASTER_FILE
+          preservation_master_file = asset.attached_files.base.preservation_master_file
+          return preservation_master_file if preservation_master_file
+        when ExtendedContainedFiles::TRANSCRIPT
+          return asset.attached_files.base.transcript if asset.attached_files.base.transcript
+        end
+      end
+
+      def authorized_file_download(file_content)
+        return file_content unless file_content.is_a?(ActiveFedora::File)
+        if can?(:read, file_content)
+          file_content
+        else
+          # return the lower resolution service image
+          Hyrax::DerivativePath.derivative_path_for_reference(params[asset_param_key], 'thumbnail')
+        end
       end
   end
 end

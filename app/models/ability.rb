@@ -44,9 +44,13 @@ class Ability
     can [:download], FileSet
   end
 
-  def campus_permissions; end
+  def campus_permissions
+    download_file_permission
+  end
 
-  def anonymous_permissions; end
+  def anonymous_permissions
+    download_file_permission
+  end
 
   # Define any customized permissions here.
   def custom_permissions
@@ -61,5 +65,11 @@ class Ability
 
     def curation_concerns
       Hyrax.config.curation_concerns
+    end
+
+    def download_file_permission
+      can :read, ActiveFedora::File do |file|
+        file.mime_type == 'image/tiff' ? false : true
+      end
     end
 end
