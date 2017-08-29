@@ -8,7 +8,7 @@ feature 'Complex Object' do
     let(:child)  { FactoryGirl.create(:object_resource_with_one_file, user: user, title: ["Suppressed Component"]) }
 
     before do
-      login_as user
+      sign_in user
       parent.ordered_members << child
       parent.save!
     end

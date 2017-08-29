@@ -1,16 +1,18 @@
 class ApplicationController < ActionController::Base
   around_action :anonymous_user
+  helper_method :current_user
 
   def anonymous_user
     # check ip for unauthenticated users
     if current_user.nil? && self.class != Qa::TermsController
       anon = User.anonymous(request.remote_ip)
-      if anon.campus?
-        @current_user = anon
-        logger.warn "#{self.class.name}: anonymous session (#{current_user}) from ip #{request.remote_ip}: #{anon}"
-      end
+      @current_user = anon if anon.campus?
     end
     yield
+  end
+
+  def current_user
+    @current_user ||= User.find_by uid: session[:user_id] if session[:user_id]
   end
 
   helper Openseadragon::OpenseadragonHelper

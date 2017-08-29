@@ -104,4 +104,5 @@ Rails.application.configure do
 
   # url base for IIIF sever
   config.iiif_baseurl = 'http://localhost:8182/iiif/2/'
+  config.shibboleth = true
 end

@@ -264,7 +264,7 @@ feature 'Create a Collection' do
   context 'an anonymous user' do
     scenario 'should not be able to create new collections' do
       visit hyrax.new_collection_path
-      expect(page).to have_current_path new_user_session_path
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should be able to read any public collections but no editing allowed' do
@@ -275,12 +275,12 @@ feature 'Create a Collection' do
 
     scenario 'should be able to read any campus only collections' do
       visit hyrax.collection_path campus_only_collection.id
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should not be able to read any private collections' do
       visit hyrax.collection_path private_collection.id
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
   end
 end
