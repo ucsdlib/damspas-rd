@@ -15,7 +15,7 @@ SimpleCov.command_name 'spec'
 require File.expand_path("../../config/environment", __FILE__)
 
 require 'factory_girl'
-
+require_relative 'support/controller_helpers'
 require 'devise'
 require 'devise/version'
 require 'rails-controller-testing' if Rails::VERSION::MAJOR >= 5
@@ -90,6 +90,13 @@ RSpec.configure do |config|
     config.include Devise::Test::ControllerHelpers, type: :controller
   else
     config.include Devise::TestHelpers, type: :controller
+  end
+
+  config.include ControllerHelpers, type: :controller
+  Warden.test_mode!
+
+  config.after do
+    Warden.test_reset!
   end
 
   config.include Warden::Test::Helpers, type: :feature

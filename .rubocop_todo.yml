@@ -8,6 +8,7 @@ Metrics/ClassLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
     - 'lib/import/tabular_importer.rb'
+    - 'app/models/user.rb'
 
 Metrics/MethodLength:
   Exclude:
@@ -29,6 +30,9 @@ Metrics/LineLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
     - 'spec/factories/permission_templates.rb'
+    - 'app/controllers/users/sessions_controller.rb'
+    - 'app/models/user.rb'
+    - 'app/models/concerns/hyrax/user.rb'
 
 Metrics/ParameterLists:
   Exclude:
@@ -41,6 +45,7 @@ Metrics/AbcSize:
     - 'app/jobs/ingest_work_job.rb'
     - 'lib/import/tabular_importer.rb'
     - 'spec/support/features/stub_view_helpers.rb'
+    - 'app/controllers/users/omniauth_callbacks_controller.rb'
 
 Metrics/CyclomaticComplexity:
   Exclude:
@@ -86,4 +91,8 @@ RSpec/ExampleLength:
 
 RSpec/VerifiedDoubles:
   Enabled: false
+
+Security/MarshalLoad:
+  Exclude:
+    - 'app/models/concerns/hyrax/user.rb'
 

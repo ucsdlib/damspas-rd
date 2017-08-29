@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   around_action :anonymous_user
+  helper_method :current_user, :logged_in?
 
   def anonymous_user
     # check ip for unauthenticated users
@@ -11,6 +12,14 @@ class ApplicationController < ActionController::Base
       end
     end
     yield
+  end
+
+  def current_user
+    @current_user ||= User.find_by uid: session[:user_id] if session[:user_id]
+  end
+
+  def logged_in?
+    current_user.present?
   end
 
   helper Openseadragon::OpenseadragonHelper

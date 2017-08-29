@@ -101,5 +101,5 @@ Rails.application.configure do
 
   # url base for local authorities
   config.authority_path = 'http://localhost:3000/dams_authorities'
-
+  config.shibboleth = true
 end

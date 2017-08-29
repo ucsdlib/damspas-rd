@@ -26,4 +26,36 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe ".find_or_create_for_developer" do
+    it "create a User for a new patron" do
+      token = { 'info' => { 'email' => nil } }
+      allow(token).to receive_messages(uid: 'test_user', provider: 'developer')
+      user = User.find_or_create_for_developer(token)
+
+      expect(user).to be_persisted
+      expect(user.provider).to eq('developer')
+      expect(user.uid).to eq('test_user')
+    end
+
+    it "reuse an existing User if the access token matches" do
+      token = { 'info' => { 'email' => nil } }
+      allow(token).to receive_messages(uid: 'test_user', provider: 'developer')
+      User.find_or_create_for_developer(token)
+
+      expect { User.find_or_create_for_developer(token) }.not_to change(User, :count)
+    end
+  end
+
+  describe ".find_or_create_for_shibboleth" do
+    it "create a User when a user is first authenticated" do
+      token = { 'info' => { 'email' => nil } }
+      allow(token).to receive_messages(uid: 'test_user', provider: 'shibboleth')
+      user = User.find_or_create_for_shibboleth(token)
+
+      expect(user).to be_persisted
+      expect(user.provider).to eq('shibboleth')
+      expect(user.uid).to eq('test_user')
+    end
+  end
 end

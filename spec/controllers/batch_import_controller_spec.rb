@@ -1,3 +1,5 @@
+include Warden::Test::Helpers
+
 describe BatchImportController do
   let(:user) { create(:editor) }
   let(:source_metadata) {}
@@ -17,7 +19,7 @@ describe BatchImportController do
   end
 
   before do
-    sign_in user
+    login_with user
   end
 
   describe "#new" do
