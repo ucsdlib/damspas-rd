@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
       anon = User.anonymous(request.remote_ip)
       if anon.campus?
         @current_user = anon
-        logger.warn "#{self.class.name}: anonymous session (#{current_user}) from ip #{request.remote_ip}: #{anon}"
       end
     end
     yield
@@ -16,10 +15,6 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.find_by uid: session[:user_id] if session[:user_id]
-  end
-
-  def logged_in?
-    current_user.present?
   end
 
   helper Openseadragon::OpenseadragonHelper
