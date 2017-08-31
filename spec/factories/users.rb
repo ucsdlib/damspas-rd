@@ -1,7 +1,9 @@
 FactoryGirl.define do
   factory :user do
     sequence(:email) { |n| "user#{n}@example.com" }
-    password 'password'
+    sequence(:uid) { |n| n }
+    sequence(:provider) { |n| "developer#{n}" }
+    sequence(:full_name) { |n| "user#{n}" }
 
     factory :admin do
       roles { [Role.where(name: 'admin').first_or_create] }

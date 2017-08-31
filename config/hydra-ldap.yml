@@ -1,0 +1,26 @@
+defaults: &defaults
+  host: <%= ENV.fetch('APPS_HORTON_LDAP_HOST') %>
+  port: <%= ENV.fetch('APPS_HORTON_LDAP_PORT') %>
+  base: <%= ENV.fetch('APPS_HORTON_LDAP_BASE') %>
+  username: <%= ENV.fetch('APPS_HORTON_LDAP_USER') %>
+  password: <%= ENV.fetch('APPS_HORTON_LDAP_PASS') %>
+  admin_group: <%= ENV.fetch('APPS_HORTON_LDAP_ADMIN_GROUP') %>
+  curator_group: <%= ENV.fetch('APPS_HORTON_LDAP_CURATOR_GROUP') %>
+
+pontos:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  
+  
+

@@ -20,6 +20,20 @@ Devise.setup do |config|
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
 
+  OmniAuth.config.logger = Rails.logger
+
+  if Rails.configuration.shibboleth
+    config.omniauth :shibboleth, {
+      :uid_field                 => 'ADUSERNAME',
+      :shib_session_id_field     => "Shib-Session-ID",
+      :shib_application_id_field => "Shib-Application-ID",
+      :debug                     => false,
+      :info_fields               => {:email => 'EMAIL', :name => 'FULL_NAME', :givenName => 'FIRST_NAME', :familyName => 'LAST_NAME'}
+    }
+  else
+    config.omniauth :developer
+  end
+
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
@@ -35,6 +49,7 @@ Devise.setup do |config|
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
   # config.authentication_keys = [:email]
+  config.authentication_keys = [ :provider, :uid ]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
