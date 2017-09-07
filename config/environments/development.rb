@@ -69,4 +69,10 @@ Rails.application.configure do
 
   # url base for local authorities
   config.authority_path = 'http://localhost:3000/dams_authorities'
+
+  # enable IIIF
+  config.iiif_enabled = true
+
+  # url base for IIIF sever
+  config.iiif_baseurl = 'http://localhost:8182/iiif/2/'
 end

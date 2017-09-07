@@ -1,0 +1,55 @@
+<% provide :page_title, @presenter.page_title %>
+
+<%= render 'shared/citations' %>
+<div itemscope itemtype="http://schema.org/CreativeWork" class="row">
+  <div class="col-xs-12">
+    <header>
+      <%= render 'work_title', presenter: @presenter %>
+    </header>
+
+    <!-- Add OpenSeaDragon Viewer -->
+    <% if Rails.configuration.iiif_enabled %>
+      <div class="open_seadragon_widget">
+        <%= openseadragon_picture_tag "#{iiif_url ActiveFedora::Base.search_by_id(@presenter.representative_id)}/info.json" %>
+      </div>
+    <% end %>
+
+  </div>
+  <div class="col-sm-8">
+    <%= render 'work_description', presenter: @presenter %>
+    <%= render 'relationships', presenter: @presenter %>
+    <%= render 'metadata', presenter: @presenter %>
+  </div>
+  <div class="col-sm-4">
+    <%= render "show_actions", presenter: @presenter %>
+    <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
+    <%= render 'representative_media', presenter: @presenter %>
+    <%= t('hyrax.base.show.last_modified', value: @presenter.date_modified) %>
+    <%= render 'social_media' %>
+    <%= render 'citations', presenter: @presenter %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <%= render 'items', presenter: @presenter %>
+    <%= render 'workflow_actions_widget', presenter: @presenter %>
+    <%# TODO: we may consider adding these partials in the future %>
+    <%#= render 'sharing_with', presenter: @presenter %>
+    <%#= render 'user_activity', presenter: @presenter %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".hover_trigger").hover(function() {
+      $('.open_seadragon_widget').show();
+      $('.hover_trigger').hide();
+    });
+
+    $(".open_seadragon_widget" ).dblclick(function() {
+      $('.open_seadragon_widget').hide();
+      $('.hover_trigger').show();
+    });
+  });
+</script>

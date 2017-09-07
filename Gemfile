@@ -72,6 +72,8 @@ gem 'nokogiri', '~> 1.7.1'
 gem 'sidekiq', '~> 5.0.0'
 gem 'rubyXL'
 
+gem 'openseadragon', '~> 0.4.0'
+
 group :development, :test do
   gem 'capybara', '~> 2.14.0'
   gem 'factory_girl_rails', '~> 4.4'
