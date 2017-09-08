@@ -8,7 +8,7 @@
     </header>
 
     <!-- Add OpenSeaDragon Viewer -->
-    <% if Rails.configuration.iiif_enabled %>
+    <% if @presenter.representative_id %>
       <div class="open_seadragon_widget">
         <%= openseadragon_picture_tag "#{iiif_url ActiveFedora::Base.search_by_id(@presenter.representative_id)}/info.json" %>
       </div>

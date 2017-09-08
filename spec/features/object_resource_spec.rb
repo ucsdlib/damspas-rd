@@ -244,6 +244,28 @@ feature 'ObjectResource' do
     end
   end
 
+  context 'IIIF OpenSeaDragon viewer' do
+    let(:user) { create(:admin) }
+    let(:object_with_file) { FactoryGirl.create(:object_with_image_file, title: ["Object - IIIF Viewer"], user: user) }
+
+    before do
+      sign_in user
+    end
+
+    scenario 'has no OpenSeaDragon widget' do
+      visit new_hyrax_object_resource_path
+      fill_in 'Title', with: 'Test ObjectResource - IIIF OpenSeaDragon'
+      click_button 'Save'
+      expect(page).to have_content 'Test ObjectResource - IIIF OpenSeaDragon'
+      expect(page).not_to have_selector "div[class='open_seadragon_widget']"
+    end
+
+    scenario 'has OpenSeaDragon widget' do
+      visit hyrax_object_resource_path object_with_file.id
+      expect(page).to have_selector "div[class='open_seadragon_widget']"
+    end
+  end
+
   context 'a logged in user in editor role' do
     let(:user) { create(:editor) }
 
