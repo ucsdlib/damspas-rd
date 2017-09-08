@@ -26,3 +26,4 @@ li > div.row {background-color: #eee;}
 .form-group.time_span ul.listing {list-style-type: none; padding: 0; margin: 0; max-width: 530px}
 .form-group.multi_value ul.listing {list-style-type: none; padding: 0; margin: 0; max-width: 535px}
 .object_resource_visibility_after_embargo {visibility: hidden;}
+.open_seadragon_widget {display: none; position: relative;}
