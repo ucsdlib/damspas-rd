@@ -46,7 +46,7 @@
         <li class="radio">
           <label>
             <%= f.radio_button :visibility, VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY %>
-            <%= visibility_badge(VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY) %>
+            <%= visibility_badge(VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY) %><%= curation_concern.visibility %>
             <%= t("hyrax.visibility.#{VisibilityService::VISIBILITY_TEXT_VALUE_SUPPRESS_DISCOVERY}.note_html") %>
           </label>
         </li>

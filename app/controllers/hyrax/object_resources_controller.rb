@@ -74,5 +74,22 @@ module Hyrax
       add_breadcrumb_relation
       add_breadcrumb_for_action
     end
+
+    def media_display_partial(file_set)
+      'hyrax/file_sets/media_display/' +
+        if file_set.image?
+          'image'
+        elsif file_set.video?
+          'video'
+        elsif file_set.audio?
+          'audio'
+        elsif file_set.pdf?
+          'pdf'
+        elsif file_set.office_document?
+          'office_document'
+        else
+          'default'
+        end
+    end
   end
 end
