@@ -7,6 +7,16 @@
 #
 # adapted from
 # https://github.com/akishin/ansible-playbooks/blob/master/lokka/roles/passenger/tasks/main.yml
+- name: add apache group
+  become: yes
+  group:
+    name: apache
+    state: present
+- name: add apache user
+  become: yes
+  user:
+    name: apache
+    group: apache
 
 - name: install passenger gem
   become: yes
@@ -19,7 +29,29 @@
            {{ lookup('env', 'PATH') }}"
     GEM_PATH: "/usr/local/rvm/gems/ruby-{{ ruby_ver }}:\
                /usr/local/rvm/gems/ruby-{{ ruby_ver }}@global"
-- name: install apache packages
+
+- name: install apache packages for Ubuntu < 16
+  become: yes
+  package: name={{ item }} state=present
+  with_items:
+    - apache2-prefork-dev
+    - apache2-mpm-worker
+  when: 
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version < "16") or
+    (ansible_distribution == "Debian")
+
+- name: install apache packages for Ubuntu 16
+  become: yes
+  package: name={{ item }} state=present
+  with_items:
+    - apache2
+    # if this is omitted, passenger doesn't have the headers it needs
+    - libaprutil1-dev
+    - apache2-dev
+  when: 
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16")
+
+- name: install apache packages for Centos and RHEL
   become: yes
   package: name={{ item }} state=present
   with_items:
@@ -27,14 +59,41 @@
     - httpd-devel
     - apr-devel
     - apr-util-devel
+  when: ansible_distribution == "CentOS" or ansible_distribution == "RedHat"
+
 - name: install passenger-install-apache2-module
   become: yes
   shell: passenger-install-apache2-module --auto creates=/usr/local/lib/ruby/gems/{{ ruby_ver | regex_replace (".\d+$", ".0") }}/gems/passenger-{{ passenger_ver }}/buildout/apache2/mod_passenger.so
+  environment:
+    PATH: "/usr/local/rvm/gems/ruby-{{ ruby_ver }}/bin:\
+           /usr/local/rvm/gems/ruby-{{ ruby_ver }}@global/bin:\
+           /usr/local/rvm/rubies/ruby-{{ ruby_ver }}/bin:\
+           /usr/local/rvm/bin:\
+           {{ lookup('env', 'PATH') }}"
+    GEM_PATH: "/usr/local/rvm/gems/ruby-{{ ruby_ver }}:\
+               /usr/local/rvm/gems/ruby-{{ ruby_ver }}@global"
+
 
 - name: generate passenger.conf file
   become: yes
-  shell: passenger-install-apache2-module --snippet > /etc/apache2/conf-available/passenger.conf creates=/etc/apache2/conf-available/passenger.conf
+  shell: passenger-install-apache2-module --snippet > "{{ passenger_root }}/passenger.conf" creates="{{ passenger_root }}/passenger.conf"
+  environment:
+    PATH: "/usr/local/rvm/gems/ruby-{{ ruby_ver }}/bin:\
+           /usr/local/rvm/gems/ruby-{{ ruby_ver }}@global/bin:\
+           /usr/local/rvm/rubies/ruby-{{ ruby_ver }}/bin:\
+           /usr/local/rvm/bin:\
+           {{ lookup('env', 'PATH') }}"
+    GEM_PATH: "/usr/local/rvm/gems/ruby-{{ ruby_ver }}:\
+               /usr/local/rvm/gems/ruby-{{ ruby_ver }}@global"
+
 
 - name: symlink passenger config
   become: yes
   file: src=/etc/apache2/conf-available/passenger.conf path=/etc/apache2/conf-enabled/passenger.conf state=link
+  when: 
+    (ansible_distribution == "Ubuntu") or
+    (ansible_distribution == "Debian")
+
+- name: restart apache
+  become: yes
+  service: name="{{ apache }}" state=restarted

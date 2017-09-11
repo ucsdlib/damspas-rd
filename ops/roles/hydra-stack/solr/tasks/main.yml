@@ -2,6 +2,14 @@
   # solr 5 requires java 8
   # until java 8 becomes the default package
   # you must include the openjdk1_8 role before the hydra-stack role when installing solr 5.x
+- iptables_raw:
+    name: allow_tcp_solr
+    rules: |
+      -A INPUT -m state --state NEW -p tcp --destination-port 8983 -j ACCEPT
+      -A INPUT -m state --state NEW -p tcp --destination-port 2181 -j ACCEPT
+      -A INPUT -m state --state NEW -p tcp --destination-port 2888 -j ACCEPT
+      -A INPUT -m state --state NEW -p tcp --destination-port 3888 -j ACCEPT
+    weight: 5
 
 - name: install solr packages
   package: name={{ item }} state=installed update_cache=yes

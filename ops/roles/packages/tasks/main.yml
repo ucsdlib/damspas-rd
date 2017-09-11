@@ -40,6 +40,7 @@
     - python-pip
     - python-devel
     - libffi-devel
+    - iptables-services
 
 - name: "Python 2.6 SNI support: install Python modules"
   pip: >
