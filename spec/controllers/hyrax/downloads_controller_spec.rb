@@ -14,7 +14,7 @@ RSpec.describe Hyrax::DownloadsController do
     context "when user doesn't have access" do
       let(:another_user) { FactoryGirl.create(:user) }
 
-      before { sign_in another_user }
+      before { login_with another_user }
 
       it 'redirects to the default image' do
         get :show, params: { id: file_set.to_param }
@@ -35,7 +35,7 @@ RSpec.describe Hyrax::DownloadsController do
     end
 
     context "when the user has access" do
-      before { sign_in user }
+      before { login_with user }
 
       it 'sends the original file' do
         get :show, params: { id: file_set }
@@ -89,7 +89,7 @@ RSpec.describe Hyrax::DownloadsController do
         let(:content) { File.open(world_image, 'rb').read }
 
         before do
-          sign_in admin_user
+          login_with admin_user
           allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(world_image)
         end
 
@@ -123,7 +123,7 @@ RSpec.describe Hyrax::DownloadsController do
         let(:content) { File.open(image, 'rb').read }
 
         before do
-          sign_in admin_user
+          login_with admin_user
           allow(Hyrax::DerivativePath).to receive(:derivative_path_for_reference).and_return(image)
         end
 

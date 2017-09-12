@@ -15,7 +15,7 @@ SimpleCov.command_name 'spec'
 require File.expand_path("../../config/environment", __FILE__)
 
 require 'factory_girl'
-
+require_relative 'support/controller_helpers'
 require 'devise'
 require 'devise/version'
 require 'rails-controller-testing' if Rails::VERSION::MAJOR >= 5
@@ -28,6 +28,8 @@ require 'support/features'
 require 'support/factory_helpers'
 require 'byebug' unless ENV['TRAVIS']
 require 'database_cleaner'
+require 'net/ldap'
+require 'fakeldap'
 
 Capybara.default_driver = :rack_test      # This is a faster driver
 Capybara.javascript_driver = :poltergeist # This is slower
@@ -90,6 +92,13 @@ RSpec.configure do |config|
     config.include Devise::Test::ControllerHelpers, type: :controller
   else
     config.include Devise::TestHelpers, type: :controller
+  end
+
+  config.include ControllerHelpers, type: :controller
+  Warden.test_mode!
+
+  config.after do
+    Warden.test_reset!
   end
 
   config.include Warden::Test::Helpers, type: :feature
