@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/samvera/hyrax.git
+  remote: https://github.com/samvera/hyrax.git
   revision: 9f117a32a9fdd42a7884c3c5ee59997ad1e8f2d4
   ref: 9f117a32a9fdd42a7884c3c5ee59997ad1e8f2d4
   specs:
