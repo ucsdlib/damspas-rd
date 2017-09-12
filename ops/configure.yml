@@ -1,85 +1,86 @@
 ---
-#- name: Server Level Config
-#  hosts: "all"
-##  strategy: debug
-#  roles:
-#    - { role: geerlingguy.repo-epel, become: true }
-#    - { role: packages, become: true}
-#    - { role: system_setup, become: true }
-#    - { role: repleo.postfix, become: true }
-##T    - { role: dj-wasabi.ossec-server }
-##T    - { role: notch8.site24x7, tags: 'monitoring' }
-#    - { role: notch8.ssh, tags: 'permissions' }
-## TODO ssh config customization
-#
-#- name: Fedora Config
-#  hosts: "horton_fedora"
+- name: Server Level Config
+  hosts: "all"
 #  strategy: debug
-#  roles:
-#    - { role: hydra-stack/fedora, become: true }
-## TODO log rotate
-#
-#- name: Solr Config
-#  hosts: "horton_solr"
+  roles:
+    - { role: geerlingguy.repo-epel, become: true }
+    - { role: packages, become: true}
+    - { role: system_setup, become: true }
+    - { role: repleo.postfix, become: true }
+#T    - { role: dj-wasabi.ossec-server }
+#T    - { role: notch8.site24x7, tags: 'monitoring' }
+    - { role: notch8.ssh, tags: 'permissions' }
+
+- name: Fedora Config
+  hosts: "horton_fedora"
+  strategy: debug
+  roles:
+    - { role: hydra-stack/fedora, become: true }
+# TODO log rotate
+
+- name: Solr Config
+  hosts: "horton_solr"
+  strategy: debug
+  roles:
+    - { role: AnsibleShipyard.ansible-zookeeper, become: true }
+    - { role: hydra-stack/solr, become: true }
+#TODO log rotate
+
+- name: HA Proxy Fedora IpTables
+  hosts: "horton_ha_proxy_fedora"
+  tasks:
+    - iptables_raw:
+        name: allow_tcp_solr
+        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 8983 -j ACCEPT"
+        weight: 5
+      become: yes
+
+    - iptables_raw:
+        name: allow_tcp_fedora
+        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 8080 -j ACCEPT"
+        weight: 5
+      become: yes
+
+- name: HA Proxy Web and Fedora/Solr
+  hosts: "horton_ha_proxy_web:horton_ha_proxy_fedora"
+  roles:
+    - { role: openmicroscopy.haproxy, become: true }
+
+- name: Keepalived internal
+  hosts: "horton_ha_proxy_fedora"
+  roles:
+    - { role: evrardjp.keepalived, become: true }
+
+# these are seperate so that master can be assigned by array position
+- name: Keepalived external
+  hosts: "horton_ha_proxy_web"
+  roles:
+    - { role: evrardjp.keepalived, become: true }
+
+- name: Rails Config
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
 #  strategy: debug
-#  roles:
-#    - { role: AnsibleShipyard.ansible-zookeeper, become: true }
-#    - { role: hydra-stack/solr, become: true }
-##TODO log rotate
-#
-#- name: HA Proxy Fedora IpTables
-#  hosts: "horton_ha_proxy_fedora"
-#  tasks:
-#    - iptables_raw:
-#        name: allow_tcp_solr
-#        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 8983 -j ACCEPT"
-#        weight: 5
-#      become: yes
-#
-#    - iptables_raw:
-#        name: allow_tcp_fedora
-#        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 8080 -j ACCEPT"
-#        weight: 5
-#      become: yes
-#
-#- name: HA Proxy Web and Fedora/Solr
-#  hosts: "horton_ha_proxy_web:horton_ha_proxy_fedora"
-#  roles:
-#    - { role: openmicroscopy.haproxy, become: true }
-#
-#- name: Keepalived internal
-#  hosts: "horton_ha_proxy_fedora"
-#    - { role: evrardjp.keepalived, become: true }
-#
-## these are seperate so that master can be assigned by array position
-#- name: Keepalived external
-#  hosts: "horton_ha_proxy_web"
-#    - { role: evrardjp.keepalived, become: true }
-#
-#- name: Rails Config
-#  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
-##  strategy: debug
-#  roles:
-#    - { role: notch8.ffmpeg, become: true }
-#    - { role: geerlingguy.nodejs, become: true }
-#    - { role: rvm_io.ruby, tags: ruby, become: true }
-#    - { role: hydra-stack/config-deploy, become: true }
-#    - { role: sufia_dependencies/install, become: true }
-#    - { role: sufia_dependencies/config, become: true }
-#
-#- name: Samvera Config
-#  hosts: "horton_samvera"
-##  strategy: debug
-#  roles:
-#    - { role: webserver/install, become: true }
-#    - { role: webserver/config, become: true }
-#
-## TODO log rotate
-#- name: Sidekiq Config Master
-#  hosts: "horton_sidekiq_master"
-#  roles:
-#    - { role: DavidWittman.redis, become: true }
-#    - { role: sidekiq, become: true }
+  roles:
+    - { role: notch8.ffmpeg, become: true }
+    - { role: geerlingguy.nodejs, become: true }
+    - { role: rvm_io.ruby, tags: ruby, become: true }
+    - { role: hydra-stack/config-deploy, become: true }
+    - { role: sufia_dependencies/install, become: true }
+    - { role: sufia_dependencies/config, become: true }
+
+- name: Samvera Config
+  hosts: "horton_samvera"
+#  strategy: debug
+  roles:
+    - { role: webserver/install, become: true }
+    - { role: webserver/config, become: true }
+
+# TODO log rotate
+- name: Sidekiq Config Master
+  hosts: "horton_sidekiq_master"
+  roles:
+    - { role: DavidWittman.redis, become: true }
+    - { role: sidekiq, become: true }
 
 - name: Sidekiq Config Slave
   hosts: "horton_sidekiq"
@@ -94,9 +95,8 @@
   tasks:
     - iptables_raw:
         name: allow_tcp_http
-        rules: "-A INPUT -m state --state NEW -p tcp --destination-port {{ item }} -j ACCEPT"
-        with_items:
-          - 80
+        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 80 -j ACCEPT"
+        weight: 5
       become: yes
 
 - include: deploy.yml

@@ -3,6 +3,11 @@
 # roles/webserver/config/tasks/main.yml
 # 
 # Apache configuration; setup apache configuration files and apply ssl certs when needed
+- iptables_raw:
+    name: allow_tcp_solr
+    rules: |
+      -A INPUT -m state --state NEW -p tcp --destination-port 80 -j ACCEPT
+    weight: 5
 
 - name: create apache vhosts file
   become: yes

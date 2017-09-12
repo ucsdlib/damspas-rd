@@ -1,3 +1,10 @@
+- name: Get timestamp for repoo
+  hosts: localhost
+  tasks:
+    - shell: 'date +%Y%m%d%H%M%S.%5N'
+      register: current_run_timestamp
+    - set_fact: ansistrano_release_version = "{{ current_run_timestamp.stdout }}"
+
 - name: Permissions and folders
   hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
   tasks:
@@ -33,6 +40,13 @@
         state: directory
         owner: "{{ capistrano_user }}"
         mode: 0755
+
+- name: Deploy Rails App - Leader
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
+  become_user: "{{ capistrano_user }}"
+  become: yes
+  roles:
+    - { role: carlosbuenosvinos.ansistrano-deploy }
 
 - name: Deploy Rails App
   hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"

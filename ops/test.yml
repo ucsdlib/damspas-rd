@@ -14,7 +14,7 @@
           samvera: 1
           sidekiq: 1
           sidekiq_master: 1
-          ha_proxy_www: 1
+          ha_proxy_web: 1
           ha_proxy_fedora: 1
       register: output
     - meta: refresh_inventory

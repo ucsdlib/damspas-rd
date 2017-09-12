@@ -1,0 +1,139 @@
+# Anistrano
+ansistrano_deploy_from: "{{ playbook_dir }}/../" # Where my local project is (relative or absolute path)
+ansistrano_deploy_to: "/opt/{{ project_name }}" # Base path to deploy to.
+ansistrano_version_dir: "releases" # Releases folder name
+ansistrano_current_dir: "current" # Softlink name. You should rarely changed it.
+ansistrano_current_via: "symlink"
+ansistrano_keep_releases: 3 # Releases to keep after a new deployment. See "Pruning old releases".
+ansistrano_shared_paths:
+  - log
+  - public/assets
+  - public/system
+  - tmp/cache
+  - tmp/derivatives
+  - tmp/pids
+  - tmp/sockets
+  - tmp/uploads
+  - vendor/bundle
+
+ansistrano_shared_files:
+  - config/database.yml
+  - config/secrets.yml
+  - config/fedora.yml
+  - config/blacklight.yml
+  - config/redis.yml
+  - config/resque-pool.yml
+  - config/solr.yml
+
+ansistrano_deploy_via: "git"
+#ansistrano_git_repo: https://github.com/ucsdlib/horton.git
+ansistrano_git_repo: https://github.com/notch8/horton.git
+ansistrano_git_branch: devops # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
+#ansistrano_git_identity_key_path: "keys/deploy" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
+ansistrano_before_symlink_tasks_file: "{{ playbook_dir }}/roles/deploy/tasks/before_symlink.yml"
+ansistrano_after_symlink_tasks_file: "{{ playbook_dir }}/roles/deploy/tasks/after_symlink.yml"
+
+capistrano_user: deploy
+capistrano_group: deploy
+deploy_target: development
+
+# Database
+db: postgres
+db_adapter: postgresql
+hydra_db: hydra
+hydra_db_user: horton
+hydra_db_pass: penguins;13f1
+hydra_db_host: postgres 
+hydra_db_port: 5432
+
+# Deploy
+fedora_base_path: /{{ deploy_target }}
+project_name: horton
+shared_root: /opt/{{ project_name }}/shared
+
+# Keepalived
+shared_internal_ip: 172.21.62.59
+shared_external_ip: 169.228.62.100
+
+keepalived_sync_groups:
+  haproxy:
+    instances:
+      - internal
+keepalived_scripts:
+  haproxy_check_script:
+    check_script: "killall -0 haproxy"
+  pingable_check_script:
+    check_script: "ping -c 1 -p {{ keepalived_check_port }} {{ keepalived_protected_address }}  1>&2"
+    # Interval is the time in seconds between each check
+    interval: 120
+    # Fall is the time to mark the keepalived status as not ok
+    fall: 2
+    # Rise is the time to mark the keepalived status as back to ok
+    rise: 4
+    # Allow the check script to complete within a timeout
+    timeout: 20
+
+keepalived_instances:
+  internal:
+    interface: "{{ vrrp_nic }}"
+    state: "{{ (play_hosts.index(inventory_hostname) == 0) | ternary('MASTER','BACKUP') }}"
+    virtual_router_id: 42
+    priority: "{{ (play_hosts.index(inventory_hostname) == 0) | ternary('100','50') }}"
+    track_scripts:
+      - haproxy_check_script
+      - pingable_check_script
+    vips:
+      - "{{ vip }}/24 dev {{ vrrp_nic }}"
+
+# Nodejs
+nodejs_install_npm_user: "{{ capistrano_user }}"
+
+# Redis
+redis_address: "{{ hostvars[groups['horton_sidekiq_master'][0]]['ansible_eth0']['ipv4']['address'] }}"
+
+# Postfix
+postfix_enabled: yes
+postfix_myhostname: "{{ inventory_hostname }}"
+postfix_dkim_domain: "{{ inventory_hostname }}"
+postfix_smtp_use_tls: yes
+postfix_smtp_tls_cafile: /etc/ssl/certs/ca-certificates.crt
+postfix_smtp_tls_loglevel: 1
+postfix_smtp_tls_security_level: encrypt
+postfix_smtp_tls_note_starttls_offer: yes
+
+# Ruby
+ruby_ver: '2.4.1'
+rvm1_rubies:
+  - 'ruby-2.4.1'
+rvm1_install_flags: '--auto-dotfiles'     # Remove --user-install from defaults
+rvm1_install_path: /usr/local/rvm         # Set to system location
+rvm1_user: root
+
+# Solr
+solr_version: 6.6.0
+# solr_url: horton_solr_1
+solr_url: "{{ shared_internal_ip }}"
+solr_port: 8983 
+solr_context: solr
+solr_core: collection1
+zookeeper_hosts: "{{groups['horton_solr']}}"
+
+# SSH Keys
+ssh_keys:
+  - winescout
+  - smcfarlane
+  - orangewolf
+# TODO UCSD users
+
+# Swap file
+vm_swap: 4000
+swap_file_path: /swapfile
+
+# Tomcat
+tomcat_url: "{{ shared_internal_ip }}"
+ 
+# Webserver
+webserver: passenger
+passenger_root: /etc/httpd/conf.d
+apache: httpd
+apache_default: /etc/httpd/conf.d/welcome.conf
