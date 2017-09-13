@@ -1,6 +1,6 @@
 ---
 - name: Server Level Config
-  hosts: "all"
+  hosts: "horton_fedora:horton_solr:horton_samvera:horton_ha_proxy_web:horton_ha_proxy_fedora:horton_sidekiq:horton_sidekiq_master"
 #  strategy: debug
   roles:
     - { role: geerlingguy.repo-epel, become: true }

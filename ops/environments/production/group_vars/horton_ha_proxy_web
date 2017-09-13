@@ -1,0 +1,22 @@
+keepalived_protected_address: "{{ ansible_default_ipv4.address }}"
+keepalived_check_port: 80
+vrrp_nic: eth0
+vip: "{{ shared_external_ip }}/24"
+
+haproxy_frontends:
+  - name: 'web'
+    address: '*:80'
+    mode: 'http'
+    backend: 'samvera'
+
+haproxy_backends:
+  - name: 'samvera'
+    mode: 'http'
+    servers:
+      - name: horton_samvera_1
+        address: "{{ groups['horton_samvera'][0] }}:80"
+      - name: horton_samvera_2
+        address: "{{ groups['horton_samvera'][1] }}:80"
+    timout connect: 60s
+    timout server: 300s
+

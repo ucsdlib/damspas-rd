@@ -1,0 +1,34 @@
+haproxy_frontends:
+  - name: 'fedora'
+    address: '*:8080'
+    mode: 'http'
+    backend: 'fedora-backend'
+  - name: 'solr'
+    address: '*:8983'
+    mode: 'http'
+    backend: 'solr-backend'
+
+
+haproxy_backends:
+  - name: 'fedora-backend'
+    mode: 'http'
+    balance_method: 'roundrobin'
+    servers:
+      - name: "{{ groups['horton_fedora'][0] }}"
+        address: "{{ groups['horton_fedora'][0] }}:8080"
+      - name: "{{ groups['horton_fedora'][1] }}" 
+        address: "{{ groups['horton_fedora'][1] }}:8080"
+    timout connect: 60s
+    timout server: 300s
+
+  - name: 'solr-backend'
+    mode: 'http'
+    balance_method: 'roundrobin'
+    servers:
+      - name: "{{ groups['horton_solr'][0] }}" 
+        address: "{{ groups['horton_solr'][0] }}:8983" 
+      - name: "{{ groups['horton_solr'][1] }}"
+        address: "{{ groups['horton_solr'][1] }}:8983"
+    timout connect: 60s
+    timout server: 300s
+
