@@ -3,7 +3,7 @@
 if ARGV[0] == "development"
   system "ansible-playbook -i ops/environments/development/docker.py -c docker ops/cleanup.yml"
 else
-  puts "Need to specify development or production - ./bin/provision production or ./bin/provision development"
+  puts "Need to specify development or production - ./bin/cleanup production or ./bin/provision development"
   exit 1
 end
 

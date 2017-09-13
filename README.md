@@ -85,3 +85,16 @@ bin/import-authorities
 ### Create an admin set to start ingest
 ```rake hyrax:default_admin_set:create```
 
+
+
+# Deployment
+Deployment is handled via ansible, allows rollback and can be used to provision new machines
+
+```bash
+./bin/deploy production 
+```
+
+```bash
+./bin/rollback production 
+```
+
