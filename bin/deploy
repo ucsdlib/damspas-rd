@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 if ARGV[0] == "production"
-  system "ansible-playbook -i ops/environments/production/hosts ops/deploy.yml"
+  system "ansible-playbook -i ops/environments/production/hosts --ask-vault-pass ops/deploy.yml"
 elsif ARGV[0] == "development"
   system "ansible-playbook -i ops/environments/development/docker.py -c docker ops/deploy.yml"
 else

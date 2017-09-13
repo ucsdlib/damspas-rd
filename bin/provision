@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
 if ARGV[0] == "production"
-  system "ansible-playbook -i ops/environments/production/hosts ops/rollback.yml"
+  system "ansible-playbook -i ops/environments/production/hosts --ask-vault-pass ops/ucsd.yml"
 elsif ARGV[0] == "development"
-  system "ansible-playbook -i ops/environments/development/docker.py -c docker ops/rollback.yml"
+  system "ansible-playbook -i ops/environments/development/docker.py -c docker ops/development.yml"
 else
-  puts "Need to specify development or production - ./bin/rollback production or ./bin/provision development"
+  puts "Need to specify development or production - ./bin/provision production or ./bin/provision development"
   exit 1
 end
 
