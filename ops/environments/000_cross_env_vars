@@ -1,4 +1,4 @@
-# Anistrano
+# Ansistrano
 ansistrano_deploy_from: "{{ playbook_dir }}/../" # Where my local project is (relative or absolute path)
 ansistrano_deploy_to: "/opt/{{ project_name }}" # Base path to deploy to.
 ansistrano_version_dir: "releases" # Releases folder name
@@ -26,7 +26,7 @@ ansistrano_shared_files:
   - config/solr.yml
 
 ansistrano_deploy_via: "git"
-#ansistrano_git_repo: https://github.com/ucsdlib/horton.git
+# TODO restore once ops is merged ansistrano_git_repo: https://github.com/ucsdlib/horton.git
 ansistrano_git_repo: https://github.com/notch8/horton.git
 ansistrano_git_branch: devops # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
 #ansistrano_git_identity_key_path: "keys/deploy" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used

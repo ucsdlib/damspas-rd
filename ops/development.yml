@@ -18,7 +18,6 @@
           ha_proxy_fedora: 1
       register: output
     - meta: refresh_inventory
-#    - debug: msg="group {{ groups['horton_fedora'] }}"
 
 - name: Fix sudoers
   hosts: "horton_fedora:horton_solr:horton_samvera:horton_ha_proxy_web:horton_ha_proxy_fedora:horton_sidekiq:horton_sidekiq_master"
@@ -27,4 +26,3 @@
 
 - include: configure.yml 
 
-#- include: cleanup.yml

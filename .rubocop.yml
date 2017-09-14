@@ -14,6 +14,7 @@ AllCops:
     - 'config/**/*'
     - 'doc/**/*'
     - 'playbooks/**/*'
+    - 'ops/**/*'
 
 Bundler/DuplicatedGem:
   Enabled: false

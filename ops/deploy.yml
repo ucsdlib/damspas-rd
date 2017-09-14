@@ -8,45 +8,18 @@
 - name: Permissions and folders
   hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
   tasks:
-    - name: make shared root config directory
+    - name: make shared directories
       become: yes
       file:
-        path: "{{ ansistrano_deploy_to }}/releases"
+        path: "{{ item }}" 
         recurse: true
         state: directory
         owner: "{{ capistrano_user }}"
         mode: 0755
-
-- name: Permissions and folders
-  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
-  tasks:
-    - name: make shared root config directory
-      become: yes
-      file:
-        path: "{{ ansistrano_deploy_to }}/shared"
-        recurse: true
-        state: directory
-        owner: "{{ capistrano_user }}"
-        mode: 0755
-
-- name: Permissions and folders
-  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
-  tasks:
-    - name: make shared root config directory
-      become: yes
-      file:
-        path: "{{ ansistrano_deploy_to }}"
-        recurse: true
-        state: directory
-        owner: "{{ capistrano_user }}"
-        mode: 0755
-
-- name: Deploy Rails App - Leader
-  hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"
-  become_user: "{{ capistrano_user }}"
-  become: yes
-  roles:
-    - { role: carlosbuenosvinos.ansistrano-deploy }
+      with_items:
+        - "{{ ansistrano_deploy_to }}/releases" 
+        - "{{ ansistrano_deploy_to }}/shared"
+        - "{{ ansistrano_deploy_to }}"
 
 - name: Deploy Rails App
   hosts: "horton_samvera:horton_sidekiq:horton_sidekiq_master"

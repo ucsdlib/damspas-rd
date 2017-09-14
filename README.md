@@ -98,3 +98,16 @@ Deployment is handled via ansible, allows rollback and can be used to provision 
 ./bin/rollback production 
 ```
 
+## Provisioning and testing of provisioning
+The following 4 scripts are provided to make server maintanence easier.  Each can be run in both production and development mode (see note about development).
+
+./bin/deploy  - Deploy a release to the servers. Can be production or development
+./bin/provision - Run the configuration script, which will attempt to install and configure all software. Configuration is idempotent, so running it on a configured server is acceptable.  Can be run in production or development
+./bin/cleanup - development only.  This script closes down the docker images used by the scripts to test provisioning
+./bin/rollback - Roll back the last deploy. Can be production or development
+
+
+## Development environment for ansible scripts
+In order to facilitate development and modification of the ansible scripts, a development config has been established.  This requires Docker be running on the dev machine and that the proper docker python packages are installed.  If using ansible >= 2.4 install python packages with "pip install docker docker-compose". For older versions of ansible "pip install docker-py".  Please note that docker-py and docker-compose Python packages do not get along.
+
+
