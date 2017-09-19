@@ -9,14 +9,6 @@ RSpec.describe "hyrax/file_sets/show.html.erb", type: :view do
   let(:ability) { double }
   let(:file_set_presenter) { FileSetPresenter.new(file_set_document, :ability) }
 
-  before do
-    @iiif_enabled = Rails.configuration.iiif_enabled
-  end
-
-  after do
-    Rails.configuration.iiif_enabled = @iiif_enabled
-  end
-
   context 'IIIF viewer' do
     let(:picture_tag) { '<picture><source media="openseadragon" src="p1.tif/info.json" /></picture>' }
 

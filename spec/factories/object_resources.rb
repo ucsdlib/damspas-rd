@@ -102,5 +102,15 @@ FactoryGirl.define do
         2.times { obj.ordered_members << FactoryGirl.create(:culturally_sensitive_file_set, user: evaluator.user) }
       end
     end
+
+    factory :object_with_image_file do
+      after(:create) do |object_resource, evaluator|
+        file_path = Rails.root.join("spec", "fixtures", "files", "file_1.jpg")
+        file = FactoryGirl.create(:file_set, user: evaluator.user, content: File.open(file_path))
+        object_resource.ordered_members << file
+        object_resource.representative_id = file.id
+        object_resource.save
+      end
+    end
   end
 end
