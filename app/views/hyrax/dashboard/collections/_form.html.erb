@@ -1,4 +1,4 @@
-<%= simple_form_for @form, html: { class: 'editor' } do |f| %>
+<%= simple_form_for @form, url: [hyrax, :dashboard, @form], html: { class: 'editor' } do |f| %>
   <div id="descriptions_display">
     <h2 class="non lower"><%= t('hyrax.collection.edit.description') %></h2>
     <div id="base-terms">

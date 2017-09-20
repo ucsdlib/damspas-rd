@@ -35,5 +35,9 @@ module MyApp
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    config.to_prepare do
+      Hyrax::Dashboard::CollectionsController.prepend Hyrax::Dashboard::CollectionsControllerOverride
+      Hyrax::PermissionBadge.prepend Hyrax::PermissionBadgeOverride
+    end
   end
 end

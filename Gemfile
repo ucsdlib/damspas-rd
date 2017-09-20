@@ -65,7 +65,7 @@ gem 'capistrano-bundler', '~> 1.2.0'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'hyrax', '2.0.0.alpha', github: 'projecthydra-labs/hyrax', ref: '9f117a32a9fdd42a7884c3c5ee59997ad1e8f2d4'
+gem 'hyrax', '2.0.0.beta1', github: 'projecthydra-labs/hyrax', ref: '7157bc31750b66be094bd117859292f3938b062c'
 gem 'hydra-role-management'
 
 gem 'nokogiri', '~> 1.7.1'
