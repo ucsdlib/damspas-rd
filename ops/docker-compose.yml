@@ -10,47 +10,36 @@ services:
   main:
     image: "notch8/systemd"
     build: .
-
-  fedora:
-    image: "notch8/systemd"
     tty: true
     privileged: true
+
+  fedora:
+    extends: main
+    # image: "notch8/systemd/fedora"  use docker commit CONTAINER_ID notch8/systemd/fedora to create new intermidiate images
     depends_on:
       - postgres
 
   haproxyweb:
-    image: "notch8/systemd"
-    tty: true
-    privileged: true
+    extends: main
 
   haproxyfedora:
-    image: "notch8/systemd"
-    tty: true
-    privileged: true
+    extends: main
 
   samvera:
-    image: "notch8/systemd"
-    tty: true
-    privileged: true
+    extends: main
     depends_on:
       - postgres
 
-  sidekiq: 
-    image: "notch8/systemd"
-    tty: true
-    privileged: true
+  sidekiq:
+    extends: main
     depends_on:
       - postgres
 
-  sidekiqmaster: 
-    image: "notch8/systemd"
-    tty: true
-    privileged: true
+  sidekiqmaster:
+    extends: main
     depends_on:
       - postgres
 
   solr:
-    image: "notch8/systemd"
-    tty: true
-    privileged: true
+    extends: main
 

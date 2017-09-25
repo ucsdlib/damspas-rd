@@ -110,4 +110,6 @@ The following 4 scripts are provided to make server maintanence easier.  Each ca
 ## Development environment for ansible scripts
 In order to facilitate development and modification of the ansible scripts, a development config has been established.  This requires Docker be running on the dev machine and that the proper docker python packages are installed.  If using ansible >= 2.4 install python packages with "pip install docker docker-compose". For older versions of ansible "pip install docker-py".  Please note that docker-py and docker-compose Python packages do not get along.
 
+If you run in to problems with systemd (specifically hanging process starts or restarts) then you may need to update the docker image. Systemd upgrades can not be done on the fly in a running docker instance, see: https://github.com/geerlingguy/ansible-role-security/issues/21 
+To do an update run "docker rmi notch8/systemd" then run the ./bin/provision development as normal.  This will clear your existing containers. Note that all containers must be stopped to do this, so you may want to run ./bin/cleanup development first.
 
