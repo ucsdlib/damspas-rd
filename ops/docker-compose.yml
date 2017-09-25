@@ -2,46 +2,55 @@ version: '2'
 services:
   postgres:
     image: postgres
+    environment:
+      - POSTGRES_PASSWORD=penguins;13f1
+      - POSTGRES_USER=horton
+      - POSTGRES_DB=horton
+
+  main:
+    image: "notch8/systemd"
+    build: .
 
   fedora:
-    image: "centos/systemd"
+    image: "notch8/systemd"
     tty: true
     privileged: true
     depends_on:
       - postgres
 
-  ha_proxy_web:
-    image: "centos/systemd"
+  haproxyweb:
+    image: "notch8/systemd"
     tty: true
     privileged: true
 
-  ha_proxy_fedora:
-    image: "centos/systemd"
-    tty: true
-    privileged: true
-
-  solr:
-    image: "centos/systemd"
+  haproxyfedora:
+    image: "notch8/systemd"
     tty: true
     privileged: true
 
   samvera:
-    image: "centos/systemd"
+    image: "notch8/systemd"
     tty: true
     privileged: true
     depends_on:
       - postgres
 
   sidekiq: 
-    image: "centos/systemd"
+    image: "notch8/systemd"
     tty: true
     privileged: true
     depends_on:
       - postgres
 
-  sidekiq_master: 
-    image: "centos/systemd"
+  sidekiqmaster: 
+    image: "notch8/systemd"
     tty: true
     privileged: true
     depends_on:
       - postgres
+
+  solr:
+    image: "notch8/systemd"
+    tty: true
+    privileged: true
+

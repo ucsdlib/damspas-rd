@@ -45,15 +45,25 @@ hydra_db_user: horton
 hydra_db_pass: penguins;13f1
 hydra_db_host: postgres 
 hydra_db_port: 5432
+fedora_db: fedora
+fedora_db_user: "{{ hydra_db_user }}"
+fedora_db_pass: "{{ hydra_db_pass }}"
+fedora_db_host: postgres 
+fedora_db_port: 5432
 
 # Deploy
 fedora_base_path: /{{ deploy_target }}
 project_name: horton
 shared_root: /opt/{{ project_name }}/shared
 
+# Fedora
+fedora_data_path: /opt/fedora-data
+
 # Keepalived
-shared_internal_ip: 172.21.62.59
-shared_external_ip: 169.228.62.100
+keepalived_protected_address: "{{ ansible_default_ipv4.address }}"
+keepalived_check_port: 8080
+vrrp_nic: eth0
+vip: "{{ shared_internal_ip }}/24"
 
 keepalived_sync_groups:
   haproxy:
@@ -89,7 +99,7 @@ keepalived_instances:
 nodejs_install_npm_user: "{{ capistrano_user }}"
 
 # Redis
-redis_address: "{{ hostvars[groups['horton_sidekiq_master'][0]]['ansible_eth0']['ipv4']['address'] }}"
+redis_address: "{{ hostvars[groups['horton_sidekiqmaster'][0]]['ansible_eth0']['ipv4']['address'] }}"
 
 # Postfix
 postfix_enabled: yes
@@ -108,6 +118,7 @@ rvm1_rubies:
 rvm1_install_flags: '--auto-dotfiles'     # Remove --user-install from defaults
 rvm1_install_path: /usr/local/rvm         # Set to system location
 rvm1_user: root
+
 
 # Solr
 solr_version: 6.6.0

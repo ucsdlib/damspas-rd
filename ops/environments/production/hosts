@@ -1,12 +1,12 @@
-[horton_ha_proxy_fedora]
+[horton_haproxyfedora]
 lib-dams5-proxy-int-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-proxy-int-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_ha_proxy_web]
+[horton_haproxyweb]
 lib-dams5-proxy-ext-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-proxy-ext-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_sidekiq_master]
+[horton_sidekiqmaster]
 lib-dams5-redis-1.ucsd.edu ansible_user=notch8-consultant
 
 [horton_sidekiq]
@@ -33,7 +33,7 @@ horton_samvera
 horton_fedora
 horton_solr
 horton_samvera
-horton_sidekiq_master
+horton_sidekiqmaster
 horton_sidekiq
-horton_ha_proxy_web
-horton_ha_proxy_fedora
+horton_haproxyweb
+horton_haproxyfedora

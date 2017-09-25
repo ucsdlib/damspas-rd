@@ -625,7 +625,7 @@ class DockerInventory(object):
                     group_name = name.split('_')[1]
                     self.groups[(stack_name + "_" + group_name)].append(name)
                 self.groups[id].append(name)
-                self.groups[name].append(name)
+#                self.groups[name].append(name)
                 if short_id not in self.groups:
                     self.groups[short_id].append(name)
                 self.groups[hostname].append(name)
