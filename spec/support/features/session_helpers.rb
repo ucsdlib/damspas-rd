@@ -5,9 +5,9 @@ module Features
       logout
       user = who.is_a?(User) ? who : FactoryGirl.build(:user).tap(&:save!)
       visit new_user_session_path
+      fill_in 'Name', with: user.full_name
       fill_in 'Email', with: user.email
-      fill_in 'Password', with: user.password
-      click_button 'Log in'
+      click_button 'Sign In'
       expect(page).not_to have_text 'Invalid email or password.'
     end
   end

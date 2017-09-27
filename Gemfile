@@ -90,6 +90,13 @@ end
 gem 'rsolr', '~> 2.0.1'
 gem 'devise', '~> 4.2.1'
 gem 'devise-guests', '~> 0.6.0'
+gem 'omniauth', '1.6.1'
+gem 'omniauth-shibboleth', '1.2.1'
+gem 'net-ldap'
+gem 'flexmock'
+gem 'fakeldap'
+gem 'ruby-ldapserver', '~> 0.5.0'
+
 group :development, :test do
   gem 'fcrepo_wrapper', '~> 0.8.0'
   gem 'rspec-rails', '~> 3.6.0'

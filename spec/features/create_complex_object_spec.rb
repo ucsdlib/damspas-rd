@@ -12,7 +12,7 @@ feature 'Create a complex Object' do
     let(:grandChild2)  { FactoryGirl.create(:object_resource_with_one_file, user: user, title: ["Grand Child 2"]) }
 
     before do
-      login_as user
+      sign_in user
       child1.ordered_members << grandChild1
       child1.ordered_members << grandChild2
       child1.save!
