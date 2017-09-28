@@ -458,7 +458,7 @@ feature 'ObjectResource' do
   context 'an anonymous user' do
     scenario 'should not allow to create new object' do
       visit new_hyrax_object_resource_path
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should be able to read any public objects but no editing allowed' do
@@ -469,18 +469,18 @@ feature 'ObjectResource' do
 
     scenario 'should be able to read any campus only objects' do
       visit hyrax_object_resource_path campus_only_object_resource.id
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should not be able to read any private objects' do
       visit hyrax_object_resource_path private_object_resource.id
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should not be able to read any embargoed objects' do
       visit hyrax_object_resource_path embargoed_object_resource.id
       expect(page).not_to have_content 'Embargoed Object Title'
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should be able to read metadata-only objects but no access to files' do
@@ -488,7 +488,7 @@ feature 'ObjectResource' do
       expect(page).to have_content 'Metadata-only Object Title'
       expect(page).not_to have_xpath "//a[text()='Edit']"
       visit hyrax_file_set_path metadata_only_object_resource.file_sets.first.id
-      expect(page).to have_current_path "#{new_user_session_path}?locale=en"
+      expect(page).to have_current_path "#{user_developer_omniauth_authorize_path}?locale=en"
     end
 
     scenario 'should be able to read culturally-sensitive objects and files' do
