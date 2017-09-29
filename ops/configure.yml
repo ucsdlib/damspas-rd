@@ -12,10 +12,8 @@
 
 - name: Fedora Config
   hosts: "horton_fedora"
-  #strategy: debug
   roles:
     - { role: hydra-stack/fedora, become: true }
-# TODO log rotate
 
 - name: Solr Config
   hosts: "horton_solr"
@@ -23,7 +21,6 @@
   roles:
     - { role: AnsibleShipyard.ansible-zookeeper, become: true }
     - { role: hydra-stack/solr, become: true }
-# TODO log rotate
 
 - name: HA Proxy Fedora IpTables
   hosts: "horton_haproxyfedora"
@@ -58,7 +55,6 @@
 
 - name: Rails Config
   hosts: "horton_samvera:horton_sidekiq:horton_sidekiqmaster"
-#  strategy: debug
   roles:
     - { role: notch8.ffmpeg, become: true }
     - { role: geerlingguy.nodejs, become: true }
@@ -69,12 +65,10 @@
 
 - name: Samvera Config
   hosts: "horton_samvera"
-#  strategy: debug
   roles:
     - { role: webserver/install, become: true }
     - { role: webserver/config, become: true }
 
-# TODO log rotate
 - name: Sidekiq Config Master
   hosts: "horton_sidekiqmaster"
   roles:
