@@ -55,11 +55,9 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-# Deploy with Capistrano
-gem 'capistrano', '~> 3.8.1'
-gem 'capistrano-rails', '~> 1.2.3'
-gem 'capistrano-rbenv', '~> 2.1.1'
-gem 'capistrano-bundler', '~> 1.2.0'
+# Syslog logging
+gem 'syslogger', '~> 1.6.0'
+gem 'lograge','~> 0.3.1'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
