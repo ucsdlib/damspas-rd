@@ -8,6 +8,7 @@ Metrics/ClassLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
     - 'lib/import/tabular_importer.rb'
+    - 'app/forms/hyrax/forms/work_form.rb'
     - 'app/models/user.rb'
 
 Metrics/MethodLength:

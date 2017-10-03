@@ -122,6 +122,7 @@ module Hyrax
         super + [
           :on_behalf_of,
           :version,
+          :add_works_to_collection,
           {
             work_members_attributes: [:id, :_destroy],
             based_near_attributes: [:id, :_destroy]
@@ -143,6 +144,13 @@ module Hyrax
         raise Hyrax::MissingWorkflowError, error_message unless workflow
         workflow
       end
+
+      # Select collection(s) based on passed-in params
+      # @return [Array] a list of collection identifiers
+      def member_of_collections(collection_ids)
+        Array.wrap(collection_ids)
+      end
+
       private_class_method :workflow_for
 
       private
