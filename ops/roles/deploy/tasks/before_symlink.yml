@@ -1,6 +1,11 @@
 ---
 - name: Install bundle
   shell: bash -l -c "cd {{ ansistrano_release_path.stdout }} && bundle install --deployment --without=\"development test\""
+  when: deploy_target != "development"
+
+- name: Install bundle
+  shell: bash -l -c "cd {{ ansistrano_release_path.stdout }} && bundle install"
+  when: deploy_target == "development"
 
 - name: Precompile assets
   command: bash -l -c "cd {{ ansistrano_release_path.stdout }} && bundle exec rake assets:precompile"
