@@ -1,7 +1,0 @@
----
-- name: set up ssh keys from github
-  authorized_key: >
-    user={{ansible_user_id}}
-    key="https://github.com/{{ item }}.keys"
-  with_items: "{{ ssh_keys }}"
-...

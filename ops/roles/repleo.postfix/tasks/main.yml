@@ -1,5 +1,0 @@
----
-
-- include: postfix.yml
-  when: postfix_enabled
-  tags: [postfix]
