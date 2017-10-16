@@ -1,0 +1,43 @@
+- src: https://github.com/notch8/ansible-redis
+  version: master
+  name: DavidWittman.redis
+
+- src: https://github.com/notch8/rollback
+  version: master
+  name: carlosbuenosvinos.ansistrano-rollback
+
+- src: https://github.com/notch8/deploy
+  version: master
+  name: carlosbuenosvinos.ansistrano-deploy
+
+- src: https://github.com/notch8/ansible-keepalived
+  version: master
+  name: evrardjp.keepalived
+
+- src: https://github.com/notch8/ansible-role-repo-epel
+  version: master
+  name: geerlingguy.repo-epel
+
+- src: https://github.com/notch8/ansible-role-nodejs
+  version: master
+  name: geerlingguy.nodejs
+
+- src: https://github.com/notch8/ansible-role-haproxy
+  version: master
+  name: openmicroscopy.haproxy
+
+- src: https://github.com/notch8/ansible-role-postfix
+  version: master
+  name: repleo.postfix
+
+- src: https://github.com/notch8/rvm1-ansible
+  version: master
+  name: rvm_io.ruby  
+
+- src: https://github.com/notch8/ansible-ssh
+  version: master
+  name: notch8.ssh
+
+- src: https://github.com/notch8/ansible-ffmpeg
+  version: master
+  name: notch8.ffmpeg

@@ -38,3 +38,4 @@ playbooks/roles
 *.retry
 ops/inventory/group_vars/*
 !ops/inventory/group_vars/sample_*
+ops/roles/*
