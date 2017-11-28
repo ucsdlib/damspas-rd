@@ -11,7 +11,10 @@ module Hyrax
 
     helper Rails.application.routes.url_helpers
 
-    self.curation_concern_type = ObjectResource
+    self.curation_concern_type = ::ObjectResource
+
+    # Use this line if you want to use a custom presenter
+    self.show_presenter = ::ObjectShowPresenter
 
     # Display the form the the user.
     def new
@@ -49,10 +52,6 @@ module Hyrax
 
     def search_builder_class
       ::WorkSearchBuilder
-    end
-
-    def show_presenter
-      ::ObjectShowPresenter
     end
 
     def add_breadcrumb_relation

@@ -3,11 +3,12 @@
 class ObjectResource < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include ::RightsOverrideBehavior
-
   include ::CommonMetadata
   include NestedAttributes
 
   self.human_readable_type = 'Object'
+  self.indexer = ::WorkIndexer
+
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
@@ -44,9 +45,5 @@ class ObjectResource < ActiveFedora::Base
   def rights_override_change?
     return true if rights_override != file_sets.first.rights_override
     false
-  end
-
-  def self.indexer
-    ::WorkIndexer
   end
 end

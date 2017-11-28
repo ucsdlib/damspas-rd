@@ -97,3 +97,6 @@ Security/MarshalLoad:
   Exclude:
     - 'app/models/concerns/hyrax/user.rb'
 
+RSpec/PredicateMatcher:
+  Enabled: false
+

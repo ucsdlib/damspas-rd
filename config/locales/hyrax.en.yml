@@ -3,76 +3,60 @@ en:
     action:
       batch:
         new: "Batch Import"
-  hyrax:
-    product_name:       "Hyrax"
-    product_twitter_handle: "@HydraSphere"
-    institution_name:   "Campus"
-#    institution_name_full:   "The Institution Name"
-    account_name:       "My Institution Account Id"
-    directory:
-      suffix:           "@example.org"
-    footer:
-      copyright_html: "<strong>Copyright &copy; 2016 Project Hydra</strong> Licensed under the Apache License, Version 2.0"
+  blacklight:
     search:
-      form:
-        option:
-          my_works:
-            label_short:  "My Objects"
-            label_long:   "My Objects"
-    select_type:
-      name:        "Object"
-    share_button:       "Share Your Object"
-    homepage:
-      featured_works:
-        tab_label:          'Featured Objects'
-        title:              'Featured Objects'
-        no_works:           'No objects have been featured'
-    toolbar:
-      works:
-        menu: "Objects"
-        new: "New Object"
-        my: "My Objects"
-        batch: "Batch Create"
-        toolbar:
-      collections:
-        menu: "Collections"
-        new: "New Collection"
-        my: "My Collections"
-    controls:
-      faq: "FAQ"
-      search-tips: "Search Tips"
-      takedown: "Take Down Policy"  
-    dashboard:
-      heading_actions:
-        create_work:            "Create Object"
-        select_type_of_work:    "Select type of object"
-      view_works:               "View Objects"
-      create_work:              "Create Object"
-      transfer_works_link:      "Select objects to transfer"
-      no_transfer_requests:     "You haven't received any object transfer requests"
-      no_transfers:             "You haven't transferred any object"
-      stats:
-        works:              "Objects created"
-      my:
-        works:        "My Objects"
-        shares:       "Objects Shared with Me"
-        facet_label:
-          works:       "Filter your objects"
-    works:
-      new:
-        header: "Add New Object"
-        in_collections: This Object in Collections
-        in_this_work: Other Objects in this Object
-        in_other_works: This Object in Other Objects
-        after_create_html: "Your files are being processed by %{application_name} in the background. The metadata and access controls you specified are being applied. Files will be marked <span class=\"label label-danger\" title=\"Private\">Private</span> until this process is complete (shouldn't take too long, hang in there!). You may need to refresh this page to see these updates."
-      edit:
-        header: Edit Object
-        in_collections: This Object in Collections
-        in_this_work: Other Objects in this Object
-        in_other_works: This Object in Other Objects
-        additional_fields: "Additional fields"
-      progress:
-        header: "Save Object"
+      fields:
+        facet:
+          based_near_sim: Location
+          creator_sim: Creator
+          file_format_sim: Format
+          generic_type_sim: Type
+          keyword_sim: Keyword
+          language_sim: Language
+          publisher_sim: Publisher
+          subject_sim: Subject
+        index:
+          based_near_tesim: Location
+          contributor_tesim: Contributor
+          creator_tesim: Creator
+          date_created_tesim: Date Created
+          date_modified_dtsi: Date Modified
+          date_uploaded_dtsi: Date Uploaded
+          description_tesim: Description
+          file_format_tesim: File Format
+          identifier_tesim: Identifier
+          keyword_tesim: Keyword
+          language_tesim: Language
+          publisher_tesim: Publisher
+          rights_tesim: Rights
+          subject_tesim: Subject
+        show:
+          based_near_tesim: Location
+          contributor_tesim: Contributor
+          creator_tesim: Creator
+          date_created_tesim: Date Created
+          date_modified_dtsi: Date Modified
+          date_uploaded_dtsi: Date Uploaded
+          description_tesim: Description
+          file_format_tesim: File Format
+          identifier_tesim: Identifier
+          keyword_tesim: Keyword
+          language_tesim: Language
+          publisher_tesim: Publisher
+          rights_tesim: Rights
+          subject_tesim: Subject
+          title_tesim: Title
+  hyrax:
+    product_name:           "Hyrax"
+    product_twitter_handle: "@SamveraRepo"
+    institution_name:       "Institution"
+    institution_name_full:  "The Institution Name"
+    account_name:           "My Institution Account Id"
+    directory:
+      suffix:               "@example.org"
+    footer:
+      copyright_html: "<strong>Copyright &copy; 2017 Samvera</strong> Licensed under the Apache License, Version 2.0"
+      service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
     visibility:
       suppress_discovery:
         class: "label-info"
@@ -90,8 +74,18 @@ en:
       tabs:
         faq_page: FAQ Page
         takedown_page: Take Down Page
-        search_tips_page: Search Tips Page
-  simple_form:
-    labels:
-      defaults:
-        description:               "Description"
+        search_tips_page: Search Tips Page      
+    controls:
+      faq: "FAQ"
+      search-tips: "Search Tips"
+      takedown: "Take Down Policy"
+    toolbar:
+      works:
+        menu: "Objects"
+        new: "New Object"
+        my: "My Objects"
+        batch: "Batch Create"
+      collections:
+        menu: "Collections"
+        new: "New Collection"
+        my: "My Collections"  

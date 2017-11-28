@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171009210710) do
+ActiveRecord::Schema.define(version: 20171115194346) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer  "user_id",       null: false
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(version: 20171009210710) do
     t.datetime "expires"
     t.index ["conversation_id"], name: "index_mailboxer_notifications_on_conversation_id"
     t.index ["notified_object_id", "notified_object_type"], name: "index_mailboxer_notifications_on_notified_object_id_and_type"
+    t.index ["notified_object_type", "notified_object_id"], name: "mailboxer_notifications_notified_object"
     t.index ["sender_id", "sender_type"], name: "index_mailboxer_notifications_on_sender_id_and_sender_type"
     t.index ["type"], name: "index_mailboxer_notifications_on_type"
   end
@@ -198,9 +199,7 @@ ActiveRecord::Schema.define(version: 20171009210710) do
     t.datetime "updated_at"
     t.date     "release_date"
     t.string   "release_period"
-    t.integer  "workflow_id"
     t.index ["admin_set_id"], name: "index_permission_templates_on_admin_set_id", unique: true
-    t.index ["workflow_id"], name: "index_permission_templates_on_workflow_id"
   end
 
   create_table "proxy_deposit_requests", force: :cascade do |t|
@@ -500,10 +499,10 @@ ActiveRecord::Schema.define(version: 20171009210710) do
     t.string   "arkivo_subscription"
     t.binary   "zotero_token"
     t.string   "zotero_userid"
+    t.string   "preferred_locale"
     t.string   "uid"
     t.string   "provider"
     t.string   "full_name"
-    t.string   "preferred_locale"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

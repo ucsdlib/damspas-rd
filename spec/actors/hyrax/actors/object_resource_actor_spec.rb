@@ -1,7 +1,9 @@
+# Generated via
+#  `rails generate hyrax:work ObjectResource`
 require 'rails_helper'
 require 'redlock'
 
-describe Hyrax::Actors::ObjectResourceActor do
+RSpec.describe Hyrax::Actors::ObjectResourceActor do
   include ActionDispatch::TestProcess
 
   let(:user) { create(:admin) }
