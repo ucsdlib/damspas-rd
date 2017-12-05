@@ -1,7 +1,4 @@
 ---
-  # solr 5 requires java 8
-  # until java 8 becomes the default package
-  # you must include the openjdk1_8 role before the hydra-stack role when installing solr 5.x
 - iptables_raw:
     name: allow_tcp_solr
     rules: |
@@ -11,49 +8,29 @@
       -A INPUT -m state --state NEW -p tcp --destination-port 3888 -j ACCEPT
     weight: 5
 
-- name: install solr packages
-  package: name={{ item }} state=installed update_cache=yes
-  with_items:
-    - lsof
-    - java-1.8.0-openjdk
+- name: "create the directory"
+  file:
+    path: /opt/solr/server/solr/configsets/samvera
+    state: directory
+    mode: 0755
+    owner: solr
+    group: solr
 
-- name: download solr tarball
-  get_url: url=http://archive.apache.org/dist/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz dest={{ install_path }}/solr-{{ solr_version }}.tgz force=no
-  # when we upgrade to ansible 2.0, add checksum="md5:{{ solr_md5 }}" 
+- name: "copy config files ot server"
+  copy:
+    src: ../solr/config
+    dest: /opt/solr/server/solr/configsets/samvera/conf
+    owner: solr
+    group: solr
+    mode: 0644
 
-- name: untar solr tarball
-  unarchive: src={{ install_path }}/solr-{{ solr_version }}.tgz dest={{ install_path }}/ creates={{ install_path }}/solr-{{ solr_version }}/bin/solr copy=no
+- name: "check for collection"
+  stat:
+    path: "/var/solr/data/{{ solr_core }}"
+    register: solr_result
 
-- name: check if solr 5 is installed
-  stat: path=/etc/default/solr.in.sh
-  register: solr_5_script
-
-- name: run solr 5 service script
-  when: solr_5_script.stat.exists == False
-  shell: bash {{ install_path }}/solr-{{ solr_version }}/bin/install_solr_service.sh {{ install_path }}/solr-{{ solr_version }}.tgz
-
-- name: create default collection
+- name: "create the collection if it does not exists"
   become: yes
   become_user: solr
-  shell: /opt/solr/bin/solr create -c {{ solr_core }} -force -d basic_configs creates=/var/solr/data/{{ solr_core }}
-
-- name: schema from code to solr
-  template: src=schema.xml.j2 dest=/var/solr/data/{{ solr_core }}/conf/schema.xml group=solr owner=solr
-  notify: restart solr
-
-
-- name: solrconfig from code to solr
-  template: src=solrconfig.xml.j2 dest=/var/solr/data/{{ solr_core }}/conf/solrconfig.xml group=solr owner=solr
-
-- name: remove managed_schema
-  file:
-    path: /var/solr/data/{{ solr_core }}/conf/managed-schema 
-    state: absent
-
-- name: set the solr port
-  set_fact:
-    solr_port: 8983
-
-- name: restart solr
-  service: name=solr enabled=yes state=restarted
-  ignore_errors: yes
+  shell: /opt/solr/bin/solr create -c {{ solr_core }} -force -d samvera  creates=/var/solr/data/{{ solr_core }}
+  when: solr_result.stat.exists == False

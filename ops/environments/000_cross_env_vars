@@ -122,12 +122,17 @@ rvm1_user: root
 
 # Solr
 solr_version: 6.6.0
-# solr_url: horton_solr_1
+solr_cluster: True
+solr_download_url: http://archive.apache.org/dist/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz
+solr_zookeeper_connect_string:
+  - "{{ groups['horton_solr'][0] }}:2181/solr"
+  - "{{ groups['horton_solr'][1] }}:2181/solr"
+solr_home: /var/solr
+solr_port: 8983
+solr_memory: 1g
 solr_url: "{{ shared_internal_ip }}"
-solr_port: 8983 
 solr_context: solr
 solr_core: collection1
-zookeeper_hosts: "{{groups['horton_solr']}}"
 
 # SSH Keys
 ssh_keys:

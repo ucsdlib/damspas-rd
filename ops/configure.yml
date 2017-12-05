@@ -19,8 +19,9 @@
   hosts: "horton_solr"
   strategy: debug
   roles:
-    - { role: AnsibleShipyard.ansible-zookeeper, become: true }
+    - { role: kevincoakley.solr, become: true }
     - { role: hydra-stack/solr, become: true }
+  tasks:
 
 - name: HA Proxy Fedora IpTables
   hosts: "horton_haproxyfedora"

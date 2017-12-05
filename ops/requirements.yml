@@ -41,3 +41,7 @@
 - src: https://github.com/notch8/ansible-ffmpeg
   version: master
   name: notch8.ffmpeg
+
+- src: https://github.com/notch8/ansible-role-solr
+  version: master
+  name: kevincoakley.solr
