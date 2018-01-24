@@ -1,0 +1,6 @@
+- name: Rollback Rails App
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiqmaster"
+  become_user: "{{ capistrano_user }}"
+  become: yes
+  roles:
+    - { role: carlosbuenosvinos.ansistrano-rollback }

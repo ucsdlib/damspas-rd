@@ -1,0 +1,84 @@
+<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:infinispan:config:5.2 http://www.infinispan.org/schemas/infinispan-config-5.2.xsd"
+            xmlns="urn:infinispan:config:5.2">
+  <global>
+    <globalJmxStatistics enabled="true" allowDuplicateDomains="true"/>
+    <transport clusterName="modeshape-cluster">
+      <properties>
+        <property name="configurationFile" value="${fcrepo.ispn.jgroups.configuration:config/jgroups-fcrepo-tcp.xml}"/>
+      </properties>
+    </transport>
+  </global>
+  <default>
+    <clustering mode="distribution">
+      <sync replTimeout="600000"/>
+      <l1 enabled="false" lifespan="0" onRehash="false"/>
+      <hash numOwners="${fcrepo.ispn.numOwners:2}"/>
+      <stateTransfer chunkSize="100" fetchInMemoryState="true"/>
+    </clustering>
+  </default>
+  <namedCache name="FedoraRepository">
+    <clustering mode="replication">
+      <sync replTimeout="6000000"/>
+      <l1 enabled="false" lifespan="0" onRehash="false"/>
+      <stateTransfer chunkSize="100" fetchInMemoryState="true" timeout="120000"/>
+    </clustering>
+    <locking isolationLevel="READ_COMMITTED" writeSkewCheck="false" lockAcquisitionTimeout="150000" useLockStriping="true" />
+    <transaction transactionMode="TRANSACTIONAL" lockingMode="PESSIMISTIC"/>
+    <loaders passivation="false" shared="false" preload="false">
+      <loader class="org.infinispan.loaders.file.FileCacheStore" fetchPersistentState="true"
+              purgeOnStartup="false">
+        <properties>
+          <property name="location" value="${fcrepo.ispn.repo.CacheDirPath:target/FedoraRepository/storage}"/>
+          <property name="fsyncMode" value="perWrite"/>
+        </properties>
+      </loader>
+    </loaders>
+  </namedCache>
+  <namedCache name="FedoraRepositoryMetaData">
+    <clustering mode="distribution">
+      <sync replTimeout="600000"/>
+      <l1 enabled="false" lifespan="0" onRehash="false"/>
+      <hash numOwners="${fcrepo.ispn.numOwners:2}"/>
+      <stateTransfer chunkSize="100" fetchInMemoryState="true"/>
+    </clustering>
+    <locking concurrencyLevel="1000" lockAcquisitionTimeout="150000" useLockStriping="false" />
+    <deadlockDetection enabled="true" spinDuration="1000"/>
+    <eviction maxEntries="500" strategy="LIRS" threadPolicy="DEFAULT"/>
+    <transaction
+            transactionManagerLookupClass="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"
+            transactionMode="TRANSACTIONAL" lockingMode="PESSIMISTIC"/>
+    <loaders passivation="false" shared="false" preload="false">
+      <loader class="org.infinispan.loaders.file.FileCacheStore" fetchPersistentState="true"
+              purgeOnStartup="false">
+        <properties>
+          <property name="location" value="${fcrepo.ispn.CacheDirPath:target/FedoraRepositoryMetaData/storage}"/>
+          <property name="fsyncMode" value="perWrite"/>
+        </properties>
+      </loader>
+    </loaders>
+  </namedCache>
+  <namedCache name="FedoraRepositoryBinaryData">
+    <clustering mode="distribution">
+      <sync replTimeout="600000"/>
+      <l1 enabled="false" lifespan="0" onRehash="false"/>
+      <hash numOwners="${fcrepo.ispn.numOwners:2}"/>
+      <stateTransfer chunkSize="100" fetchInMemoryState="true"/>
+    </clustering>
+    <locking concurrencyLevel="1000" lockAcquisitionTimeout="150000" useLockStriping="false" />
+    <deadlockDetection enabled="true" spinDuration="1000"/>
+    <eviction maxEntries="100" strategy="LIRS" threadPolicy="DEFAULT"/>
+    <transaction
+            transactionManagerLookupClass="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"
+            transactionMode="TRANSACTIONAL" lockingMode="PESSIMISTIC"/>
+    <loaders passivation="false" shared="false" preload="false">
+      <loader class="org.infinispan.loaders.file.FileCacheStore" fetchPersistentState="true"
+              purgeOnStartup="false">
+        <properties>
+          <property name="location" value="${fcrepo.ispn.binary.CacheDirPath:target/FedoraRepositoryBinaryData/storage}"/>
+          <property name="fsyncMode" value="perWrite"/>
+        </properties>
+      </loader>
+    </loaders>
+  </namedCache>
+</infinispan>

@@ -1,0 +1,11 @@
+---
+# ROLE: sufia_dependencies
+# roles/sufia_dependencies/install/tasks/main.yml
+#
+# includes tasks to install dependencies specific to sufia (but not hydra generally)
+#
+- name: fits
+  include: fits.yml
+
+- name: postgresql or mysql
+  include: database.yml

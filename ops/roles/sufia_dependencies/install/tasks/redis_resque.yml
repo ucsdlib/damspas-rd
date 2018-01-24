@@ -1,0 +1,16 @@
+---
+# install and start redis, resque
+- name: install redis from epel
+  package: name=redis
+
+- name: run redis-server
+  service: name=redis state=started
+  become: yes
+
+- name: copy resque init script
+  template: src=pool_q.j2 dest=/etc/init.d/resque-pool mode=0755
+  become: yes
+
+- name: start resque
+  service: name=resque-pool state=started enabled=yes
+  become: yes

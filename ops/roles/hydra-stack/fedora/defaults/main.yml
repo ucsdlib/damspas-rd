@@ -1,0 +1,12 @@
+---
+# roles/hydra-stack/install/defaults/main.yml
+install_path: /opt/install
+java_home: /usr/lib/jvm/java
+# tomcat PermGen memory (for loading java classes, etc.)
+tomcat_permgen_memory: 128M
+# tomcat min memory allocation
+tomcat_min_memory: 512m
+# tomcat max memory allocation
+tomcat_max_memory: 4096m
+tomcat_config_path: /etc/tomcat7/Catalina/localhost
+fedora_version: 4.7.3

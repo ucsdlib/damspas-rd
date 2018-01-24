@@ -1,0 +1,5 @@
+ansible_ssh_user: root
+shared_internal_ip: horton_haproxyfedora_1
+shared_external_ip: horton_haproxyweb_1
+
+deploy_target: development

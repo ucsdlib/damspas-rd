@@ -1,0 +1,57 @@
+---
+# ROLE: packages
+# roles/packages/tasks/main.yml
+#
+# updates apt, installs packages used by other installation/configuration tasks
+#
+- name: install dev tools and libraries 1
+  package: name={{ item }} state=installed
+  with_items:
+    - initscripts
+    - git
+    - curl
+    - openssl-devel
+    - readline-devel
+    - zlib-devel
+    - libyaml-devel
+    - libxml2-devel
+    - libxslt-devel
+    - autoconf
+
+- name: install dev tools and libraries 2
+  package: name={{ item }} state=installed
+  with_items:
+    - gmp-devel
+    - ncurses-devel
+    - automake
+    - libtool
+    - bison-devel
+    - ImageMagick-devel
+    - libcurl-devel
+    - xfsprogs
+    - which
+    - vim
+
+- name: install dev tools and libraries 3
+  package: name={{ item }} state=installed
+  with_items:
+    - libreoffice
+    - libreoffice-sdk
+    - python-pip
+    - python-devel
+    - libffi-devel
+    - iptables-services
+    - postgresql-devel
+    - checkpolicy
+    - policycoreutils-python
+
+- name: "Python 2.6 SNI support: install Python modules"
+  pip: >
+    name={{item}}
+    state=present
+  with_items:
+    - urllib3
+    - pyopenssl
+    - ndg-httpsclient
+    - pyasn1
+    - psycopg2

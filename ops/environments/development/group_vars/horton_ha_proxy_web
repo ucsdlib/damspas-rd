@@ -1,0 +1,14 @@
+haproxy_frontends:
+  - name: 'web'
+    address: '*'
+    mode: 'http'
+    backend: 'samvera'
+
+haproxy_backends:
+  - name: 'samvera'
+    mode: 'http'
+    servers:
+      - name: horton_samvera_1
+        address: horton_samvera_1
+      - name: horton_samvera_2
+        address: horton_samvera_2
