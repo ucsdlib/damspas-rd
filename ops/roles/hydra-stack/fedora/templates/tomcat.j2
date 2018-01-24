@@ -1,0 +1,39 @@
+# Where your java installation lives
+#JAVA_HOME="/usr/lib/jvm/java"
+
+# Where your tomcat installation lives
+#CATALINA_BASE="/usr/share/tomcat"
+#CATALINA_HOME="/usr/share/tomcat"
+#JASPER_HOME="/usr/share/tomcat"
+#CATALINA_TMPDIR="/var/cache/tomcat/temp"
+
+# You can pass some parameters to java here if you wish to
+#JAVA_OPTS="-Xminf0.1 -Xmaxf0.3"
+
+# Use JAVA_OPTS to set java.library.path for libtcnative.so
+#JAVA_OPTS="-Djava.library.path=/usr/lib64"
+
+# What user should run tomcat
+#TOMCAT_USER="tomcat"
+
+# You can change your tomcat locale here
+#LANG="en_US"
+
+# Run tomcat under the Java Security Manager
+#SECURITY_MANAGER="false"
+
+# Time to wait in seconds, before killing process
+#SHUTDOWN_WAIT="30"
+
+# Whether to annoy the user with "attempting to shut down" messages or not
+#SHUTDOWN_VERBOSE="false"
+
+# Connector port is 8080 for this tomcat instance
+#CONNECTOR_PORT="8080"
+
+# If you wish to further customize your tomcat environment,
+# put your own definitions here
+# (i.e. LD_LIBRARY_PATH for some jdbc drivers)
+
+JAVA_HOME={{ java_home }}
+JAVA_OPTS=" -Djava.awt.headless=true -XX:+UseG1GC -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:MaxPermSize={{ tomcat_permgen_memory }} -Xms{{ tomcat_min_memory }} -Xmx{{ tomcat_max_memory }} -Djava.util.logging.config.file=/etc/tomcat7/logging.properties -Dfcrepo.modeshape.configuration=classpath:/config/jdbc-postgresql/repository.json -Dfcrepo.postgresql.username={{ fedora_db_user }} -Dfcrepo.postgresql.password={{ fedora_db_pass }} -Dfcrepo.postgresql.host={{ fedora_db_host }} -Dfcrepo.postgresql.port={{ fedora_db_port }} -Dfcrepo.postgresql.database={{ fedora_db }} -Dfcrepo.home={{ fedora_data_path }} -Djgroups.tcp.address={{ ansible_default_ipv4.address }}"

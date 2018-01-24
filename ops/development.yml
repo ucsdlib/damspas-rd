@@ -1,0 +1,31 @@
+---
+- name: Bring up docker containers
+  hosts: localhost
+  gather_facts: false
+  environment:
+    POSTGRES_PASSWORD: "{{ hydra_db_pass }}"
+    POSTGRES_USER: "{{ hydra_db_user }}"
+    POSTGRES_DB: "{{ hydra_db }}"
+  tasks:
+    - docker_service:
+        project_name: horton
+        project_src: .
+        scale:
+          postgres: 1
+          fedora: 2
+          solr: 1
+          samvera: 1
+          sidekiqmaster: 1
+          haproxyweb: 1
+          haproxyfedora: 1
+          sidekiq: 1
+      register: output
+    - meta: refresh_inventory
+
+- name: Fix sudoers
+  hosts: "horton_fedora:horton_solr:horton_samvera:horton_haproxyweb:horton_haproxyfedora:horton_sidekiq:horton_sidekiqmaster"
+  roles:
+    - sudoersfix
+
+- include: configure.yml 
+

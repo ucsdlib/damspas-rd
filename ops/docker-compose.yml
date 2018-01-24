@@ -1,0 +1,45 @@
+version: '2'
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=penguins;13f1
+      - POSTGRES_USER=horton
+      - POSTGRES_DB=horton
+
+  main:
+    image: "notch8/systemd"
+    build: .
+    tty: true
+    privileged: true
+
+  fedora:
+    extends: main
+    # image: "notch8/systemd/fedora"  use docker commit CONTAINER_ID notch8/systemd/fedora to create new intermidiate images
+    depends_on:
+      - postgres
+
+  haproxyweb:
+    extends: main
+
+  haproxyfedora:
+    extends: main
+
+  samvera:
+    extends: main
+    depends_on:
+      - postgres
+
+  sidekiq:
+    extends: main
+    depends_on:
+      - postgres
+
+  sidekiqmaster:
+    extends: main
+    depends_on:
+      - postgres
+
+  solr:
+    extends: main
+

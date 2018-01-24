@@ -1,0 +1,73 @@
+---
+# ROLE: hydra-stack
+# roles/hydra-stack/install/tasks/fedora.yml
+#
+- iptables_raw:
+    name: allow_tcp_fedora
+    rules: |
+      -A INPUT -m state --state NEW -p tcp --destination-port 8080 -j ACCEPT
+      -A INPUT -m state --state NEW -p tcp --destination-port 7800 -j ACCEPT
+      -A INPUT -m state --state NEW -p tcp --destination-port 7801 -j ACCEPT
+      -A INPUT -m state --state NEW -p tcp --destination-port 7802 -j ACCEPT
+    weight: 5
+
+- name: mount storage
+  mount:
+    path: /opt 
+    src: "{{ fedora_storage_mount }}"
+    fstype: "{{ fedora_storage_mount_type }}"
+    state: present
+  when: fedora_storage_mount is defined
+
+- name: ensure directory
+  file:
+    path: "{{ install_path }}" 
+    recurse: true
+    state: directory
+    owner: "{{ capistrano_user }}"
+    mode: 0755
+ 
+- name: download fedora
+  get_url: url=http://repo1.maven.org/maven2/org/fcrepo/fcrepo-webapp/{{ fedora_version }}/fcrepo-webapp-{{ fedora_version }}.war owner={{ capistrano_user }} group={{ capistrano_group }} dest={{ install_path }}/fcrepo-webapp-{{ fedora_version }}.war timeout=100
+
+- name: make fedora data dir
+  file: owner=tomcat group=tomcat state=directory path={{ fedora_data_path }}
+
+- name: check fedora.war
+  stat: path=/var/lib/tomcat/webapps/fedora.war
+  register: fedora_war
+
+- name: copy over fedora.war
+  command: cp {{ install_path }}/fcrepo-webapp-{{ fedora_version }}.war /var/lib/tomcat/webapps/fedora.war
+  when: fedora_war.stat.exists == False
+
+- name: create tomcat config and java options
+  template: src=tomcat.j2 dest=/etc/sysconfig/tomcat backup=yes
+
+- name: create war destination
+  file: owner=tomcat group=tomcat state=directory path=/var/lib/tomcat/webapps/fedora
+
+- name: unpack the war
+  unarchive:
+    remote_src: yes
+    dest: /var/lib/tomcat/webapps/fedora
+    src: /var/lib/tomcat/webapps/fedora.war
+  when: fedora_war.stat.exists == False
+
+- name: postgres cluster template
+  template: src=postgres-cluster.json.j2 dest=/var/lib/tomcat/webapps/fedora/WEB-INF/classes/config/jdbc-postgresql/repository.json
+
+- name: postgres based jgroups
+  template: src=jgroups.xml.j2 dest=/var/lib/tomcat/webapps/fedora/WEB-INF/classes/config/jgroups-fcrepo-tcp.xml
+
+- name: create database if it does not exist
+  postgresql_db:
+    login_host: "{{ fedora_db_host }}"
+    login_user: "{{ fedora_db_user }}"
+    login_password: "{{ fedora_db_pass }}"
+    name: "{{ fedora_db }}"
+    state: present
+
+- name: restart tomcat
+  service: name=tomcat enabled=yes state=restarted
+  ignore_errors: yes

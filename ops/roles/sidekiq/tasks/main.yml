@@ -1,0 +1,9 @@
+---
+- name: copy sidekiq init script
+  template: src=sidekiq.j2 dest=/usr/lib/systemd/system/sidekiq.service mode=0755
+  become: yes
+
+# dont try and start until after deploy
+#- name: start sidekiq
+#  service: name=sidekiq state=started enabled=yes
+#  become: yes

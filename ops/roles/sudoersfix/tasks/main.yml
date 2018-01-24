@@ -1,0 +1,11 @@
+---
+- name: install sudo 
+  package: name={{ item }} state=installed 
+  with_items:
+    - sudo
+
+- name: mod sudoers
+  template:
+    dest: /etc/sudoers
+    src: sudoers.j2
+...

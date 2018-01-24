@@ -85,3 +85,31 @@ bin/import-authorities
 ### Create an admin set to start ingest
 ```rake hyrax:default_admin_set:create```
 
+
+
+# Deployment
+Deployment is handled via ansible, allows rollback and can be used to provision new machines
+
+```bash
+./bin/deploy production 
+```
+
+```bash
+./bin/rollback production 
+```
+
+## Provisioning and testing of provisioning
+The following 4 scripts are provided to make server maintanence easier.  Each can be run in both production and development mode (see note about development).
+
+./bin/deploy  - Deploy a release to the servers. Can be production or development
+./bin/provision - Run the configuration script, which will attempt to install and configure all software. Configuration is idempotent, so running it on a configured server is acceptable.  Can be run in production or development
+./bin/cleanup - development only.  This script closes down the docker images used by the scripts to test provisioning
+./bin/rollback - Roll back the last deploy. Can be production or development
+
+
+## Development environment for ansible scripts
+In order to facilitate development and modification of the ansible scripts, a development config has been established.  This requires Docker be running on the dev machine and that the proper docker python packages are installed.  If using ansible >= 2.4 install python packages with "pip install docker docker-compose". For older versions of ansible "pip install docker-py".  Please note that docker-py and docker-compose Python packages do not get along.
+
+If you run in to problems with systemd (specifically hanging process starts or restarts) then you may need to update the docker image. Systemd upgrades can not be done on the fly in a running docker instance, see: https://github.com/geerlingguy/ansible-role-security/issues/21 
+To do an update run "docker rmi notch8/systemd" then run the ./bin/provision development as normal.  This will clear your existing containers. Note that all containers must be stopped to do this, so you may want to run ./bin/cleanup development first.
+

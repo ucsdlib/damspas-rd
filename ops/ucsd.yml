@@ -1,0 +1,9 @@
+---
+
+- name: Fix proxy
+  hosts: all
+  roles:
+    - { role: ucsd.proxy, become: true }
+
+- include: configure.yml
+

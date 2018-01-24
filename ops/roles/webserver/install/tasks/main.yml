@@ -1,0 +1,15 @@
+---
+# Role: webserver/install
+# roles/webserver/install/tasks/main.yml
+# 
+# Installs a webserver (Apache, Nginx) plus Passenger or Puma as desired; install apached pagckages
+# see webserver/configure role for local configuration files
+#
+
+- name: passenger
+  include: passenger.yml
+  when: webserver == "passenger"
+
+- name: puma
+  include: puma.yml
+  when: webserver == "puma"

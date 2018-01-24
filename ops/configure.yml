@@ -1,0 +1,96 @@
+---
+- name: Server Level Config
+  hosts: "horton_fedora:horton_solr:horton_samvera:horton_haproxyweb:horton_haproxyfedora:horton_sidekiq:horton_sidekiqmaster"
+  roles:
+    - { role: geerlingguy.repo-epel, become: true }
+    - { role: packages, become: true}
+    - { role: system_setup, become: true }
+    - { role: repleo.postfix, become: true }
+#T    - { role: dj-wasabi.ossec-server }
+#T    - { role: notch8.site24x7, tags: 'monitoring' }
+    - { role: notch8.ssh, tags: 'permissions' }
+
+- name: Fedora Config
+  hosts: "horton_fedora"
+  roles:
+    - { role: hydra-stack/fedora, become: true }
+
+- name: Solr Config
+  hosts: "horton_solr"
+  strategy: debug
+  roles:
+    - { role: kevincoakley.solr, become: true }
+    - { role: hydra-stack/solr, become: true }
+  tasks:
+
+- name: HA Proxy Fedora IpTables
+  hosts: "horton_haproxyfedora"
+  tasks:
+    - iptables_raw:
+        name: allow_tcp_solr
+        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 8983 -j ACCEPT"
+        weight: 5
+      become: yes
+
+    - iptables_raw:
+        name: allow_tcp_fedora
+        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 8080 -j ACCEPT"
+        weight: 5
+      become: yes
+
+- name: HA Proxy Web and Fedora/Solr
+  hosts: "horton_haproxyweb:horton_haproxyfedora"
+  roles:
+    - { role: openmicroscopy.haproxy, become: true }
+
+- name: Keepalived internal
+  hosts: "horton_haproxyfedora"
+  roles:
+    - { role: evrardjp.keepalived, become: true }
+
+# these are seperate so that master can be assigned by array position
+- name: Keepalived external
+  hosts: "horton_haproxyweb"
+  roles:
+    - { role: evrardjp.keepalived, become: true }
+
+- name: Rails Config
+  hosts: "horton_samvera:horton_sidekiq:horton_sidekiqmaster"
+  roles:
+    - { role: notch8.ffmpeg, become: true }
+    - { role: geerlingguy.nodejs, become: true }
+    - { role: rvm_io.ruby, tags: ruby, become: true }
+    - { role: hydra-stack/config-deploy, become: true }
+    - { role: sufia_dependencies/install, become: true }
+    - { role: sufia_dependencies/config, become: true }
+
+- name: Samvera Config
+  hosts: "horton_samvera"
+  roles:
+    - { role: webserver/install, become: true }
+    - { role: webserver/config, become: true }
+
+- name: Sidekiq Config Master
+  hosts: "horton_sidekiqmaster"
+  roles:
+    - { role: DavidWittman.redis, become: true }
+    - { role: sidekiq, become: true }
+
+- name: Sidekiq Config Slave
+  hosts: "horton_sidekiq"
+  vars:
+    redis_slaveof: "{{ hostvars[groups['horton_sidekiqmaster'][0]]['ansible_eth0']['ipv4']['address'] }} {{ redis_port }}"
+  roles:
+    - { role: DavidWittman.redis, become: true }
+    - { role: sidekiq, become: true }
+
+- name: HA Proxy Web IpTables
+  hosts: "horton_haproxyweb"
+  tasks:
+    - iptables_raw:
+        name: allow_tcp_http
+        rules: "-A INPUT -m state --state NEW -p tcp --destination-port 80 -j ACCEPT"
+        weight: 5
+      become: yes
+
+- include: deploy.yml

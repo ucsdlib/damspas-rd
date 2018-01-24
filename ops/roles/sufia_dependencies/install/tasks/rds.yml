@@ -1,0 +1,10 @@
+---
+# installs postgresql and supporting libraries
+- name: install postgresql packages
+  package: name={{ item }} state=present
+  become: yes
+  with_items:
+    - libpq-dev
+    - python-psycopg2
+
+- meta: flush_handlers

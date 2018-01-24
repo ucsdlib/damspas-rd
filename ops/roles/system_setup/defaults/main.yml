@@ -1,0 +1,3 @@
+---
+# roles/system_setup/defaults/main.yml
+install_path: /opt/install
