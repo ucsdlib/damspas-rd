@@ -1,6 +1,6 @@
 # DAMSPAS-RD
 
-> Frankly, my dear, I don't GIVE A DAMS!
+> "Frankly, my dear, I don't GIVE A DAMS!"
 
 R&D project for a future DAMS5. A digital collections application for the UC San Diego Library built using the [Hydra framework](https://projecthydra.org/), specifically using the [Hyrax front-end](https://github.com/projecthydra-labs/hyrax/), and the [Fedora Repository](http://fedorarepository.org/).
 
