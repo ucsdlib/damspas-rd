@@ -1,4 +1,4 @@
 # Fedora
-fedora_data_path: /opt/fedora-data-{{ groups.horton_fedora.index(inventory_hostname) }}
+fedora_data_path: /opt/fedora-data-{{ groups.damspas-rd_fedora.index(inventory_hostname) }}
 fedora_storage_mount: lib-lin-storage:/ifs/dams5/prod
 fedora_storage_mount_type: nfs

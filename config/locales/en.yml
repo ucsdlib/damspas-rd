@@ -31,7 +31,7 @@ en:
         identifier: "A generic unique handle identifying the collection."
       defaults:
         identifier: "A generic unique handle identifying the work."
-  horton:
+  damspas-rd:
     works:
       edit:
         identifiers: "Identifiers"

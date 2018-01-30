@@ -6,7 +6,7 @@
     - set_fact: ansistrano_release_version = "{{ current_run_timestamp.stdout }}"
 
 - name: Permissions and folders
-  hosts: "horton_samvera:horton_sidekiq:horton_sidekiqmaster"
+  hosts: "damspas-rd_samvera:damspas-rd_sidekiq:damspas-rd_sidekiqmaster"
   tasks:
     - name: make shared directories
       become: yes
@@ -22,7 +22,7 @@
         - "{{ ansistrano_deploy_to }}"
 
 - name: Deploy Rails App
-  hosts: "horton_samvera:horton_sidekiq:horton_sidekiqmaster"
+  hosts: "damspas-rd_samvera:damspas-rd_sidekiq:damspas-rd_sidekiqmaster"
   become_user: "{{ capistrano_user }}"
   become: yes
   roles:
@@ -30,7 +30,7 @@
 
 
 - name: Restart Sidekiq
-  hosts: "horton_sidekiq:horton_sidekiqmaster"
+  hosts: "damspas-rd_sidekiq:damspas-rd_sidekiqmaster"
   tasks:
     - name: kick sidekiq
       service: name=sidekiq state=restarted enabled=yes

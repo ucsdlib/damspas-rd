@@ -4,6 +4,6 @@
   gather_facts: false
   tasks:
     - docker_service:
-        project_name: horton
+        project_name: damspas-rd
         project_src: .
         state: absent

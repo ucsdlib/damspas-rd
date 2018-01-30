@@ -13,7 +13,7 @@ DEFAULT_BOX=ENV.fetch('DEFAULT_BOX', 'centos/7')
 #     variable. Default none.
 # If there are multiple systems, the first one will be marked "primary"
 guests = [
-  { :name => 'horton' },
+  { :name => 'damspas-rd' },
   #{ :name => 'web1', :box => 'centos/6', :ip => '2' },
   #{ :name => 'web2', :ip => '192.168.1.3' },
   #{ :name => 'db1' },

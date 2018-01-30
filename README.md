@@ -1,8 +1,11 @@
-# Horton
-A digital collections application for the UC San Diego Library built using the [Hydra framework](https://projecthydra.org/), specifically using the [Hyrax front-end](https://github.com/projecthydra-labs/hyrax/), and the [Fedora Repository](http://fedorarepository.org/).
+# DAMSPAS-RD
 
-[![Coverage Status](https://coveralls.io/repos/github/ucsdlib/horton/badge.svg?branch=develop)](https://coveralls.io/github/ucsdlib/horton?branch=develop)
-[![Dependency Status](https://gemnasium.com/ucsdlib/horton.svg)](https://gemnasium.com/ucsdlib/horton)
+> Frankly, my dear, I don't GIVE A DAMS!
+
+R&D project for a future DAMS5. A digital collections application for the UC San Diego Library built using the [Hydra framework](https://projecthydra.org/), specifically using the [Hyrax front-end](https://github.com/projecthydra-labs/hyrax/), and the [Fedora Repository](http://fedorarepository.org/).
+
+[![Coverage Status](https://coveralls.io/repos/github/ucsdlib/damspas-rd/badge.svg?branch=develop)](https://coveralls.io/github/ucsdlib/damspas-rd?branch=develop)
+[![Dependency Status](https://gemnasium.com/ucsdlib/damspas-rd.svg)](https://gemnasium.com/ucsdlib/damspas-rd)
 
 ## Prerequisites
 
@@ -20,8 +23,8 @@ The following software are required:
 Please visit [Curation Concerns](https://github.com/projecthydra/curation_concerns) for installation guide.
 
 ### Check out DAMSPAS from GIT
-1. Clone Project: ```git clone https://github.com/ucsdlib/horton```
-2. Open Project: ```cd horton```
+1. Clone Project: ```git clone https://github.com/ucsdlib/damspas-rd```
+2. Open Project: ```cd damspas-rd```
 3. Install gems: ```bundle install```
 4. Update DB: ```bundle exec rake db:migrate```
 5. Edit config/browse_everything_providers.yml file_system home for server side files ingest.
@@ -51,7 +54,7 @@ fcrepo_wrapper -p 8986 --no-jms
 bundle exec rake spec
 ```
 
-### Running horton (demo only)
+### Running damspas-rd (demo only)
 ```rake hydra:server```
 
 Or do it in the following steps:

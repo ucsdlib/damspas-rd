@@ -30,10 +30,10 @@ Hyrax.config do |config|
   # Enable displaying usage statistics in the UI
   # Defaults to FALSE
   # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
-  config.analytics = ENV.fetch('APPS_HORTON_ANALYTICS'){'false'}
+  config.analytics = ENV.fetch('APPS_damspas-rd_ANALYTICS'){'false'}
 
   # Specify a Google Analytics tracking ID to gather usage statistics
-  config.google_analytics_id = ENV.fetch('APPS_HORTON_GOOGLE_ID'){'UA-99999999-1'}
+  config.google_analytics_id = ENV.fetch('APPS_damspas-rd_GOOGLE_ID'){'UA-99999999-1'}
 
   # Specify a date you wish to start collecting Google Analytic statistics for.
   config.analytic_start_date = DateTime.new(2014,9,10)

@@ -1,7 +1,7 @@
 require 'syslogger'
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.logger = Syslogger.new("HORTON", Syslog::LOG_PID, Syslog::LOG_LOCAL7)
+  config.logger = Syslogger.new("damspas-rd", Syslog::LOG_PID, Syslog::LOG_LOCAL7)
   config.lograge.enabled = true
 
   # Code is not reloaded between requests.

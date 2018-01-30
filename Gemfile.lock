@@ -948,6 +948,7 @@ GEM
       omniauth (>= 1.0.0)
       rails (> 3.2.0)
     openseadragon (0.4.0)
+      rails (> 3.2.0)
     orm_adapter (0.5.0)
     os (0.9.6)
     parallel (1.11.2)
@@ -1314,4 +1315,4 @@ DEPENDENCIES
   web-console (~> 3.5.0)
 
 BUNDLED WITH
-   1.16.0.pre.3
+   1.16.1

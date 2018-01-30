@@ -2,8 +2,8 @@
 # To integrate your app with Google Analytics, uncomment the lines below and add your API key information.
 #
 analytics:
-   app_name: <%= ENV.fetch('APPS_HORTON_APP_NAME'){'GOOGLE_OAUTH_APP_NAME'} %>
-   app_version: <%= ENV.fetch('APPS_HORTON_APP_VERSION'){'GOOGLE_OAUTH_APP_VERSION'} %>
-   privkey_path: <%= ENV.fetch('APPS_HORTON_PRIVKEY_PATH'){'GOOGLE_OAUTH_PRIVATE_KEY_PATH'} %>
-   privkey_secret: <%= ENV.fetch('APPS_HORTON_PRIVKEY_SECRET'){'GOOGLE_OAUTH_PRIVATE_KEY_SECRET'} %>
-   client_email: <%= ENV.fetch('APPS_HORTON_CLIENT_EMAIL'){'GOOGLE_OAUTH_CLIENT_EMAIL'} %>
+   app_name: <%= ENV.fetch('APPS_damspas-rd_APP_NAME'){'GOOGLE_OAUTH_APP_NAME'} %>
+   app_version: <%= ENV.fetch('APPS_damspas-rd_APP_VERSION'){'GOOGLE_OAUTH_APP_VERSION'} %>
+   privkey_path: <%= ENV.fetch('APPS_damspas-rd_PRIVKEY_PATH'){'GOOGLE_OAUTH_PRIVATE_KEY_PATH'} %>
+   privkey_secret: <%= ENV.fetch('APPS_damspas-rd_PRIVKEY_SECRET'){'GOOGLE_OAUTH_PRIVATE_KEY_SECRET'} %>
+   client_email: <%= ENV.fetch('APPS_damspas-rd_CLIENT_EMAIL'){'GOOGLE_OAUTH_CLIENT_EMAIL'} %>
