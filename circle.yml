@@ -18,7 +18,7 @@ machine:
 
 dependencies:
   pre:
-    - wget https://github.com/harvard-lts/fits/archive/1.0.5.zip -O fits-1.0.5.zip
+    - wget http://projects.iq.harvard.edu/files/fits/files/fits-1.0.5.zip -O fits-1.0.5.zip
     - unzip fits-1.0.5.zip -d /tmp/
     - sudo chmod 755 /tmp/fits-1.0.5/fits.sh
     - sudo ln -s /tmp/fits-1.0.5/fits.sh /bin/fits.sh
