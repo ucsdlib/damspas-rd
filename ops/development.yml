@@ -8,7 +8,7 @@
     POSTGRES_DB: "{{ hydra_db }}"
   tasks:
     - docker_service:
-        project_name: horton
+        project_name: damspas-rd
         project_src: .
         scale:
           postgres: 1
@@ -23,7 +23,7 @@
     - meta: refresh_inventory
 
 - name: Fix sudoers
-  hosts: "horton_fedora:horton_solr:horton_samvera:horton_haproxyweb:horton_haproxyfedora:horton_sidekiq:horton_sidekiqmaster"
+  hosts: "damspas-rd_fedora:damspas-rd_solr:damspas-rd_samvera:damspas-rd_haproxyweb:damspas-rd_haproxyfedora:damspas-rd_sidekiq:damspas-rd_sidekiqmaster"
   roles:
     - sudoersfix
 

@@ -26,8 +26,8 @@ ansistrano_shared_files:
   - config/solr.yml
 
 ansistrano_deploy_via: "git"
-# TODO restore once ops is merged ansistrano_git_repo: https://github.com/ucsdlib/horton.git
-ansistrano_git_repo: https://github.com/notch8/horton.git
+# TODO restore once ops is merged ansistrano_git_repo: https://github.com/ucsdlib/damspas-rd.git
+ansistrano_git_repo: https://github.com/notch8/damspas-rd.git
 ansistrano_git_branch: devops # What version of the repository to check out. This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
 #ansistrano_git_identity_key_path: "keys/deploy" # If specified this file is copied over and used as the identity key for the git commands, path is relative to the playbook in which it is used
 ansistrano_before_symlink_tasks_file: "{{ playbook_dir }}/roles/deploy/tasks/before_symlink.yml"
@@ -41,7 +41,7 @@ deploy_target: development
 db: postgres
 db_adapter: postgresql
 hydra_db: hydra
-hydra_db_user: horton
+hydra_db_user: damspas-rd
 hydra_db_pass: penguins;13f1
 hydra_db_host: postgres 
 hydra_db_port: 5432
@@ -53,7 +53,7 @@ fedora_db_port: 5432
 
 # Deploy
 fedora_base_path: /{{ deploy_target }}
-project_name: horton
+project_name: damspas-rd
 shared_root: /opt/{{ project_name }}/shared
 
 # Fedora
@@ -99,7 +99,7 @@ keepalived_instances:
 nodejs_install_npm_user: "{{ capistrano_user }}"
 
 # Redis
-redis_address: "{{ hostvars[groups['horton_sidekiqmaster'][0]]['ansible_eth0']['ipv4']['address'] }}"
+redis_address: "{{ hostvars[groups['damspas-rd_sidekiqmaster'][0]]['ansible_eth0']['ipv4']['address'] }}"
 
 # Postfix
 postfix_enabled: yes
@@ -125,8 +125,8 @@ solr_version: 6.6.0
 solr_cluster: True
 solr_download_url: http://archive.apache.org/dist/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz
 solr_zookeeper_connect_string:
-  - "{{ groups['horton_solr'][0] }}:2181/solr"
-  - "{{ groups['horton_solr'][1] }}:2181/solr"
+  - "{{ groups['damspas-rd_solr'][0] }}:2181/solr"
+  - "{{ groups['damspas-rd_solr'][1] }}:2181/solr"
 solr_home: /var/solr
 solr_port: 8983
 solr_memory: 1g

@@ -20,6 +20,7 @@
 /tmp
 /spec/examples.txt
 /coverage
+fits*
 
 .project
 .DS_Store

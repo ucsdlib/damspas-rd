@@ -14,10 +14,10 @@ haproxy_backends:
     mode: 'http'
     balance_method: 'roundrobin'
     servers:
-      - name: "{{ groups['horton_fedora'][0] }}"
-        address: "{{ groups['horton_fedora'][0] }}:8080"
-      - name: "{{ groups['horton_fedora'][1] }}" 
-        address: "{{ groups['horton_fedora'][1] }}:8080"
+      - name: "{{ groups['damspas-rd_fedora'][0] }}"
+        address: "{{ groups['damspas-rd_fedora'][0] }}:8080"
+      - name: "{{ groups['damspas-rd_fedora'][1] }}" 
+        address: "{{ groups['damspas-rd_fedora'][1] }}:8080"
     timout connect: 60s
     timout server: 300s
 
@@ -25,10 +25,10 @@ haproxy_backends:
     mode: 'http'
     balance_method: 'roundrobin'
     servers:
-      - name: "{{ groups['horton_solr'][0] }}" 
-        address: "{{ groups['horton_solr'][0] }}:8983" 
-      - name: "{{ groups['horton_solr'][1] }}"
-        address: "{{ groups['horton_solr'][1] }}:8983"
+      - name: "{{ groups['damspas-rd_solr'][0] }}" 
+        address: "{{ groups['damspas-rd_solr'][0] }}:8983" 
+      - name: "{{ groups['damspas-rd_solr'][1] }}"
+        address: "{{ groups['damspas-rd_solr'][1] }}:8983"
     timout connect: 60s
     timout server: 300s
 

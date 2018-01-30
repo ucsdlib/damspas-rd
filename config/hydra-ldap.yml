@@ -1,9 +1,9 @@
 test:
-  host: <%= ENV.fetch('APPS_HORTON_LDAP_HOST') {'localhost'}%>
-  port: <%= ENV.fetch('APPS_HORTON_LDAP_PORT') {'1389'}%>
-  base: <%= ENV.fetch('APPS_HORTON_LDAP_BASE') {'dc=example,dc=com'}%>
-  username: <%= ENV.fetch('APPS_HORTON_LDAP_USER') {'cn=test_user,cn=TOPLEVEL,dc=example,dc=com'}%>
-  password: <%= ENV.fetch('APPS_HORTON_LDAP_PASS') {'test_password'}%>
-  admin_group: <%= ENV.fetch('APPS_HORTON_LDAP_ADMIN_GROUP') {'cn=admin_group,ou=GROUPS,dc=example,dc=com'}%>
-  curator_group: <%= ENV.fetch('APPS_HORTON_LDAP_CURATOR_GROUP') {'cn=curator_group,ou=GROUPS,dc=example,dc=com'}%>
+  host: <%= ENV.fetch('APPS_damspas-rd_LDAP_HOST') {'localhost'}%>
+  port: <%= ENV.fetch('APPS_damspas-rd_LDAP_PORT') {'1389'}%>
+  base: <%= ENV.fetch('APPS_damspas-rd_LDAP_BASE') {'dc=example,dc=com'}%>
+  username: <%= ENV.fetch('APPS_damspas-rd_LDAP_USER') {'cn=test_user,cn=TOPLEVEL,dc=example,dc=com'}%>
+  password: <%= ENV.fetch('APPS_damspas-rd_LDAP_PASS') {'test_password'}%>
+  admin_group: <%= ENV.fetch('APPS_damspas-rd_LDAP_ADMIN_GROUP') {'cn=admin_group,ou=GROUPS,dc=example,dc=com'}%>
+  curator_group: <%= ENV.fetch('APPS_damspas-rd_LDAP_CURATOR_GROUP') {'cn=curator_group,ou=GROUPS,dc=example,dc=com'}%>
   

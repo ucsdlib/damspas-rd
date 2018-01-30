@@ -8,7 +8,7 @@ haproxy_backends:
   - name: 'samvera'
     mode: 'http'
     servers:
-      - name: horton_samvera_1
-        address: horton_samvera_1
-      - name: horton_samvera_2
-        address: horton_samvera_2
+      - name: damspas-rd_samvera_1
+        address: damspas-rd_samvera_1
+      - name: damspas-rd_samvera_2
+        address: damspas-rd_samvera_2

@@ -1,39 +1,39 @@
-[horton_haproxyfedora]
+[damspas-rd_haproxyfedora]
 lib-dams5-proxy-int-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-proxy-int-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_haproxyweb]
+[damspas-rd_haproxyweb]
 lib-dams5-proxy-ext-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-proxy-ext-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_sidekiqmaster]
+[damspas-rd_sidekiqmaster]
 lib-dams5-redis-1.ucsd.edu ansible_user=notch8-consultant
 
-[horton_sidekiq]
+[damspas-rd_sidekiq]
 lib-dams5-redis-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_solr]
+[damspas-rd_solr]
 lib-dams5-solr-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-solr-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_fedora]
+[damspas-rd_fedora]
 lib-dams5-fedora-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-fedora-2.ucsd.edu ansible_user=notch8-consultant
 
-[horton_samvera]
+[damspas-rd_samvera]
 lib-dams5-samvera-1.ucsd.edu ansible_user=notch8-consultant
 lib-dams5-samvera-2.ucsd.edu ansible_user=notch8-consultant
 
 [stack:children]
-horton_fedora
-horton_solr
-horton_samvera
+damspas-rd_fedora
+damspas-rd_solr
+damspas-rd_samvera
 
 [all:children]
-horton_fedora
-horton_solr
-horton_samvera
-horton_sidekiqmaster
-horton_sidekiq
-horton_haproxyweb
-horton_haproxyfedora
+damspas-rd_fedora
+damspas-rd_solr
+damspas-rd_samvera
+damspas-rd_sidekiqmaster
+damspas-rd_sidekiq
+damspas-rd_haproxyweb
+damspas-rd_haproxyfedora

@@ -4,8 +4,8 @@ services:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=penguins;13f1
-      - POSTGRES_USER=horton
-      - POSTGRES_DB=horton
+      - POSTGRES_USER=damspas-rd
+      - POSTGRES_DB=damspas-rd
 
   main:
     image: "notch8/systemd"

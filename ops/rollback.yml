@@ -1,5 +1,5 @@
 - name: Rollback Rails App
-  hosts: "horton_samvera:horton_sidekiq:horton_sidekiqmaster"
+  hosts: "damspas-rd_samvera:damspas-rd_sidekiq:damspas-rd_sidekiqmaster"
   become_user: "{{ capistrano_user }}"
   become: yes
   roles:
