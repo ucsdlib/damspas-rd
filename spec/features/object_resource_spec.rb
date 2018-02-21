@@ -79,7 +79,7 @@ feature 'ObjectResource' do
     scenario 'should create object' do
       visit new_hyrax_object_resource_path
       fill_in 'Title', with: 'Test ObjectResource'
-      fill_in 'Description', with: 'Test Description'
+      fill_in 'Abstract or Summary', with: 'Test Description'
       click_button 'Save'
       expect(page).to have_content 'Test ObjectResource'
       expect(page).to have_content 'Test Description'

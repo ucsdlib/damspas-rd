@@ -1,4 +1,6 @@
 Hyrax.config do |config|
+  # Injected via `rails g hyrax:work ObjectResource`
+  #config.register_curation_concern :object_resource
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
@@ -27,18 +29,27 @@ Hyrax.config do |config|
   # How frequently should a file be fixity checked
   # config.max_days_between_fixity_checks = 7
 
+  # Options to control the file uploader
+  # config.uploader = {
+  #   limitConcurrentUploads: 6,
+  #   maxNumberOfFiles: 100,
+  #   maxFileSize: 500.megabytes
+  # }
+
   # Enable displaying usage statistics in the UI
-  # Defaults to FALSE
+  # Defaults to false
   # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
-  config.analytics = ENV.fetch('APPS_HORTON_ANALYTICS'){'false'}
+  # config.analytics = false
 
-  # Specify a Google Analytics tracking ID to gather usage statistics
-  config.google_analytics_id = ENV.fetch('APPS_HORTON_GOOGLE_ID'){'UA-99999999-1'}
+  # Google Analytics tracking ID to gather usage statistics
+  # config.google_analytics_id = 'UA-99999999-1'
 
-  # Specify a date you wish to start collecting Google Analytic statistics for.
-  config.analytic_start_date = DateTime.new(2014,9,10)
+  # Date you wish to start collecting Google Analytic statistics for
+  # Leaving it blank will set the start date to when ever the file was uploaded by
+  # NOTE: if you have always sent analytics to GA for downloads and page views leave this commented out
+  # config.analytic_start_date = DateTime.new(2014, 9, 10)
 
-  # Enables a link to the citations page for a generic_file.
+  # Enables a link to the citations page for a work
   # Default is false
   # config.citations = false
 
@@ -83,6 +94,9 @@ Hyrax.config do |config|
   # Hyrax can integrate with Zotero's Arkivo service for automatic deposit
   # of Zotero-managed research items.
   # config.arkivo_api = false
+
+  # Stream realtime notifications to users in the browser
+  # config.realtime_notifications = true
 
   # Location autocomplete uses geonames to search for named regions
   # Username for connecting to geonames
@@ -196,3 +210,4 @@ Qa::Authorities::Local.register_subauthority('subjects', 'Qa::Authorities::Local
 Qa::Authorities::Local.register_subauthority('languages', 'Qa::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('genres', 'Qa::Authorities::Local::TableBasedAuthority')
 Qa::Authorities::Local.register_subauthority('country_codes', 'Qa::Authorities::Local::TableBasedAuthority')
+
