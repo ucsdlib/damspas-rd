@@ -101,3 +101,7 @@ group :development, :test do
   gem 'fcrepo_wrapper', '~> 0.8.0'
   gem 'rspec-rails', '~> 3.6.0'
 end
+
+group :production do
+  gem 'pg'
+end
